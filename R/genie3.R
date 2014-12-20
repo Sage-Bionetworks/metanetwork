@@ -1,0 +1,1 @@
+###Function to run genie3 on the data

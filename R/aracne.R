@@ -1,0 +1,1 @@
+###Function to run aracne on the data

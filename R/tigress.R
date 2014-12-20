@@ -1,0 +1,1 @@
+###Function to run tigress on the data
