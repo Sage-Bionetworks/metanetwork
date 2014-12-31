@@ -1,0 +1,7 @@
+To do:
+1) Implement aracne
+2) Implement wgcna
+3) Implement genie3...1000!
+4) Implement sparrow
+5) Implement lasso
+6) Implement 

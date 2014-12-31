@@ -1,4 +1,3 @@
-
 ###function to run sparrow on the data
 sparrow <- function(data,driverIndex,...){
   extractEdges <- function(index,data,driverIndex,...){
