@@ -18,6 +18,6 @@ tigress<- function(y,x){
     w2<-rev(order(result2$entry,decreasing=T)[1:L])
     indexMat[,w2][lower.tri(indexMat[,w2],diag=T)] <- indexMat[,w2][lower.tri(indexMat[,w2],diag=T)] + 1;
   }
-  return(indexMat)
+  return(colMeans(indexMat/R))
 }
 
