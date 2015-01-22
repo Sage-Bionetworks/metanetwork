@@ -2,7 +2,7 @@
 tigress<- function(y,x){
   alpha = 0.2;
   L = 5;
-  R = 1000;
+  R = 100;
   n <- length(y);
   require(lars);
   #indexMat <- matrix(0,R,L)
