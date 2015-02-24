@@ -1,9 +1,9 @@
 Package: metaNet
 Type: Package
-Title: What the package does (short line)
+Title: Network meta analysis
 Version: 1.0
-Date: 2014-12-20
-Author: Who wrote it
-Maintainer: Who to complain to <yourfault@somewhere.net>
-Description: More about what it does (maybe more than one line)
-License: What license is it under?
+Date: 2015-02-24
+Author: Benjamin A Logsdon
+Maintainer: Benjamin A Logsdon <ben.logsdon@sagebase.org>
+Description: Package to infer multiple types of coexpression network representations of high dimensional gene expression data.  Builds network ensembles, extract network statistics, and run enrichments on network features.
+License: GPLv3
