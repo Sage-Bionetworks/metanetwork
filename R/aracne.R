@@ -38,14 +38,14 @@ aracne <- function(data,path=NULL,pval=NULL){
   return(network)
 }
 
-n <- 20
-m <- 100
+#n <- 20
+#m <- 100
 
-dum <- matrix(rnorm(n*m),n,m)
-colnames(dum) <- paste('a',1:m,sep='')
-rownames(dum) <- paste('b',1:n,sep='')
+#dum <- matrix(rnorm(n*m),n,m)
+#colnames(dum) <- paste('a',1:m,sep='')
+#rownames(dum) <- paste('b',1:n,sep='')
 #dum <- cbind(rownames(dum),dum)
-a<-aracne(data=dum,pval = 0.1)
-write.table(dum,file='dum.txt',sep='\t',quote=FALSE)
-system('./aracne2 -i dum.txt -a adaptive_partitioning -p 1e-3')
-system('./aracne2 -i test/arraydata10x336.exp -a adaptive_partitioning -p 1e-3')
+#a<-aracne(data=dum,pval = 0.1)
+#write.table(dum,file='dum.txt',sep='\t',quote=FALSE)
+#system('./aracne2 -i dum.txt -a adaptive_partitioning -p 1e-3')
+#system('./aracne2 -i test/arraydata10x336.exp -a adaptive_partitioning -p 1e-3')
