@@ -27,7 +27,7 @@ sparrowMPI = function(data,nodes,pathv,regulatorIndex=NULL,hosts=NULL){
   
   foldslave <- function() {
     # Get a task 
-    require("sparrow")
+    require("vbsr")
     task <- mpi.recv.Robj(mpi.any.source(),mpi.any.tag()) 
     task_info <- mpi.get.sourcetag() 
     tag <- task_info[2] 
