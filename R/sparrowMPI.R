@@ -176,7 +176,7 @@ sparrowMPI = function(data,nodes,pathv,regulatorIndex=NULL,hosts=NULL){
   
   # save list to file
   result <- simplify2array(res_list);
-  colnames(result) <- paste0(colnames(data),'_dep'
+  colnames(result) <- paste0(colnames(data),'_dep')
   rownames(result) <- c('fold',paste0(colnames(data),'_indep'))
   result <- t(result)
   result <- data.frame(result)
