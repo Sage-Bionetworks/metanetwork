@@ -31,7 +31,7 @@ sparrowMPI = function(data,nodes,pathv,regulatorIndex=NULL,hosts=NULL){
     task <- mpi.recv.Robj(mpi.any.source(),mpi.any.tag()) 
     task_info <- mpi.get.sourcetag() 
     tag <- task_info[2] 
-    cat('tag:',tag,'\n')
+    #cat('tag:',tag,'\n')
     # While task is not a "done" message. Note the use of the tag to indicate 
     # the type of message
     while (tag != 2) {
@@ -39,9 +39,9 @@ sparrowMPI = function(data,nodes,pathv,regulatorIndex=NULL,hosts=NULL){
       foldNumber <- task$foldNumber
       #rss <- double(p)
       #for (i in 1:p) {
-      cat('in fold',foldNumber,'\n')
+      #cat('in fold',foldNumber,'\n')
       if(is.null(regulatorIndex)){
-        cat('running vbsr\n')
+        #cat('running vbsr\n')
         temp_vbsr <- rep(0,p);
         
         #temp_cor <- rep(0,p);
@@ -49,10 +49,10 @@ sparrowMPI = function(data,nodes,pathv,regulatorIndex=NULL,hosts=NULL){
         res <- NA;
         set.seed(foldNumber)
         #print(data[,foldNumber])
-        print(data[,-foldNumber][1:5,1:5])
-        print(dim(data[,-foldNumber]))
-        res <- vbsr(y=data[,foldNumber],X=data[,-foldNumber],n_orderings=1);
-        cat('The system works\n')
+        #print(data[,-foldNumber][1:5,1:5])
+        #print(dim(data[,-foldNumber]))
+        res <- vbsr(y=data[,foldNumber],X=data[,-foldNumber],n_orderings=12);
+        #cat('The system works\n')
         if(!is.na(res)){
           temp_vbsr[-foldNumber]<- res$z;
           #temp_cor[-foldNumber] <- res$cor;
