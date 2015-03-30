@@ -159,7 +159,7 @@ sparrowMPI = function(data,nodes,pathv,regulatorIndex=NULL,hosts=NULL){
     if(length(vv)>0){
       fold_vec <- fold_vec[-vv];
     }
-    #print(fold_vec);
+    print(fold_vec);
     results    <- message$result
     #rssresult[,foldNumber] <- results
     res_list[[foldNumber]]<- results
