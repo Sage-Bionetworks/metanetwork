@@ -31,7 +31,7 @@ sparrowMPI = function(data,nodes,pathv,regulatorIndex=NULL,hosts=NULL){
     task <- mpi.recv.Robj(mpi.any.source(),mpi.any.tag()) 
     task_info <- mpi.get.sourcetag() 
     tag <- task_info[2] 
-    
+    cat('tag:',tag,'\n')
     # While task is not a "done" message. Note the use of the tag to indicate 
     # the type of message
     while (tag != 2) {
