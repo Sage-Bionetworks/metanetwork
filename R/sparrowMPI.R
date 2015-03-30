@@ -161,6 +161,7 @@ sparrowMPI = function(data,nodes,pathv,regulatorIndex=NULL,hosts=NULL){
     }
     print(fold_vec);
     results    <- message$result
+    cat(results[1:5],'\n')
     #rssresult[,foldNumber] <- results
     res_list[[foldNumber]]<- results
   }
