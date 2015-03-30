@@ -39,7 +39,7 @@ sparrowMPI = function(data,nodes,pathv,regulatorIndex=NULL,hosts=NULL){
       foldNumber <- task$foldNumber
       #rss <- double(p)
       #for (i in 1:p) {
-      #cat('in fold',foldNumber,'\n')
+      cat('in fold',foldNumber,'\n')
       if(is.null(regulatorIndex)){
         #cat('running vbsr\n')
         temp_vbsr <- rep(0,p);
@@ -52,7 +52,7 @@ sparrowMPI = function(data,nodes,pathv,regulatorIndex=NULL,hosts=NULL){
         #print(data[,-foldNumber][1:5,1:5])
         #print(dim(data[,-foldNumber]))
         res <- vbsr(y=data[,foldNumber],X=data[,-foldNumber],n_orderings=1);
-        #cat('The system works\n')
+        cat('The system works\n')
         if(!is.na(res)){
           temp_vbsr[-foldNumber]<- res$z;
           #temp_cor[-foldNumber] <- res$cor;
