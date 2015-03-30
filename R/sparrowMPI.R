@@ -39,8 +39,9 @@ sparrowMPI = function(data,nodes,pathv,regulatorIndex=NULL,hosts=NULL){
       foldNumber <- task$foldNumber
       #rss <- double(p)
       #for (i in 1:p) {
-      
+      cat('in fold',task$foldNumber,'\n')
       if(is.null(regulatorIndex)){
+        cat('running vbsr\n')
         temp_vbsr <- rep(0,p);
         temp_cor <- rep(0,p);
         #set.seed(1);
