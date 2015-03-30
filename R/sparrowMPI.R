@@ -176,8 +176,11 @@ sparrowMPI = function(data,nodes,pathv,regulatorIndex=NULL,hosts=NULL){
   
   # save list to file
   result <- simplify2array(res_list);
-  colnames(result) <- colnames(data)
-  rownames(result) <- c('fold',colnames(data))
+  colnames(result) <- paste0(colnames(data),'_dep'
+  rownames(result) <- c('fold',paste0(colnames(data),'_indep'))
+  result <- t(result)
+  result <- data.frame(result)
+  result$fold <- as.integer(result$fold)
   save(result,file=paste(pathv,'result.rda',sep=''));
   
   #mpi.close.Rslaves()
