@@ -51,7 +51,7 @@ sparrowMPI = function(data,nodes,pathv,regulatorIndex=NULL,hosts=NULL){
         #print(data[,foldNumber])
         #print(data[,-foldNumber][1:5,1:5])
         #print(dim(data[,-foldNumber]))
-        res <- vbsr(y=data[,foldNumber],X=data[,-foldNumber],n_orderings=1);
+        res <- vbsr(y=data[,foldNumber],X=data[,-foldNumber],n_orderings=12);
         #cat('The system works\n')
         if(!is.na(res)){
           temp_vbsr[-foldNumber]<- res$z;
