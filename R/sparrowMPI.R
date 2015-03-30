@@ -47,7 +47,7 @@ sparrowMPI = function(data,nodes,pathv,regulatorIndex=NULL,hosts=NULL){
         #set.seed(1);
         res <- NA;
         set.seed(foldNumber)
-        try(res <- vbsr(y=data[,foldNumber],X=data[,-foldNumber],n_orderings=1),silent=TRUE);
+        res <- vbsr(y=data[,foldNumber],X=data[,-foldNumber],n_orderings=1);
         if(!is.na(res)){
           temp_vbsr[-foldNumber]<- res$z;
           temp_cor[-foldNumber] <- res$cor;
