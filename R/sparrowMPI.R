@@ -184,8 +184,8 @@ sparrowMPI = function(data,nodes,pathv,regulatorIndex=NULL,hosts=NULL){
   result$fold <- as.integer(result$fold)
   save(result,file=paste(pathv,'result.rda',sep=''));
   
-  #mpi.close.Rslaves()
-  mpi.bcast.cmd(q("no"));
+  mpi.close.Rslaves()
+  #mpi.bcast.cmd(q("no"));
   mpi.quit(save="no")
   
 }
