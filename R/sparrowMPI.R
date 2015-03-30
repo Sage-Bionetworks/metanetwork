@@ -6,7 +6,7 @@ sparrowMPI = function(data,nodes,pathv,regulatorIndex=NULL,hosts=NULL){
   nslaves <- nodes;
   #nslaves/nodes: cluster size
   mpi.spawn.Rslaves(nslaves=nslaves,hosts=hosts);
-  cat('well at least we made it here!')
+  #cat('well at least we made it here!')
   #if cluster has fewer than 2 nodes, quit
   if (mpi.comm.size() <2){
     cat('More slave processes required.\n');
@@ -31,7 +31,7 @@ sparrowMPI = function(data,nodes,pathv,regulatorIndex=NULL,hosts=NULL){
     task <- mpi.recv.Robj(mpi.any.source(),mpi.any.tag()) 
     task_info <- mpi.get.sourcetag() 
     tag <- task_info[2] 
-    cat('in fold slave tag:',tag,'\n')
+    #cat('in fold slave tag:',tag,'\n')
     # While task is not a "done" message. Note the use of the tag to indicate 
     # the type of message
     while (tag != 2) {
@@ -39,7 +39,7 @@ sparrowMPI = function(data,nodes,pathv,regulatorIndex=NULL,hosts=NULL){
       foldNumber <- task$foldNumber
       #rss <- double(p)
       #for (i in 1:p) {
-      cat('in fold',foldNumber,'\n')
+      #cat('in fold',foldNumber,'\n')
       if(is.null(regulatorIndex)){
         #cat('running vbsr\n')
         temp_vbsr <- rep(0,p);
@@ -52,7 +52,7 @@ sparrowMPI = function(data,nodes,pathv,regulatorIndex=NULL,hosts=NULL){
         #print(data[,-foldNumber][1:5,1:5])
         #print(dim(data[,-foldNumber]))
         res <- vbsr(y=data[,foldNumber],X=data[,-foldNumber],n_orderings=1);
-        cat('The system works\n')
+        #cat('The system works\n')
         if(!is.na(res)){
           temp_vbsr[-foldNumber]<- res$z;
           #temp_cor[-foldNumber] <- res$cor;
@@ -118,7 +118,7 @@ sparrowMPI = function(data,nodes,pathv,regulatorIndex=NULL,hosts=NULL){
   mpi.bcast.Robj2slave(p);
   mpi.bcast.Robj2slave(n);
   mpi.bcast.Robj2slave(regulatorIndex);
-  cat('data was sent to slaves\n')
+  #cat('data was sent to slaves\n')
   #mpi.bcast.Robj2slave(regulatorIndex);
   #mpi.bcast.Robj2slave(thedata)
   #mpi.bcast.Robj2slave(fold)
@@ -126,11 +126,11 @@ sparrowMPI = function(data,nodes,pathv,regulatorIndex=NULL,hosts=NULL){
   
   # Send the function to the slaves
   mpi.bcast.Robj2slave(foldslave)
-  cat('foldslave was sent to slaves\n')
+  #cat('foldslave was sent to slaves\n')
   # Call the function in all the slaves to get them ready to
   # undertake tasks
   mpi.bcast.cmd(foldslave())
-  cat('foldslave was called in all slaves\n')
+  #cat('foldslave was called in all slaves\n')
   # Create task list
   tasks <- vector('list')
   for (i in 1:p) {
@@ -159,9 +159,9 @@ sparrowMPI = function(data,nodes,pathv,regulatorIndex=NULL,hosts=NULL){
     if(length(vv)>0){
       fold_vec <- fold_vec[-vv];
     }
-    print(fold_vec);
+    #print(fold_vec);
     results    <- message$result
-    cat(results[1:5],'\n')
+    #cat(results[1:5],'\n')
     #rssresult[,foldNumber] <- results
     res_list[[foldNumber]]<- results
   }
