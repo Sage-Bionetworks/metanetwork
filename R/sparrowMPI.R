@@ -118,6 +118,7 @@ sparrowMPI = function(data,nodes,pathv,regulatorIndex=NULL,hosts=NULL){
   mpi.bcast.Robj2slave(p);
   mpi.bcast.Robj2slave(n);
   mpi.bcast.Robj2slave(regulatorIndex);
+  cat('data was sent to slaves\n')
   #mpi.bcast.Robj2slave(regulatorIndex);
   #mpi.bcast.Robj2slave(thedata)
   #mpi.bcast.Robj2slave(fold)
@@ -125,11 +126,11 @@ sparrowMPI = function(data,nodes,pathv,regulatorIndex=NULL,hosts=NULL){
   
   # Send the function to the slaves
   mpi.bcast.Robj2slave(foldslave)
-  
+  cat('foldslave was sent to slaves\n')
   # Call the function in all the slaves to get them ready to
   # undertake tasks
   mpi.bcast.cmd(foldslave())
-  
+  cat('foldslave was called in all slaves\n')
   # Create task list
   tasks <- vector('list')
   for (i in 1:p) {
