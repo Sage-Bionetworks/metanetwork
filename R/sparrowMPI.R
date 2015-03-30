@@ -43,7 +43,8 @@ sparrowMPI = function(data,nodes,pathv,regulatorIndex=NULL,hosts=NULL){
       if(is.null(regulatorIndex)){
         cat('running vbsr\n')
         temp_vbsr <- rep(0,p);
-        temp_cor <- rep(0,p);
+        
+        #temp_cor <- rep(0,p);
         #set.seed(1);
         res <- NA;
         set.seed(foldNumber)
@@ -54,35 +55,37 @@ sparrowMPI = function(data,nodes,pathv,regulatorIndex=NULL,hosts=NULL){
         cat('The system works\n')
         if(!is.na(res)){
           temp_vbsr[-foldNumber]<- res$z;
-          temp_cor[-foldNumber] <- res$cor;
+          #temp_cor[-foldNumber] <- res$cor;
         }
-        temp_res <- c(foldNumber,temp_vbsr,temp_cor);
+        temp_res <- c(foldNumber,temp_vbsr);
         #fn <- paste(pathv,'gene',foldNumber,'.out',sep='')
         #cat(temp_res,file=fn);
       }else{
         #temp_res <- rep(0,length(regulatorIndex));
         temp_vbsr <- rep(0,length(regulatorIndex));
-        temp_cor <- rep(0,length(regulatorIndex));
+        #temp_cor <- rep(0,length(regulatorIndex));
         
         if(foldNumber%in%regulatorIndex){
           wi <- which(regulatorIndex%in%foldNumber);
           #set.seed(1);
           res <- NA;
-          try(res <- vbsr(data[,foldNumber],data[,regulatorIndex][,-wi],n_orderings=12,n_threads=1,seed=1),silent=TRUE)
+          set.seed(foldNumber)
+          try(res <- vbsr(data[,foldNumber],data[,regulatorIndex][,-wi],n_orderings=12),silent=TRUE)
           if(!is.na(res)){
             temp_vbsr[-wi] <- res$z;
-            temp_cor[-wi] <- res$cor;
+            #temp_cor[-wi] <- res$cor;
           }
         }else{
           #set.seed(1);
           res <- NA;
-          try(res <- vbsr(data[,foldNumber],data[,regulatorIndex],n_orderings=12,n_threads=1,seed=1),silent=TRUE);
+          set.seed(foldNumber)
+          try(res <- vbsr(data[,foldNumber],data[,regulatorIndex],n_orderings=12),silent=TRUE);
           if(!is.na(res)){
             temp_vbsr <- res$z;
-            temp_cor <- res$cor;
+            #temp_cor <- res$cor;
           }
         }
-        temp_res <- c(foldNumber,temp_vbsr,temp_cor);
+        temp_res <- c(foldNumber,temp_vbsr);
       }
       
       # Construct and send message back to master
