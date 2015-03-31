@@ -51,7 +51,7 @@ sparrowMPI = function(data,nodes,pathv,regulatorIndex=NULL,hosts=NULL){
         #print(data[,foldNumber])
         #print(data[,-foldNumber][1:5,1:5])
         #print(dim(data[,-foldNumber]))
-        res <- vbsr(y=data[,foldNumber],X=data[,-foldNumber],n_orderings=12);
+        res <- vbsr(y=data[,foldNumber],X=data[,-foldNumber],n_orderings=10);
         #cat('The system works\n')
         if(!is.na(res)){
           temp_vbsr[-foldNumber]<- res$z;
@@ -70,7 +70,7 @@ sparrowMPI = function(data,nodes,pathv,regulatorIndex=NULL,hosts=NULL){
           #set.seed(1);
           res <- NA;
           set.seed(foldNumber)
-          try(res <- vbsr(data[,foldNumber],data[,regulatorIndex][,-wi],n_orderings=12),silent=TRUE)
+          try(res <- vbsr(data[,foldNumber],data[,regulatorIndex][,-wi],n_orderings=10),silent=TRUE)
           if(!is.na(res)){
             temp_vbsr[-wi] <- res$z;
             #temp_cor[-wi] <- res$cor;
@@ -79,7 +79,7 @@ sparrowMPI = function(data,nodes,pathv,regulatorIndex=NULL,hosts=NULL){
           #set.seed(1);
           res <- NA;
           set.seed(foldNumber)
-          try(res <- vbsr(data[,foldNumber],data[,regulatorIndex],n_orderings=12),silent=TRUE);
+          try(res <- vbsr(data[,foldNumber],data[,regulatorIndex],n_orderings=10),silent=TRUE);
           if(!is.na(res)){
             temp_vbsr <- res$z;
             #temp_cor <- res$cor;
