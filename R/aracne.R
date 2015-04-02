@@ -35,7 +35,8 @@ aracne <- function(data,path=NULL,pval=NULL){
   for (i in 1:length(resultFormat)){
     network[resultFormat[[i]]$gene,]<-resultFormat[[i]]$vec;
   }
-  return(network)
+  #return(network)
+  save(network,file='../result_aracne.rda')
 }
 
 #n <- 20
