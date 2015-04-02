@@ -2,7 +2,7 @@ Package: metaNet
 Type: Package
 Title: Network meta analysis
 Version: 0.1
-Date: 2015-02-24
+Date: 2015-04-02
 Author: Benjamin A Logsdon
 Maintainer: Benjamin A Logsdon <ben.logsdon@sagebase.org>
 Description: Package to infer multiple types of coexpression network representations of high dimensional gene expression data.  Builds network ensembles, extract network statistics, and run enrichments on network features.

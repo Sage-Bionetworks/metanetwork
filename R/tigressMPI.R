@@ -51,7 +51,7 @@ sparrowMPI = function(data,nodes,pathv,regulatorIndex=NULL,hosts=NULL){
         #print(data[,foldNumber])
         #print(data[,-foldNumber][1:5,1:5])
         #print(dim(data[,-foldNumber]))
-        res <- vbsrWrapperZ(y=data[,foldNumber],x=data[,-foldNumber],n_orderings=12);
+        res <- tigress(y=data[,foldNumber],x=data[,-foldNumber]);
         #cat('The system works\n')
         if(!is.na(res)){
           temp_vbsr[-foldNumber]<- res;
@@ -70,7 +70,7 @@ sparrowMPI = function(data,nodes,pathv,regulatorIndex=NULL,hosts=NULL){
           #set.seed(1);
           res <- NA;
           set.seed(foldNumber)
-          try(res <- vbsrWrapperZ(data[,foldNumber],data[,regulatorIndex][,-wi],n_orderings=12),silent=TRUE)
+          try(res <- tigress(y=data[,foldNumber],x=data[,regulatorIndex][,-wi]),silent=TRUE)
           if(!is.na(res)){
             temp_vbsr[-wi] <- res;
             #temp_cor[-wi] <- res$cor;
@@ -79,7 +79,7 @@ sparrowMPI = function(data,nodes,pathv,regulatorIndex=NULL,hosts=NULL){
           #set.seed(1);
           res <- NA;
           set.seed(foldNumber)
-          try(res <- vbsrWrapperZ(data[,foldNumber],data[,regulatorIndex],n_orderings=12),silent=TRUE);
+          try(res <- tigress(data[,foldNumber],data[,regulatorIndex]),silent=TRUE);
           if(!is.na(res)){
             temp_vbsr <- res;
             #temp_cor <- res$cor;
@@ -184,10 +184,10 @@ sparrowMPI = function(data,nodes,pathv,regulatorIndex=NULL,hosts=NULL){
   result <- t(result)
   result <- data.frame(result)
   result$fold <- as.integer(result$fold)
-  save(result,file=paste(pathv,'result_sparrow.rda',sep=''));
+  save(result,file=paste(pathv,'result_tigress.rda',sep=''));
   
   mpi.close.Rslaves()
-  #mpi.bcast.cmd(q("no"));
+
   mpi.quit(save="no")
   
 }
