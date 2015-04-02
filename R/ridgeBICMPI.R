@@ -51,7 +51,7 @@ sparrowMPI = function(data,nodes,pathv,regulatorIndex=NULL,hosts=NULL){
         #print(data[,foldNumber])
         #print(data[,-foldNumber][1:5,1:5])
         #print(dim(data[,-foldNumber]))
-        res <- ridgeBIC(y=data[,foldNumber],x=data[,-foldNumber]);
+        res <- ridgeBIC(y=data[,foldNumber],x=data[,-foldNumber],eigen=eigen);
         #cat('The system works\n')
         if(!is.na(res)){
           temp_vbsr[-foldNumber]<- res;
@@ -70,7 +70,7 @@ sparrowMPI = function(data,nodes,pathv,regulatorIndex=NULL,hosts=NULL){
           #set.seed(1);
           res <- NA;
           set.seed(foldNumber)
-          try(res <- ridgeBIC(y=data[,foldNumber],x=data[,regulatorIndex][,-wi]),silent=TRUE)
+          try(res <- ridgeBIC(y=data[,foldNumber],x=data[,regulatorIndex][,-wi],eigen=eigen),silent=TRUE)
           if(!is.na(res)){
             temp_vbsr[-wi] <- res;
             #temp_cor[-wi] <- res$cor;
@@ -79,7 +79,7 @@ sparrowMPI = function(data,nodes,pathv,regulatorIndex=NULL,hosts=NULL){
           #set.seed(1);
           res <- NA;
           set.seed(foldNumber)
-          try(res <- ridgeBIC(data[,foldNumber],data[,regulatorIndex]),silent=TRUE);
+          try(res <- ridgeBIC(data[,foldNumber],data[,regulatorIndex],eigen=eigen),silent=TRUE);
           if(!is.na(res)){
             temp_vbsr <- res;
             #temp_cor <- res$cor;
@@ -113,10 +113,12 @@ sparrowMPI = function(data,nodes,pathv,regulatorIndex=NULL,hosts=NULL){
   # Now, send the data to the slaves
   p <- ncol(data)
   n <- nrow(data)
+  eigen <- svd(data)$d^2
   mpi.bcast.Robj2slave(pathv);
   mpi.bcast.Robj2slave(data);
   mpi.bcast.Robj2slave(p);
   mpi.bcast.Robj2slave(n);
+  mpi.bcast.Robj2slave(eigen);
   mpi.bcast.Robj2slave(regulatorIndex);
   #cat('data was sent to slaves\n')
   #mpi.bcast.Robj2slave(regulatorIndex);
