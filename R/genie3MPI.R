@@ -177,14 +177,14 @@ sparrowMPI = function(data,nodes,pathv,regulatorIndex=NULL,hosts=NULL){
   }
   
   # save list to file
-  result <- simplify2array(res_list);
+  network <- simplify2array(res_list);
   #result <- result[,order(result[1,])]
-  colnames(result) <- colnames(data)
-  rownames(result) <- c('fold',colnames(data))
-  result <- t(result)
-  result <- data.frame(result)
-  result$fold <- as.integer(result$fold)
-  save(result,file=paste(pathv,'result_genie3.rda',sep=''));
+  colnames(network) <- colnames(data)
+  rownames(network) <- c('fold',colnames(data))
+  network <- t(network)
+  network <- data.frame(network)
+  network$fold <- as.integer(network$fold)
+  save(network,file=paste(pathv,'result_genie3.rda',sep=''));
   
   mpi.close.Rslaves()
 
