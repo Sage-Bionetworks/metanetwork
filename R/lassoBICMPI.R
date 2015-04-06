@@ -184,7 +184,7 @@ lassoBICMPI = function(data,nodes,pathv,regulatorIndex=NULL,hosts=NULL){
   network <- t(network)
   network <- data.frame(network)
   network$fold <- as.integer(network$fold)
-  save(network,file=paste(pathv,'result_lassoBIC.rda',sep=''));
+  save(network,file=paste(pathv,'result_lasso.rda',sep=''));
   
   mpi.close.Rslaves()
 
