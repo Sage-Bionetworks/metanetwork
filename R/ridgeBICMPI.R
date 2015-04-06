@@ -184,8 +184,10 @@ ridgeBICMPI = function(data,nodes,pathv,regulatorIndex=NULL,hosts=NULL){
   colnames(network) <- colnames(data)
   rownames(network) <- c('fold',colnames(data))
   network <- t(network)
+ 
   network <- data.frame(network)
   network$fold <- as.integer(network$fold)
+  network <- network[,-1]
   save(network,file=paste(pathv,'result_ridge.rda',sep=''));
   
   mpi.close.Rslaves()
