@@ -1,4 +1,4 @@
-sparrowMPI = function(data,nodes,pathv,regulatorIndex=NULL,hosts=NULL){
+genie3MPI = function(data,nodes,pathv,regulatorIndex=NULL,hosts=NULL){
   #initialize MPI
   library('Rmpi');
   #load sparrow library
