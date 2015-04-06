@@ -31,7 +31,7 @@ aracne <- function(data,path=NULL,pval=NULL){
     model$vec <- as.numeric(model$vec)
     return(model)
   }
-  resultFormat <- lapply(result[-c(1:18)],fun,ref=rownames(data))
+  resultFormat <- lapply(result[-c(1:17)],fun,ref=rownames(data))
   for (i in 1:length(resultFormat)){
     network[resultFormat[[i]]$gene,]<-resultFormat[[i]]$vec;
   }
