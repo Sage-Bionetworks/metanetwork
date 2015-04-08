@@ -2,6 +2,7 @@
 aracne <- function(data,path=NULL,pval=NULL){
   #path is the a string of the path to th aracne compiled executable
   #data is a matrix of the gene expression data of interest
+  data <- t(data);
   if(!is.null(path)){
     setwd(path)
   }
