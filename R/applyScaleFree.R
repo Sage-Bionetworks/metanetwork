@@ -9,7 +9,7 @@ applyScaleFree <- function(network){
   edgeVec <- edgeVec[which(edgeVec!=0)]
   cutPoints <- quantile(edgeVec,seq(0,1,length.out=17))
   diag(network) <- 1
-  hardThresholdMatrix <- pickHardThreshold.fromSimilarity(similarity = network, cutVector = cutPoints)
+  hardThresholdMatrix <- pickHardThreshold.fromSimilarityMetaNet(similarity = network, cutVector = cutPoints)
   if(!is.na(hardThresholdMatrix$cutEstimate)){
     hardThreshold = hardThresholdMatrix$cutEstimate
   }else{
