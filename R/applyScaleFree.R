@@ -2,6 +2,8 @@ applyScaleFree <- function(network){
   require(WGCNA)
   network <- network/2 + t(network)/2
   network <- as.matrix(network)
+  maxVar <- max(abs(network))
+  network <- network/maxVar
   edgeVec <- network[which(upper.tri(network))]
   edgeVec <- abs(edgeVec)
   edgeVec <- edgeVec[which(edgeVec!=0)]
