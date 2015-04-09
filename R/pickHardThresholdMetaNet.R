@@ -1,6 +1,4 @@
-pickHardThresholdMetaNet <- function(data, dataIsExpr = TRUE, RsquaredCut = 0.85, cutVector = seq(0.1, 
-                                                                       0.9, by = 0.05), moreNetworkConcepts = FALSE, removeFirst = FALSE, 
-          nBreaks = 10, corFnc = "cor", corOptions = "use = 'p'") 
+pickHardThresholdMetaNet <- function(data, dataIsExpr = TRUE, RsquaredCut = 0.85, cutVector = seq(0.1, 0.9, by = 0.05), moreNetworkConcepts = FALSE, removeFirst = FALSE, nBreaks = 10, corFnc = "cor", corOptions = "use = 'p'") 
 {
   nGenes = dim(data)[[2]]
   colname1 = c("Cut", "p-value", "SFT.R.sq", "slope=", "truncated R^2", 
@@ -10,6 +8,7 @@ pickHardThresholdMetaNet <- function(data, dataIsExpr = TRUE, RsquaredCut = 0.85
   }
   if (!dataIsExpr) {
     checkAdjMat(data)
+    nSamples = dim(data)[[1]]
     if (any(diag(data) != 1)) 
       diag(data) = 1
   }
@@ -20,8 +19,7 @@ pickHardThresholdMetaNet <- function(data, dataIsExpr = TRUE, RsquaredCut = 0.85
   datout[, 1] = cutVector
   for (i in 1:length(cutVector)) {
     cut1 = cutVector[i]
-    datout[i, 2] = 2 * (1 - pt(sqrt(nSamples - 1) * cut1/sqrt(1 - 
-                                                                cut1^2), nSamples - 1))
+    datout[i, 2] = 2 * (1 - pt(sqrt(nSamples - 1) * cut1/sqrt(1 - cut1^2), nSamples - 1))
   }
   if (exists("fun1")) 
     rm(fun1)
