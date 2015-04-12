@@ -8,7 +8,12 @@ networkStatistics <- function(network){
   #shared neighbors
   #clustering coefficient
   #closeness centrality
+  require(Matrix)
   netStat <- list()
-  netStat$hubs <- rowSums(network)
+  netStat$hubs <- rowSums((network))
+  
+  
+  
+  
   return(netStat)  
 }
