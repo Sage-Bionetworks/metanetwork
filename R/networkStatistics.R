@@ -10,10 +10,6 @@ networkStatistics <- function(network){
   #closeness centrality
   require(Matrix)
   netStat <- list()
-  netStat$hubs <- rowSums((network))
-  
-  
-  
-  
+  netStat$hubs <- rowSums(as.matrix(network))
   return(netStat)  
 }
