@@ -173,7 +173,7 @@ mpiWrapper = function(data,nodes,pathv,regressionFunction,regulatorIndex=NULL,ho
   network <- data.frame(network)
   network$fold <- as.integer(network$fold)
   network <- network[,-1]
-  save(network,file=paste(pathv,'result_sparrow.rda',sep=''));
+  save(network,file=paste(pathv,'result_',regressionFunction,'.rda',sep=''));
   
   mpi.close.Rslaves()
   #mpi.bcast.cmd(q("no"));
