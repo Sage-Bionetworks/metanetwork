@@ -1,5 +1,5 @@
 #function to grab BIC solution for lasso
-lassoBIC <- function(y,x){
+lassoAIC <- function(y,x){
   require(glmnet)
   res <- glmnet(y=y,x=x)
   resid <- y - x%*%res$beta;

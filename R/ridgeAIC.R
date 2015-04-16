@@ -1,4 +1,4 @@
-ridgeBIC <- function(y,x,eigen){
+ridgeAIC <- function(y,x,eigen){
   require(glmnet)
   res <- glmnet(y=y,x=x,alpha=0)
   resid <- y - x%*%res$beta;
