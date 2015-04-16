@@ -7,7 +7,7 @@ aracne <- function(data,path=NULL,pval=NULL){
     setwd(path)
   }
   if(is.null(pval)){
-    pval <- 0.05/choose(ncol(data),2)
+    pval <- 0.05/choose(nrow(data),2)
   }
   
   dataMatrix <- cbind(rownames(data),rownames(data),data)
