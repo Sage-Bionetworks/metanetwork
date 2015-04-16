@@ -1,9 +1,13 @@
 #vbsrWrapper
-vbsrWrapperZ2 <- function(y,x,...){
+vbsrWrapperZ2 <- function(y,x,fdr=NULL,...){
   require(vbsr)
   result <- vbsr(y=y,X=x,...)$z
-  thres <- 0.05/ncol(x);
-  pval <- pchisq(result^2,1,lower.tail=F)
+  pval <- pchisq(result^2,1,lower.tail=F)  
+  if(is.null(FDR)){
+    thres <- 0.05/ncol(x);
+  }else{
+    thres <- fdrThres(pval,fdr = fdr)
+  }
   if(sum(pval<thres)>0){
     newz <- fastlm(y,x[,pval<thres])
     result[pval<thres] <- newz
