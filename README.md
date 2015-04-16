@@ -1,14 +1,21 @@
 # README #
 
-This README would normally document whatever steps are necessary to get your application up and running.
+R package to build many different statistical networks on high dimensional multivariate data and run diagnostic statistics
 
 ### What is this repository for? ###
 
 * Quick summary
 * Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
 
 ### How do I get set up? ###
+
+Install the R package devtools
+
+`install.packages('devtools')`
+
+Run the command
+
+`install_github("blogsdon/metanetwork")`
 
 * Summary of set up
 * Configuration
