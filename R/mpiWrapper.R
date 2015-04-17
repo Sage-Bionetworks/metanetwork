@@ -63,7 +63,7 @@ mpiWrapper = function(data,nodes,pathv,regressionFunction,regulatorIndex=NULL,ho
           fxnArgs <- list()
           fxnArgs$y <- data[,foldNumber]
           fxnArgs$x <- data[,regulatorIndex][,-wi]
-          if(regressionFunction=='vbsrWrapperZ' | regressionFunction=='vbsrWrapperZ2' | regressionFunction=='vbsrWrapperZ2FDR'){
+          if(regressionFunction=='sparrowZ' | regressionFunction=='sparrow2Z' | regressionFunction=='sparrow2ZFDR'){
             fxnArgs$n_orderings<-12
           }
           try(res <- do.call(regressionFunction,fxnArgs),silent=TRUE)
