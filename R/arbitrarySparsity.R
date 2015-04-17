@@ -1,6 +1,7 @@
 arbitrarySparsity <- function(network,nedges){
+  require(dplyr)
   diag(network) <- 0
-  network <- abs(network)
+  network <- network %>% abs
   require(dplyr)
   networkVec <- c(network[network %>% upper.tri() %>% which])
   sortedNetworkVec<-sort(networkVec,decreasing=T)

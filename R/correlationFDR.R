@@ -1,7 +1,8 @@
 correlationFDR <- function(data,path=NULL,fdr=0.05){
   #thres <- 0.05/choose(ncol(data),2);
-  pvals <- corPvalue(data)
+  require(dplyr)
+  pvals <- data %>% corPvalue
   diag(pvals) <- 1
-  thres <- fdrThres(pvals[which(upper.tri(pvals))],fdr = fdr)
+  thres <- pvals[pvals %>% upper.tri %>% which] %>% fdrThres(fdr=fdr)
   return(pvals<thres)
 }
