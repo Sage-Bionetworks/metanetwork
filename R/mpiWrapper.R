@@ -1,4 +1,4 @@
-mpiWrapper = function(data,nodes,pathv,regressionFunction,regulatorIndex=NULL,hosts=NULL){
+mpiWrapper = function(data,nodes,pathv,regressionFunction,eigen=NULL,regulatorIndex=NULL,hosts=NULL){
   #initialize MPI
   library('Rmpi');
   #load sparrow library
@@ -44,6 +44,9 @@ mpiWrapper = function(data,nodes,pathv,regressionFunction,regulatorIndex=NULL,ho
         fxnArgs$x <- data[,-foldNumber]
         if(regressionFunction=='vbsrWrapperZ' | regressionFunction=='vbsrWrapperZ2' | regressionFunction=='vbsrWrapperZ2FDR'){
           fxnArgs$n_orderings<-12
+        }
+        if(!is.null(eigen)){
+          fxnArgs$eigen <- eigen
         }
         
         try(res <- do.call(regressionFunction,fxnArgs),silent=TRUE)
@@ -107,6 +110,10 @@ mpiWrapper = function(data,nodes,pathv,regressionFunction,regulatorIndex=NULL,ho
   
   p <- ncol(data)
   n <- nrow(data)
+  if(regressionFunction=='ridgeAIC'|regressionFunction=='ridgeBIC'|regressionFunction=='ridgeCV1se'|regressionFunction=='ridgeCVmin'){
+    eigen <- svd(data)$d^2
+  }
+  mpi.bcast.Robj2slave(eigen);
   mpi.bcast.Robj2slave(pathv);
   mpi.bcast.Robj2slave(data);
   mpi.bcast.Robj2slave(p);
