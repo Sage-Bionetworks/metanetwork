@@ -1,13 +1,13 @@
 fastlm <- function(y,x){
   require(dplyr)
-  X <- as.matrix(x)
-  n1 <- nrow(X)
-  X <- cbind(rep(1,n1),X);
+  X <- x %>% as.matrix
+  n1 <- X %>% nrow
+  X <- (1 %>% rep(n1)) %>% cbind(X)
   ginv <- t(X)%*%X %>% solve();
   Xhat <- ginv%*%t(X);
   betahat <- Xhat%*%y;
-  sig <- mean((y-X%*%betahat)^2)*((n1)/(n1-ncol(X)));
-  zval <- betahat/((sig*diag(ginv)) %>% sqrt());
+  sig <- (((y-X%*%betahat)^2) %>% mean)*((n1)/(n1- X %>% ncol));
+  zval <- betahat/((sig*(ginv %>% diag)) %>% sqrt);
   #print('In cleaning')
   return(zval[-1]);
 }
