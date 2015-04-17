@@ -110,7 +110,7 @@ mpiWrapper = function(data,nodes,pathv,regressionFunction,eigen=NULL,regulatorIn
   
   p <- ncol(data)
   n <- nrow(data)
-  if(regressionFunction=='ridgeAIC'|regressionFunction=='ridgeBIC'|regressionFunction=='ridgeCV1se'|regressionFunction=='ridgeCVmin'){
+  if(regressionFunction=='ridgeAIC'|regressionFunction=='ridgeBIC'){
     eigen <- svd(data)$d^2
   }
   mpi.bcast.Robj2slave(eigen);
