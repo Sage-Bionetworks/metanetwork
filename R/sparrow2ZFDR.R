@@ -1,5 +1,5 @@
 #vbsrWrapper
-vbsrWrapperZ2FDR <- function(y,x,fdr=0.05,...){
+sparrow2ZFDR <- function(y,x,fdr=0.05,...){
   require(vbsr)
   result <- vbsr(y=y,X=x,...)$z
   pval <- pchisq(result^2,1,lower.tail=F)  
