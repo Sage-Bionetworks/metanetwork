@@ -7,5 +7,5 @@ generateNetworkPathStatistics <- function(network,fxn){
     argList$x <- network>=cut
     (fxn %>% do.call(args=argList)) %>% return
   }
-  (cutpoints %>% sapply(internalFunction,network,fxn)) %>% return
+  (cutpoints %>% lapply(internalFunction,network,fxn)) %>% return
 }
