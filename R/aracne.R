@@ -37,5 +37,10 @@ aracne <- function(data,path=NULL,pval=NULL){
     network[resultFormat[[i]]$gene,]<-resultFormat[[i]]$vec;
   }
   #return(network)
-  save(network,file='../result_aracne.rda')
+  if(pval==1){
+    fileName <- '../result_aracneFull.rda'
+  }else{
+    fileName <- '../result_aracne.rda'
+  }
+  save(network,file=fileName)
 }
