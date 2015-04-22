@@ -3,7 +3,8 @@ generateNetworkPathStatistics <- function(network,fxn){
   network <- network %>% abs
   cutpoints <- network[network %>% upper.tri %>% which] %>% unique
   internalFunction <- function(cut,network,fxn){
-    argList$net <- network>=cut
+    argList <- list()
+    argList$x <- network>=cut
     (fxn %>% do.call(args=argList)) %>% return
   }
   (cutpoints %>% sapply(internalFunction,network,fxn)) %>% return
