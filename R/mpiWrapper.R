@@ -180,7 +180,7 @@ mpiWrapper = function(data,nodes,pathv,regressionFunction,eigen=NULL,regulatorIn
   network <- data.frame(network)
   network$fold <- as.integer(network$fold)
   network <- network[,-1]
-  if(regressionFunction=='lassoCV1se'|regressionFunction=='lassoCVmin'|regressionFunction=='lassoAIC'|regressionFunction=='lassoAIC'|regressionFunction=='tigress'){
+  if(regressionFunction=='lassoCV1se'|regressionFunction=='lassoCVmin'|regressionFunction=='lassoAIC'|regressionFunction=='lassoBIC'|regressionFunction=='tigress'){
     cat(paste(regressionFunction,sum((network+t(network))!=0)/2,sep=','),'\n',file='sparsity.csv',sep='',append=TRUE)
   }else if (regressionFunction=='sparrowZ'){
     #bonferroni
