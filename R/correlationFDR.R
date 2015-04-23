@@ -6,5 +6,6 @@ correlationFDR <- function(data,path=NULL,fdr=0.05){
   thres <- pvals[pvals %>% upper.tri %>% which] %>% fdrThres(fdr=fdr)
   #return(pvals<thres)
   network <- pvals < thres
+  cat(paste('correlationFDR',sum(network)/2,sep=','),'\n',file='sparsity.csv',sep='',append=TRUE)
   save(network,file='result_correlationFDR.rda')
 }
