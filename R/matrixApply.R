@@ -1,6 +1,7 @@
-matrixApply <- function(fun,x,y){
-  internal <- function(x,y,fun){
-    return(apply(y,2,fun,x))
+matrixApply <- function(FUN,MARGIN,X,Y){
+  require(dplyr)
+  internal <- function(X,Y,FUN,MARGIN){
+    return(Y%>% apply(MARGIN,FUN,X))
   }
-  return(apply(x,2,internal,y,fun))  
+  return(X %>% apply(MARGIN,internal,Y,FUN,MARGIN))  
 }
