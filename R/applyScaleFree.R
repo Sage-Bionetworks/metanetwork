@@ -1,7 +1,6 @@
 applyScaleFree <- function(network){
   require(WGCNA)
   require(dplyr)
-  network <- network/2 + t(network)/2
   network <- network %>% as.matrix
   #maxVar <- max(abs(network))
   maxVar <- network %>% abs %>% max
