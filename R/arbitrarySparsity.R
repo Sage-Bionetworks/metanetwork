@@ -1,4 +1,4 @@
-arbitrarySparsity <- function(network,nedges){
+arbitrarySparsity <- function(nedges,network){
   require(dplyr)
   #make the network into a matrix for sure (in case it is stored as a data frame or list)
   network <- network %>% as.matrix
