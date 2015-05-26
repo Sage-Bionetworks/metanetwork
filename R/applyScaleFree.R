@@ -3,12 +3,12 @@ applyScaleFree <- function(network){
   require(dplyr)
   network <- network %>% as.matrix
   #maxVar <- max(abs(network))
-  maxVar <- network %>% abs %>% max
+  maxVar <- (network %>% abs) %>% max
   network <- network/maxVar
   #edgeVec <- network[which(upper.tri(network))]
-  edgeVec <- network[network %>% upper.tri %>% which] %>% abs
+  edgeVec <- network[(network %>% upper.tri) %>% which] %>% abs
   #edgeVec <- abs(edgeVec)
-  edgeVec <- edgeVec[edgeVec!=0 %>% which]
+  edgeVec <- edgeVec[(edgeVec!=0) %>% which]
   quant <- (2^(seq(5,15,length.out=17))-1)/(2^(seq(5,15,length.out=17)))
   #cutPoints <- quantile(edgeVec,quant)
   cutPoints <- edgeVec %>% quantile(quant)
