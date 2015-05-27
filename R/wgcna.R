@@ -1,5 +1,5 @@
 # ###Function to run wgcna on the data
-wgcna <- function(data,path=NULL){
+wgcna <- function(data,path=NULL,outputpath){
   library(WGCNA)
   hardThresholdMatrix = pickHardThreshold(data)
   if(!is.na(hardThresholdMatrix$cutEstimate)){
@@ -10,5 +10,5 @@ wgcna <- function(data,path=NULL){
     cat('warning, r^2 less than .85:',hardThresholdMatrix$fitIndices$SFT.R.sq[w1],'\n')
   }
   network <- abs(cor(data))>hardThreshold
-  save(network,file='result_wgcna.rda')
+  save(network,file=paste0(outputpath,'result_wgcna.rda'))
 }

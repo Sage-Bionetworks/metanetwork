@@ -1,5 +1,5 @@
 ###Function to run aracne on the data
-aracne <- function(data,path=NULL,pval=NULL){
+aracne <- function(data,path=NULL,pval=NULL,outputpath){
   #path is the a string of the path to th aracne compiled executable
   #data is a matrix of the gene expression data of interest
   data <- t(data);
@@ -38,10 +38,10 @@ aracne <- function(data,path=NULL,pval=NULL){
   }
   #return(network)
   if(pval==1){
-    fileName <- '../result_aracneFull.rda'
+    fileName <- paste0(outputpath,'result_aracneFull.rda')
   }else{
-    fileName <- '../result_aracne.rda'
-    cat(paste('aracne',sum(network!=0)/2,sep=','),'\n',file='../sparsity.csv',sep='',append=TRUE)
+    fileName <- paste0(outputpath,'result_aracne.rda')
+    cat(paste('aracne',sum(network!=0)/2,sep=','),'\n',file=paste0(outputpath,'sparsity.csv'),sep='',append=TRUE)
   }
   save(network,file=fileName)
 }
