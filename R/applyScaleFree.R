@@ -23,6 +23,9 @@ applyScaleFree <- function(network){
     hardThreshold = hardThresholdMatrix$fitIndices$Cut[w1]
     cat('warning, r^2 less than .85:',hardThresholdMatrix$fitIndices$SFT.R.sq[w1],'\n')
   }
-  network <- abs(network) > hardThreshold
-  return(network)
+  #diag(network) <- 0;
+  
+  #network <- abs(network) > hardThreshold
+  n1<-((network[(network %>% upper.tri) %>% which] %>% abs) > hardThreshold) %>% sum
+  return(n1)
 }
