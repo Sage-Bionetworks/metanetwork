@@ -1,8 +1,6 @@
 rankedEdgeList <- function(network,symmetric=FALSE,maxLength=1e7){
   require(dplyr)
-  edgeMat <- matrix(paste0('e',1:(nrow(network)*ncol(network))),nrow(network),ncol(network))
-  #rownames(edgeMat) <- rownames(network)
-  #colnames(edgeMat) <- colnames(netw)
+  #edgeMat <- matrix(paste0('e',1:(nrow(network)*ncol(network))),nrow(network),ncol(network))
   if(!symmetric){
     #need to fix this
     whichMatrix <- ((network%>%abs) > 0) %>% which(T)
@@ -12,7 +10,6 @@ rankedEdgeList <- function(network,symmetric=FALSE,maxLength=1e7){
     a <- sort(abs(network[which(upper.tri(network))]),decreasing=T)[tl]
     a <- max(0,a)
     gc()
-    #print(a)
     cat('getting matrix\n')
     whichMatrix <- ((network%>%abs) > a & network%>%upper.tri) %>% which(T)    
     gc()
@@ -22,9 +19,8 @@ rankedEdgeList <- function(network,symmetric=FALSE,maxLength=1e7){
   cat('building table\n')
   gc()
   colnames(rankedEdgeList) <- c('var1','var2','value')
-  #rownames(rankedEdgeList) <- paste0('edge',1:nrow(rankedEdgeList))
   cat('getting edge names\n')
-  rownames(rankedEdgeList) <- apply(whichMatrix,1,internal,edgeMat)
+  #rownames(rankedEdgeList) <- apply(whichMatrix,1,internal,edgeMat)
   gc()
   cat('making a dataframe \n')
   rankedEdgeList <- rankedEdgeList %>% data.frame(stringsAsFactors = F)
@@ -35,6 +31,5 @@ rankedEdgeList <- function(network,symmetric=FALSE,maxLength=1e7){
   cat('ordering data frame\n')
   rankedEdgeList <- rankedEdgeList[order((rankedEdgeList$value %>% abs),decreasing=T),]
   gc()
-  #rownames(rankedEdgeList) <- paste0('edge',1:nrow(rankedEdgeList))
   rankedEdgeList %>% return
 }
