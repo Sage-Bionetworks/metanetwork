@@ -8,23 +8,31 @@ rankedEdgeList <- function(network,symmetric=FALSE,maxLength=1e7){
     whichMatrix <- ((network%>%abs) > 0) %>% which(T)
   }else {
     tl <- min(choose(ncol(network),2),maxLength)
+    cat('sorting\n')
     a <- sort(abs(network[which(upper.tri(network))]),decreasing=T)[tl]
     a <- max(0,a)
     gc()
     #print(a)
+    cat('getting matrix\n')
     whichMatrix <- ((network%>%abs) > a & network%>%upper.tri) %>% which(T)    
+    gc()
   }
   internal <- function(ind,x){ return(x[ind[1],ind[2]])}
   rankedEdgeList <- cbind(whichMatrix[,1],whichMatrix[,2],apply(whichMatrix,1,internal,network))
+  cat('building table\n')
   gc()
   colnames(rankedEdgeList) <- c('var1','var2','value')
   #rownames(rankedEdgeList) <- paste0('edge',1:nrow(rankedEdgeList))
+  cat('getting edge names\n')
   rownames(rankedEdgeList) <- apply(whichMatrix,1,internal,edgeMat)
   gc()
+  cat('making a dataframe \n')
   rankedEdgeList <- rankedEdgeList %>% data.frame(stringsAsFactors = F)
   gc()
+  cat('changing value to numeric\n')
   rankedEdgeList$value <- as.numeric(rankedEdgeList$value)
   gc()
+  cat('ordering data frame\n')
   rankedEdgeList <- rankedEdgeList[order((rankedEdgeList$value %>% abs),decreasing=T),]
   gc()
   #rownames(rankedEdgeList) <- paste0('edge',1:nrow(rankedEdgeList))
