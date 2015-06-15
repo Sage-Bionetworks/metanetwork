@@ -197,8 +197,6 @@ mpiWrapper = function(data,nodes,pathv,regressionFunction,outputpath,eigen=NULL,
     cat(paste('sparrow2Bonferroni',sum(network2!=0)/2,sep=','),'\n',file=paste0(outputpath,'sparsity.csv'),sep='',append=TRUE)
     rm(network2)
     gc()
-    
-  }else if (regressionFunction=='sparrow2ZFDR'){
     network2 <- applySparrowFDR(network)
     cat(paste('sparrow2FDR',sum(network2!=0)/2,sep=','),'\n',file=paste0(outputpath,'sparsity.csv'),sep='',append=TRUE)
     rm(network2)
