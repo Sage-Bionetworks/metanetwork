@@ -4,7 +4,7 @@ aracne <- function(data,path=NULL,pval=NULL,outputpath){
   #data is a matrix of the gene expression data of interest
   data <- t(data);
   if(!is.null(path)){
-    setwd(path)
+    setwd(paste0(path,'ARACNE/'))
   }
   if(is.null(pval)){
     pval <- 0.05/choose(nrow(data),2)
