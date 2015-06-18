@@ -204,7 +204,10 @@ mpiWrapper = function(data,nodes,pathv,regressionFunction,outputpath,eigen=NULL,
   }
   save(network,file=paste(outputpath,'result_',regressionFunction,'.rda',sep=''));
   
-  mpi.close.Rslaves()
+  a <- mpi.close.Rslaves()
+  while(a==0){
+    a <- mpi.close.Rslaves()
+  }
   #mpi.bcast.cmd(q("no"));
   mpi.quit(save="no")
   
