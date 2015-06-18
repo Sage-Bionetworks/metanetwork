@@ -205,6 +205,7 @@ mpiWrapper = function(data,nodes,pathv,regressionFunction,outputpath,eigen=NULL,
   save(network,file=paste(outputpath,'result_',regressionFunction,'.rda',sep=''));
   
   a <- mpi.close.Rslaves()
+  cat('did the cluster shut down?',a,'\n')
   while(a==0){
     a <- mpi.close.Rslaves()
   }
