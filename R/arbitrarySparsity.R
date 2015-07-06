@@ -1,9 +1,9 @@
 arbitrarySparsity <- function(nedges,network){
   require(dplyr)
   #make the network into a matrix for sure (in case it is stored as a data frame or list)
-  network <- network %>% as.matrix
+  #network <- network %>% as.matrix
   #set the diagonal to zero
-  diag(network) <- 0
+  #diag(network) <- 0
   #take the absolute value
   network <- network %>% abs
   #grab the upper diagonal
