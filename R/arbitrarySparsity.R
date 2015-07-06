@@ -1,5 +1,7 @@
 arbitrarySparsity <- function(nedges,network){
   require(dplyr)
+  gc()
+  cat('nedges: ',nedges,'\n')
   #make the network into a matrix for sure (in case it is stored as a data frame or list)
   #network <- network %>% as.matrix
   #set the diagonal to zero
@@ -12,9 +14,10 @@ arbitrarySparsity <- function(nedges,network){
   sortedNetworkVec<-sort(networkVec,decreasing=T)
   #need to add a conditional if nedges exceeds the number of non-zero elements
   thres <- sortedNetworkVec[nedges]
+  gc()
   if(thres==0){
     return(NA)
   }else{
-    return(network>thres)
+    return(network>=thres)
   }
 }
