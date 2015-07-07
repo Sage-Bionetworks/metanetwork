@@ -1,4 +1,4 @@
-rankedEdgeList <- function(network,symmetric=FALSE,maxLength=1e9){
+rankedEdgeList <- function(network,symmetric=FALSE,maxLength=1e7){
   require(dplyr)
   #edgeMat <- matrix(paste0('e',1:(nrow(network)*ncol(network))),nrow(network),ncol(network))
   if(!symmetric){
