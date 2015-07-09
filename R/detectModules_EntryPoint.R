@@ -12,7 +12,7 @@ library(synapseClient)
 library(dplyr)
 library(WGCNA)
 library(Rclusterpp)
-library(tool)
+library(tools)
 library(stringr)
 
 ## Needs the dev branch
@@ -39,12 +39,26 @@ moduleFun <- getPermlink(repository = thisRepo,
                          repositoryPath=paste0('R/', moduleFunName))
 
 # Get all files and folder
-tmp = synQuery('select * from entity where parentId=="syn4593591"')
+tmp = synQuery('select * from entity where parentId=="syn4545002"')
 All.Files = tmp[tmp$entity.nodeType == 'file',]
 All.Folder = tmp[tmp$entity.nodeType == 'folder',]
 
-activityName = 'Module Identification'
+id = All.Folder$entity.id[1]
+while(!is.na(id)){
+  tmp = synQuery(paste0('select * from entity where parentId=="',id,'"'))
+  All.Files = bind_rows(All.Files,tmp[tmp$entity.nodeType == 'file',])
+  All.Folder = bind_rows(All.Folder,tmp[tmp$entity.nodeType == 'folder',])
   
+  All.Folder = All.Folder[-(1),]
+  id = All.Folder$entity.id[1]
+  writeLines(paste(paste(dim(All.Files), collapse=','), paste(dim(All.Folder), collapse = ',')))  
+}
+ind = grep('correlationcorrelationBon',All.Files$entity.name)
+
+All.Files = All.Files[ind,]
+
+# Synapse specific parameters
+activityName = 'Module Identification'
 activityDescription = 'Clustering network genes in to modules using TOM and dynamic tree cut methodology'
   
 for(i in 1:length(All.Files$entity.id)){
@@ -59,29 +73,31 @@ for(i in 1:length(All.Files$entity.id)){
   NET = as.matrix(sparseNetwork)*1
   
   # Get modules
-  MOD = getModules(NET[1:3000,1:3000])
+  MOD = getModules(NET)
   
   # Write results to synapse
   save(list=c('MOD'), file = paste(FNAME,'RData',sep='.'))
-  MOD_OBJ = File(paste(FNAME,'RData',sep='.'), name = paste(FNAME,'RData',sep=' '), parentId = parentId)
+  MOD_OBJ = File(paste(FNAME,'RData',sep='.'), name = paste(FNAME,'TOM','hclust','Modules'), parentId = parentId)
   annotations(MOD_OBJ) = annotations(NET_OBJ)
   MOD_OBJ@annotations$networkStorageType = 'full'
   MOD_OBJ@annotations$fileType = 'RData'
   MOD_OBJ@annotations$moduleParameters = 'linkage:ward_distance:eucledian_treecut:dynamictree_minsize:30_deepSplit:F'
   MOD_OBJ = synStore(MOD_OBJ,
-                     executed = c(thisFile,moduleFun), 
+                     executed = list(thisFile,moduleFun), 
                      used = NET_OBJ,
                      activityName = activityName,
                      activityDescription = activityDescription)
   
   write.table(MOD$geneModules, paste(FNAME,'tsv',sep='.'), sep='\t', row.names=F, quote=F)
-  MOD_OBJ = File(paste(FNAME,'tsv',sep='.'), name = paste(FNAME,'tsv',sep=' '), parentId = parentId)
+  MOD_OBJ = File(paste(FNAME,'tsv',sep='.'), name = paste(FNAME,'Modules'), parentId = parentId)
   annotations(MOD_OBJ) = annotations(NET_OBJ)
   MOD_OBJ@annotations$fileType = 'tsv'
   MOD_OBJ@annotations$moduleParameters = 'linkage:ward_distance:eucledian_treecut:dynamictree_minsize:30_deepSplit:F'
   MOD_OBJ = synStore(MOD_OBJ,
-                     executed = c(thisFile,moduleFun), 
+                     executed = list(thisFile,moduleFun), 
                      used = NET_OBJ,
                      activityName = activityName,
                      activityDescription = activityDescription)
+  
+  writeLines(paste('Completed',FNAME,'and stored in',MOD_OBJ$properties$id))
 }
