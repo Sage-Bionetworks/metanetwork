@@ -39,30 +39,18 @@ moduleFun <- getPermlink(repository = thisRepo,
                          repositoryPath=paste0('R/', moduleFunName))
 
 # Get all files and folder
-tmp = synQuery('select * from entity where parentId=="syn4545002"')
-All.Files = tmp[tmp$entity.nodeType == 'file',]
-All.Folder = tmp[tmp$entity.nodeType == 'folder',]
+All.Files = synQuery('select name,id,disease from file where projectId=="syn2397881" and fileType == "rda"')
+Finished.Files = synQuery('select name,id,disease from file where projectId=="syn2397881" and fileType == "RData"')
 
-id = All.Folder$entity.id[1]
-while(!is.na(id)){
-  tmp = synQuery(paste0('select * from entity where parentId=="',id,'"'))
-  All.Files = bind_rows(All.Files,tmp[tmp$entity.nodeType == 'file',])
-  All.Folder = bind_rows(All.Folder,tmp[tmp$entity.nodeType == 'folder',])
-  
-  All.Folder = All.Folder[-(1),]
-  id = All.Folder$entity.id[1]
-  writeLines(paste(paste(dim(All.Files), collapse=','), paste(dim(All.Folder), collapse = ',')))  
-}
-ind = grep('correlationcorrelationBon',All.Files$entity.name)
-
-All.Files = All.Files[ind,]
+All.Files = All.Files[!(paste(tools::file_path_sans_ext(All.Files$file.name),All.Files$file.disease) %in%
+                          paste(sapply(Finished.Files$file.name, function(x){strsplit(x," ")[[1]][1]}), Finished.Files$file.disease)),]
 
 # Synapse specific parameters
 activityName = 'Module Identification'
 activityDescription = 'Clustering network genes in to modules using TOM and dynamic tree cut methodology'
   
-for(i in 1:length(All.Files$entity.id)){
-  NET_OBJ = synGet(All.Files$entity.id[i])
+for(i in 1:length(All.Files$file.id)){
+  NET_OBJ = synGet(All.Files$file.id[i])
   FNAME = tools::file_path_sans_ext(NET_OBJ$properties$name)
   parentId = NET_OBJ$properties$parentId
   
@@ -82,22 +70,39 @@ for(i in 1:length(All.Files$entity.id)){
   MOD_OBJ@annotations$networkStorageType = 'full'
   MOD_OBJ@annotations$fileType = 'RData'
   MOD_OBJ@annotations$moduleParameters = 'linkage:ward_distance:eucledian_treecut:dynamictree_minsize:30_deepSplit:F'
-  MOD_OBJ = synStore(MOD_OBJ,
-                     executed = list(thisFile,moduleFun), 
-                     used = NET_OBJ,
-                     activityName = activityName,
-                     activityDescription = activityDescription)
+  MOD_OBJ = tryCatch(synStore(MOD_OBJ,
+                              executed = list(thisFile,moduleFun), 
+                              used = NET_OBJ,
+                              activityName = activityName,
+                              activityDescription = activityDescription),
+                     error = function(MOD_OBJ){
+                       MOD_OBJ = synStore(MOD_OBJ,
+                                          executed = list(thisFile,moduleFun), 
+                                          used = NET_OBJ,
+                                          activityName = activityName,
+                                          activityDescription = activityDescription)
+                       return(MOD_OBJ)
+                       }
+                     )
   
   write.table(MOD$geneModules, paste(FNAME,'tsv',sep='.'), sep='\t', row.names=F, quote=F)
   MOD_OBJ = File(paste(FNAME,'tsv',sep='.'), name = paste(FNAME,'Modules'), parentId = parentId)
   annotations(MOD_OBJ) = annotations(NET_OBJ)
   MOD_OBJ@annotations$fileType = 'tsv'
   MOD_OBJ@annotations$moduleParameters = 'linkage:ward_distance:eucledian_treecut:dynamictree_minsize:30_deepSplit:F'
-  MOD_OBJ = synStore(MOD_OBJ,
-                     executed = list(thisFile,moduleFun), 
-                     used = NET_OBJ,
-                     activityName = activityName,
-                     activityDescription = activityDescription)
-  
+  MOD_OBJ = tryCatch(synStore(MOD_OBJ,
+                              executed = list(thisFile,moduleFun), 
+                              used = NET_OBJ,
+                              activityName = activityName,
+                              activityDescription = activityDescription),
+                     error = function(MOD_OBJ){
+                       MOD_OBJ = synStore(MOD_OBJ,
+                                          executed = list(thisFile,moduleFun), 
+                                          used = NET_OBJ,
+                                          activityName = activityName,
+                                          activityDescription = activityDescription)
+                       return(MOD_OBJ)
+                     }
+  )                     
   writeLines(paste('Completed',FNAME,'and stored in',MOD_OBJ$properties$id))
 }
