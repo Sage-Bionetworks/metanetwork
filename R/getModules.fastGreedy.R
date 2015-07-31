@@ -23,7 +23,6 @@ library(rGithubClient)
 
 # login to synapse
 synapseLogin()
-setGithubToken('848279763d6e418d97a8139c12ae944c2d29bb1e')
 
 # Get github links for provenance
 thisFileName = 'getModules.fastGreedy.R'
