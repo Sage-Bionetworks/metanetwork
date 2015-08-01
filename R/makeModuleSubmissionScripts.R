@@ -15,7 +15,7 @@ synapseLogin()
 
 # Get all files and folder
 All.Files = synQuery('select name,id,disease from file where projectId=="syn2397881" and fileType == "rda"')
-Finished.Files = synQuery('select name,id,disease from file where projectId=="syn2397881" and fileType == "RData"')
+Finished.Files = synQuery('select name,id,disease from file where projectId=="syn2397881" and fileType == "tsv" and moduleMethod == "igraph:fast_greedy"')
 
 All.Files = All.Files[!(paste(tools::file_path_sans_ext(All.Files$file.name),All.Files$file.disease) %in%
                           paste(sapply(Finished.Files$file.name, function(x){strsplit(x," ")[[1]][1]}), Finished.Files$file.disease)),]
