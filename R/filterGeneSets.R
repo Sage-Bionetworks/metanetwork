@@ -1,5 +1,6 @@
 library(synapseClient)
 library(data.table)
+library(rGithubClient)
 
 synapseLogin()
 
@@ -45,11 +46,22 @@ filterGeneSets <- function(GeneLists, # List of lists
 # Filter gene sets
 GeneSets = filterGeneSets(GeneSets, backGroundGenes)
 
+thisFileName <- 'filterGeneSets.R'
+
+# Github link
+thisRepo <- getRepo(repository = "th1vairam/metanetwork", 
+                    ref="branch", 
+                    refName='enrich')
+
+thisFile <- getPermlink(repository = thisRepo,
+                        repositoryPath=paste0('R/', thisFileName))
+
 # Write to synapse
 save(list = 'GeneSets', file = 'GeneLists.RData')
 OBJ <- File('./GeneLists.RData',
             name = 'Enrichr Merged Gene Sets in RList Format (filtered)',
             parentId = 'syn4597301')
 OBJ <- synStore(OBJ, 
-                used = c(ALL_USED_IDs, 'syn4868362', 'syn4259377'), 
-                activityName = 'Gene Sets Curation')
+                used = c('syn4868362', 'syn4259377'), 
+                activityName = 'Gene Sets Curation',
+                executed = thisFile)
