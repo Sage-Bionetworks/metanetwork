@@ -15,7 +15,7 @@ synapseLogin()
 
 # Get all files and folder
 All.Files = synQuery('select name,id,disease from file where projectId=="syn2397881" and fileType == "rda"')
-Finished.Files = synQuery('select name,id,disease from file where projectId=="syn2397881" and fileType == "tsv" and moduleMethod == "igraph:fast_greedy"')
+Finished.Files = synQuery('select name,id,disease from file where projectId=="syn2397881" and fileType == "tsv" and moduleMethod == "WGCNA:dynamicTreeCut"')
 
 All.Files = All.Files[!(paste(tools::file_path_sans_ext(All.Files$file.name),All.Files$file.disease) %in%
                           paste(sapply(Finished.Files$file.name, function(x){strsplit(x," ")[[1]][1]}), Finished.Files$file.disease)),]
@@ -29,7 +29,7 @@ for (id in All.Files$file.id){
   fp = file (paste('/home/ec2-user/Work/Github/metanetwork/R/sgeModuleSubmissions/SUB',id,sep='.'), "w+")
   cat('#!/bin/bash', 
       'sleep 30', 
-      paste('Rscript /home/ec2-user/Work/Github/metanetwork/R/getModules.fastGreedy.R',id), 
+      paste('Rscript /home/ec2-user/Work/Github/metanetwork/R/getModules.dynamicTreeCut.R',id), 
       file = fp,
       sep = '\n')
   close(fp)
@@ -38,7 +38,7 @@ for (id in All.Files$file.id){
   cat(paste('qsub','-cwd','-V', paste('/home/ec2-user/Work/Github/metanetwork/R/sgeModuleSubmissions/SUB',id,sep='.'),
             '-o',paste('/home/ec2-user/Work/Github/metanetwork/R/sgeModuleSubmissions/SUB',id,'o',sep='.'),
             '-e',paste('/home/ec2-user/Work/Github/metanetwork/R/sgeModuleSubmissions/SUB',id,'e',sep='.'),
-	    '-l mem=7GB'),
+	    '-l mem=14GB'),
       file=fp_all,
       sep='\n')
   close(fp_all)
