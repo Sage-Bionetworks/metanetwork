@@ -22,7 +22,7 @@ All.Files = All.Files[!(paste(tools::file_path_sans_ext(All.Files$file.name),All
 
 # Make directory and write shell scripts for running these files
 system('mkdir sgeEnrichSub')
-fp_all = file(paste('allSubmissions.sh'),'w+')    
+fp_all = file(paste('./sgeEnrichSub/allSubmissions.sh'),'w+')    
 cat('#!/bin/bash',file=fp_all,sep='\n')
 close(fp_all)
 for (id in All.Files$file.id){
@@ -34,7 +34,7 @@ for (id in All.Files$file.id){
       sep = '\n')
   close(fp)
   
-  fp_all = file(paste('allSubmissions.sh'),'a+')    
+  fp_all = file(paste('./sgeEnrichSub/allSubmissions.sh'),'a+')    
   cat(paste('qsub',paste('/home/ec2-user/Work/Github/metanetwork/R/sgeEnrichSub/SUB',id,sep='.'),
             '-o',paste('/home/ec2-user/Work/Github/metanetwork/R/sgeEnrichSub/SUB',id,'o',sep='.'),
             '-e',paste('/home/ec2-user/Work/Github/metanetwork/R/sgeEnrichSub/SUB',id,'e',sep='.')),
