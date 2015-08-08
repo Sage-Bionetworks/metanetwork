@@ -35,9 +35,10 @@ for (id in All.Files$file.id){
   close(fp)
   
   fp_all = file(paste('./sgeEnrichSub/allSubmissions.sh'),'a+')    
-  cat(paste('qsub',paste('/home/ec2-user/Work/Github/metanetwork/R/sgeEnrichSub/SUB',id,sep='.'),
+  cat(paste('qsub','-cwd','-V',paste('/home/ec2-user/Work/Github/metanetwork/R/sgeEnrichSub/SUB',id,sep='.'),
             '-o',paste('/home/ec2-user/Work/Github/metanetwork/R/sgeEnrichSub/SUB',id,'o',sep='.'),
-            '-e',paste('/home/ec2-user/Work/Github/metanetwork/R/sgeEnrichSub/SUB',id,'e',sep='.')),
+            '-e',paste('/home/ec2-user/Work/Github/metanetwork/R/sgeEnrichSub/SUB',id,'e',sep='.'),
+	    '-l mem=7GB'),
       file=fp_all,
       sep='\n')
   close(fp_all)

@@ -21,12 +21,12 @@ All.Files = All.Files[!(paste(tools::file_path_sans_ext(All.Files$file.name),All
                           paste(sapply(Finished.Files$file.name, function(x){strsplit(x," ")[[1]][1]}), Finished.Files$file.disease)),]
 
 # Make directory and write shell scripts for running these files
-system('mkdir sgeSubmissions')
-fp_all = file(paste('allSubmissions.sh'),'w+')    
+system('mkdir sgeModuleSubmissions')
+fp_all = file(paste('sgeModuleSubmissions/allSubmissions.sh'),'w+')    
 cat('#!/bin/bash',file=fp_all,sep='\n')
 close(fp_all)
 for (id in All.Files$file.id){
-  fp = file (paste('/home/ec2-user/Work/Github/metanetwork/R/sgeSubmissions/SUB',id,sep='.'), "w+")
+  fp = file (paste('/home/ec2-user/Work/Github/metanetwork/R/sgeModuleSubmissions/SUB',id,sep='.'), "w+")
   cat('#!/bin/bash', 
       'sleep 30', 
       paste('Rscript /home/ec2-user/Work/Github/metanetwork/R/getModules.fastGreedy.R',id), 
@@ -34,10 +34,11 @@ for (id in All.Files$file.id){
       sep = '\n')
   close(fp)
   
-  fp_all = file(paste('allSubmissions.sh'),'a+')    
-  cat(paste('qsub',paste('/home/ec2-user/Work/Github/metanetwork/R/sgeSubmissions/SUB',id,sep='.'),
-            '-o',paste('/home/ec2-user/Work/Github/metanetwork/R/sgeSubmissions/SUB',id,'o',sep='.'),
-            '-e',paste('/home/ec2-user/Work/Github/metanetwork/R/sgeSubmissions/SUB',id,'e',sep='.')),
+  fp_all = file(paste('sgeModuleSubmissions/allSubmissions.sh'),'a+')    
+  cat(paste('qsub','-cwd','-V', paste('/home/ec2-user/Work/Github/metanetwork/R/sgeModuleSubmissions/SUB',id,sep='.'),
+            '-o',paste('/home/ec2-user/Work/Github/metanetwork/R/sgeModuleSubmissions/SUB',id,'o',sep='.'),
+            '-e',paste('/home/ec2-user/Work/Github/metanetwork/R/sgeModuleSubmissions/SUB',id,'e',sep='.'),
+	    '-l mem=7GB'),
       file=fp_all,
       sep='\n')
   close(fp_all)
