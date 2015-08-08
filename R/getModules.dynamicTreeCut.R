@@ -29,11 +29,11 @@ library(stringr)
 # Needs the dev branch
 library(rGithubClient)
 
-# login to synapse
+# Login to synapse
 synapseLogin()
 
 # Get github links for provenance
-thisFileName = 'getmodules.dynamicTreeCut.R'
+thisFileName = 'getModules.dynamicTreeCut.R'
 
 # Github link
 thisRepo <- getRepo(repository = "th1vairam/metanetwork", 
@@ -57,7 +57,6 @@ load(NET_OBJ@filePath)
   
 # Convert lsparseNetwork to adjacency
 adjMat = as.matrix(sparseNetwork)*1
-adjMat = adjMat[1:1000,1:1000]
 
 # Check adjMat is of class matrix
 if (!is(adjMat, 'matrix'))
@@ -129,4 +128,4 @@ MOD_OBJ2 = synStore(MOD_OBJ,
                    activityDescription = activityDescription)
 
 write.table(c(MOD_OBJ1$properties$id, MOD_OBJ2$properties$id), file = 'CompletedIDs.txt',append=T, quote=F, row.names=F, col.names=F)
-writeLines(paste('Completed',FNAME,'and stored in',MOD_OBJ$properties$id))
+writeLines(paste('Completed',FNAME,'and stored in',MOD_OBJ1$properties$id,MOD_OBJ2$properties$id))
