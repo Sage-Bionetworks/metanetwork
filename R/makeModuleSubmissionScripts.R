@@ -14,8 +14,9 @@ library(synapseClient)
 synapseLogin()
 
 # Get all files and folder
-All.Files = synQuery('select name,id,disease from file where projectId=="syn2397881" and fileType == "rda"')
-Finished.Files = synQuery('select name,id,disease from file where projectId=="syn2397881" and fileType == "tsv" and moduleMethod == "WGCNA:dynamicTreeCut"')
+All.Files = synQuery('select * from file where projectId=="syn2397881" and fileType == "rda"')
+Finished.Files = synQuery('select * from file where projectId=="syn2397881" and fileType == "tsv" and moduleMethod == "igraph:fast_greedy"')
+Finished.Files = Finished.Files[is.na(Finished.Files$file.enrichmentMethod),]
 
 All.Files = All.Files[!(paste(tools::file_path_sans_ext(All.Files$file.name),All.Files$file.disease) %in%
                           paste(sapply(Finished.Files$file.name, function(x){strsplit(x," ")[[1]][1]}), Finished.Files$file.disease)),]
@@ -29,16 +30,15 @@ for (id in All.Files$file.id){
   fp = file (paste('/home/ec2-user/Work/Github/metanetwork/R/sgeModuleSubmissions/SUB',id,sep='.'), "w+")
   cat('#!/bin/bash', 
       'sleep 30', 
-      paste('Rscript /home/ec2-user/Work/Github/metanetwork/R/getModules.dynamicTreeCut.R',id), 
+      paste('Rscript /home/ec2-user/Work/Github/metanetwork/R/getModules.fastGreedy.R',id), 
       file = fp,
       sep = '\n')
   close(fp)
   
   fp_all = file(paste('sgeModuleSubmissions/allSubmissions.sh'),'a+')    
-  cat(paste('qsub','-cwd','-V', paste('/home/ec2-user/Work/Github/metanetwork/R/sgeModuleSubmissions/SUB',id,sep='.'),
+  cat(paste('qsub','-cwd','-V','-pe smp 4',paste('/home/ec2-user/Work/Github/metanetwork/R/sgeModuleSubmissions/SUB',id,sep='.'),
             '-o',paste('/home/ec2-user/Work/Github/metanetwork/R/sgeModuleSubmissions/SUB',id,'o',sep='.'),
-            '-e',paste('/home/ec2-user/Work/Github/metanetwork/R/sgeModuleSubmissions/SUB',id,'e',sep='.'),
-	    '-l mem=14GB'),
+            '-e',paste('/home/ec2-user/Work/Github/metanetwork/R/sgeModuleSubmissions/SUB',id,'e',sep='.')),
       file=fp_all,
       sep='\n')
   close(fp_all)
