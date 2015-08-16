@@ -14,12 +14,12 @@ library(synapseClient)
 synapseLogin()
 
 # Get all files and folder
-All.Files = synQuery('select * from file where projectId=="syn2397881" and fileType == "rda"')
-Finished.Files = synQuery('select * from file where projectId=="syn2397881" and fileType == "tsv" and moduleMethod == "igraph:fast_greedy"')
-Finished.Files = Finished.Files[is.na(Finished.Files$file.enrichmentMethod),]
+Data.Files = synQuery('select * from file where projectId=="syn2397881" and fileType == "rda"')
+Module.Files = synQuery('select * from file where projectId=="syn2397881" and fileType == "tsv" and moduleMethod == "igraph:fast_greedy"')
+Module.Files = Module.Files[is.na(Module.Files$file.enrichmentMethod),]
 
-All.Files = All.Files[!(paste(tools::file_path_sans_ext(All.Files$file.name),All.Files$file.disease) %in%
-                          paste(sapply(Finished.Files$file.name, function(x){strsplit(x," ")[[1]][1]}), Finished.Files$file.disease)),]
+All.Files = Data.Files[!(paste(tools::file_path_sans_ext(Data.Files$file.name),Data.Files$file.disease) %in%
+                         paste(sapply(Module.Files$file.name, function(x){strsplit(x," ")[[1]][1]}), Module.Files$file.disease)),]
 
 # Make directory and write shell scripts for running these files
 system('mkdir sgeModuleSubmissions')
@@ -36,7 +36,7 @@ for (id in All.Files$file.id){
   close(fp)
   
   fp_all = file(paste('sgeModuleSubmissions/allSubmissions.sh'),'a+')    
-  cat(paste('qsub','-cwd','-V','-pe smp 4',paste('/home/ec2-user/Work/Github/metanetwork/R/sgeModuleSubmissions/SUB',id,sep='.'),
+  cat(paste('qsub','-cwd','-V',paste('/home/ec2-user/Work/Github/metanetwork/R/sgeModuleSubmissions/SUB',id,sep='.'),
             '-o',paste('/home/ec2-user/Work/Github/metanetwork/R/sgeModuleSubmissions/SUB',id,'o',sep='.'),
             '-e',paste('/home/ec2-user/Work/Github/metanetwork/R/sgeModuleSubmissions/SUB',id,'e',sep='.')),
       file=fp_all,
