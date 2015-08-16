@@ -24,7 +24,6 @@ library(biomaRt)
 
 # Needs the dev branch
 library(rGithubClient)
-setGithubToken('445838fcb74d2ff824be0cee7c52567000b5f39a')
 
 # login to synapse
 synapseLogin()
