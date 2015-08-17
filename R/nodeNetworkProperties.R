@@ -48,6 +48,17 @@ activityDescription = 'Calculating node and network properties of the network'
 ############################################################################################################
 
 ############################################################################################################
+#### Function definitions ####
+# Function to convert rownames to first column of a df
+rownameToFirstColumn <- function(DF,colname){
+  DF <- as.data.frame(DF)
+  DF[,colname] <- row.names(DF)
+  DF <- DF[,c(dim(DF)[2],1:(dim(DF)[2]-1))]
+  return(DF)
+}
+############################################################################################################
+
+############################################################################################################
 #### Get network ####
 # Get network from synapse (rda format)
 NET_OBJ = synapseClient::synGet(args[1])
@@ -162,6 +173,7 @@ try({
 ############################################################################################################
 #### Write to synapse ####
 # Write results to synapse
+Node.properties = rownameToFirstColumn(Node.properties, 'GeneIDs')
 write.table(Node.properties, paste(FNAME,'nodeProperties.tsv',sep='.'), sep='\t', row.names=F, quote=F)
 NODE_OBJ = File(paste(FNAME,'nodeProperties.tsv',sep='.'), name = paste(FNAME,'Node Properties'), parentId = parentId)
 annotations(NODE_OBJ) = annotations(NET_OBJ)
@@ -169,6 +181,8 @@ NODE_OBJ@annotations$fileType = 'tsv'
 
 # Network level metrics as annotations
 try({
+  NODE_OBJ@annotations$vcount = vcount(g)
+  NODE_OBJ@annotations$ecount = ecount(g)
   NODE_OBJ@annotations$avgClusteringCoefficient = avgClusteringCoefficient
   NODE_OBJ@annotations$avgNodeDegree = avgNodeDegree
   NODE_OBJ@annotations$avgPathLength = avgPathLength
