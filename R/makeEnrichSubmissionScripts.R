@@ -14,10 +14,11 @@ library(synapseClient)
 synapseLogin()
 
 # Get all files and folder
-All.Files = synQuery('select name,id,disease from file where projectId=="syn2397881" and fileType == "tsv" and moduleMethod == "igraph:fast_greedy"')
-Finished.Files = synQuery('select name,id,disease from file where projectId=="syn2397881" and fileType == "tsv" and algo == "Fisher"')
+All.Files = synQuery('select name,id,disease,enrichmentMethod from file where projectId=="syn2397881" and fileType == "tsv" and moduleMethod == "igraph:fast_greedy"')
+All.Files = All.Files[is.na(All.Files$file.enrichmentMethod),]
+Finished.Files = synQuery('select name,id,disease from file where projectId=="syn2397881" and fileType == "tsv" and enrichmentMethod == "Fisher"')
 
-All.Files = All.Files[!(paste(tools::file_path_sans_ext(All.Files$file.name),All.Files$file.disease) %in%
+All.Files = All.Files[!(paste(sapply(All.Files$file.name, function(x){strsplit(x," ")[[1]][1]}), All.Files$file.disease) %in%
                           paste(sapply(Finished.Files$file.name, function(x){strsplit(x," ")[[1]][1]}), Finished.Files$file.disease)),]
 
 # Make directory and write shell scripts for running these files
