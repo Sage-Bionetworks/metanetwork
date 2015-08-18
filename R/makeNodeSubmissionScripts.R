@@ -15,7 +15,8 @@ synapseLogin()
 
 # Get all files and folder
 Data.Files = synQuery('select * from file where projectId=="syn2397881" and fileType == "rda"')
-Node.Files = synQuery('select id, name, disease, density from file where projectId=="syn2397881" and fileType == "tsv"')
+Node.Files = synQuery('select id, name, disease, density from file where proje`ctId=="syn2397881" and fileType == "tsv"', blockSize = 100)
+Node.Files = Node.Files$collectAll()
 Node.Files = Node.Files[!is.na(Node.Files$file.density),]
 
 All.Files = Data.Files[!(paste(tools::file_path_sans_ext(Data.Files$file.name),Data.Files$file.disease) %in%
@@ -36,7 +37,7 @@ for (id in All.Files$file.id){
   close(fp)
   
   fp_all = file(paste('sgeNodeSubmissions/allSubmissions.sh'),'a+')    
-  cat(paste('qsub','-cwd','-V',paste('/home/ec2-user/Work/Github/metanetwork/R/sgeNodeSubmissions/SUB',id,sep='.'),
+  cat(paste('qsub','-cwd','-V','-l h_vmem=15G',paste('/home/ec2-user/Work/Github/metanetwork/R/sgeNodeSubmissions/SUB',id,sep='.'),
             '-o',paste('/home/ec2-user/Work/Github/metanetwork/R/sgeNodeSubmissions/SUB',id,'o',sep='.'),
             '-e',paste('/home/ec2-user/Work/Github/metanetwork/R/sgeNodeSubmissions/SUB',id,'e',sep='.')),
       file=fp_all,
