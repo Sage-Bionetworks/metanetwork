@@ -14,9 +14,11 @@ library(synapseClient)
 synapseLogin()
 
 # Get all files and folder
-All.Files = synQuery('select name,id,disease,enrichmentMethod from file where projectId=="syn2397881" and fileType == "tsv" and moduleMethod == "igraph:fast_greedy"')
+All.Files = synQuery('select * from file where projectId=="syn2397881" and fileType == "tsv" and moduleMethod == "igraph:fast_greedy"', blockSize = 100)
+All.Files = All.Files$collectAll()
 All.Files = All.Files[is.na(All.Files$file.enrichmentMethod),]
-Finished.Files = synQuery('select name,id,disease from file where projectId=="syn2397881" and fileType == "tsv" and enrichmentMethod == "Fisher"')
+Finished.Files = synQuery('select * from file where projectId=="syn2397881" and fileType == "tsv" and enrichmentMethod == "Fisher"', blocksize = 100)
+Finished.Files = Finished.Files$collectAll()
 
 All.Files = All.Files[!(paste(sapply(All.Files$file.name, function(x){strsplit(x," ")[[1]][1]}), All.Files$file.disease) %in%
                           paste(sapply(Finished.Files$file.name, function(x){strsplit(x," ")[[1]][1]}), Finished.Files$file.disease)),]
