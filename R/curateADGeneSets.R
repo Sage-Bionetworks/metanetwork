@@ -4,6 +4,7 @@ library(org.Hs.eg.db)
 library(annotate)
 library(tools)
 library(biomaRt)
+library(rGithubClient)
 
 synapseLogin()
 
@@ -60,7 +61,7 @@ GeneSets_GeneticLoci = list("AD:GeneticLoci" = tmp$V1)
 
 GeneSets = c(GeneSets_CM, GeneSets_GeneticLoci, GeneSets_mouse)
 
-thisFileName <- './curateADGeneSets.R'
+thisFileName <- 'curateADGeneSets.R'
 
 # Github link
 thisRepo <- getRepo(repository = "th1vairam/metanetwork", 
@@ -68,7 +69,7 @@ thisRepo <- getRepo(repository = "th1vairam/metanetwork",
                     refName='enrich')
 
 thisFile <- getPermlink(repository = thisRepo,
-                        repositoryPath=paste0('code/Rmd/', thisFileName))
+                        repositoryPath=paste0('R/', thisFileName))
 
 # Push list to synapse (in RData format)
 save(list = 'GeneSets', file = 'MergedGeneSets.RData')
