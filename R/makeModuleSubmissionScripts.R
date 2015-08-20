@@ -38,7 +38,7 @@ for (id in All.Files$file.id){
   close(fp)
   
   fp_all = file(paste('sgeModuleSubmissions/allSubmissions.sh'),'a+')    
-  cat(paste('qsub','-cwd','-V','-l h_vmem=7G',paste('/home/ec2-user/Work/Github/metanetwork/R/sgeModuleSubmissions/SUB',id,sep='.'),
+  cat(paste('qsub','-cwd','-V','-l h_vmem=13G', '-l mem_free=13G', paste('/home/ec2-user/Work/Github/metanetwork/R/sgeModuleSubmissions/SUB',id,sep='.'),
             '-o',paste('/home/ec2-user/Work/Github/metanetwork/R/sgeModuleSubmissions/SUB',id,'o',sep='.'),
             '-e',paste('/home/ec2-user/Work/Github/metanetwork/R/sgeModuleSubmissions/SUB',id,'e',sep='.')),
       file = fp_all,

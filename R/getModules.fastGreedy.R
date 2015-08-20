@@ -21,6 +21,7 @@ library(igraph)
 # Needs the dev branch
 library(rGithubClient)
 
+
 # login to synapse
 synapseLogin()
 
@@ -48,7 +49,7 @@ parentId = NET_OBJ$properties$parentId
 load(NET_OBJ@filePath)
 
 # Convert lsparseNetwork to igraph graph object
-g = igraph::graph.adjacency(sparseNetwork, mode = 'undirected', weighted = NULL, diag = F)
+g = igraph::graph.adjacency(sparseNetwork, mode = 'undirected', weighted = T, diag = F)
 
 # Get modules using fast.greedy method (http://arxiv.org/abs/cond-mat/0408187)
 mod = igraph::fastgreedy.community(g)
