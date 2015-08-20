@@ -122,8 +122,8 @@ try({
   # Centralisation: Measures how well network has a star-like topology (closer to 1 more likely the topology is star-like)
   writeLines('Calculating centralisation...')
   centralisation <- vcount(g)/(vcount(g) - 2) * (max(degree(g))/(vcount(g) - 1) - graph.density(g))
-  }, 
-  silent = T)
+}, 
+    silent = T)
 
 # Path level properties 
 try({
@@ -135,39 +135,39 @@ try({
   
   # Average path length: Average distance between any two vertex in network
   avgPathLength <- average.path.length(g)
-  }, 
-  silent = T)
-  
+}, 
+    silent = T)
+
 # Cluter level properties
-try({
-  # Clustering coefficeint
-  writeLines('Calculating clustering coefficient...')
-  Node.properties$clustCoefficient <- transitivity(g,
-                                                   v=V(g),
-                                                   type = 'barrat')
-  
-  # Average clustering coefficeint: Gives first hand information on network clusters
-  writeLines('Calculating average clustering coefficient...')
-  avgClusteringCoefficient <- mean(Node.properties$clustCoefficient, na.rm=T)
-  
-  # Nearest Neighbor degree
-  writeLines('Calculating k nearest neighborhood degree...')
-  Node.properties$nearNeighbor <- graph.knn(g,
-                                            vids=V(g))$knn
-  
-  # Closeness centrality: An important node is typically \u201cclose\u201d to, and can communicate quickly with, the other nodes in the network
-  writeLines('Calculating closeness centrality ...')
-  Node.properties$closeness <- closeness(g,
-                                         v= V(g),
-                                         mode = 'all',
-                                         normalized = T)
-  
-  # Eigen centrality: An important node is connected to important neighbours.
-  writeLines('Calculating eigen centrality...')
-  Node.properties$eigen <- alpha.centrality(g,
-                                            nodes=V(g))
-  }, 
-  silent = T)
+# try({
+#   # Clustering coefficeint
+#   writeLines('Calculating clustering coefficient...')
+#   Node.properties$clustCoefficient <- transitivity(g,
+#                                                    v=V(g),
+#                                                    type = 'barrat')
+#   
+#   # Average clustering coefficeint: Gives first hand information on network clusters
+#   writeLines('Calculating average clustering coefficient...')
+#   avgClusteringCoefficient <- mean(Node.properties$clustCoefficient, na.rm=T)
+#   
+#   # Nearest Neighbor degree
+#   writeLines('Calculating k nearest neighborhood degree...')
+#   Node.properties$nearNeighbor <- graph.knn(g,
+#                                             vids=V(g))$knn
+#   
+#   # Closeness centrality: An important node is typically \u201cclose\u201d to, and can communicate quickly with, the other nodes in the network
+#   writeLines('Calculating closeness centrality ...')
+#   Node.properties$closeness <- closeness(g,
+#                                          v= V(g),
+#                                          mode = 'all',
+#                                          normalized = T)
+#   
+#   # Eigen centrality: An important node is connected to important neighbours.
+#   writeLines('Calculating eigen centrality...')
+#   Node.properties$eigen <- alpha.centrality(g,
+#                                             nodes=V(g))
+# }, 
+#     silent = T)
 ############################################################################################################
 
 ############################################################################################################
@@ -190,7 +190,7 @@ try({
   NODE_OBJ@annotations$density = density
   NODE_OBJ@annotations$diameter = diameter
 },
-silent =T)
+    silent =T)
 
 NODE_OBJ = synStore(NODE_OBJ, 
                     executed = thisFile,
