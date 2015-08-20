@@ -14,21 +14,18 @@ library(synapseClient)
 synapseLogin()
 
 # Get all files and folder
-All.Files = synQuery('select * from file where projectId=="syn2397881" and fileType == "tsv" and moduleMethod == "igraph:fast_greedy"', blockSize = 100)
-All.Files = All.Files$collectAll()
-All.Files = All.Files[is.na(All.Files$file.enrichmentMethod),]
-Finished.Files = synQuery('select * from file where projectId=="syn2397881" and fileType == "tsv" and enrichmentMethod == "Fisher"', blocksize = 100)
-Finished.Files = Finished.Files$collectAll()
-
-All.Files = All.Files[!(paste(sapply(All.Files$file.name, function(x){strsplit(x," ")[[1]][1]}), All.Files$file.disease) %in%
-                          paste(sapply(Finished.Files$file.name, function(x){strsplit(x," ")[[1]][1]}), Finished.Files$file.disease)),]
+Module.Files = synQuery('select * from file where projectId=="syn2397881" and fileType == "tsv" and moduleMethod == "igraph:fast_greedy"', blockSize = 100)
+Module.Files = Module.Files$collectAll()
+Module.Files = Module.Files[is.na(Module.Files$file.enrichmentMethod),]
+#Enrich.Files = synQuery('select * from file where projectId=="syn2397881" and fileType == "tsv" and enrichmentMethod == "Fisher" and enrichmentGeneSet == "AD"', blocksize = 100)
+#Enrich.Files = Enrich.Files$collectAll()
 
 # Make directory and write shell scripts for running these files
 system('mkdir sgeEnrichSub')
 fp_all = file(paste('./sgeEnrichSub/allSubmissions.sh'),'w+')    
 cat('#!/bin/bash',file=fp_all,sep='\n')
 close(fp_all)
-for (id in All.Files$file.id){
+for (id in Module.Files$file.id){
   fp = file (paste('/home/ec2-user/Work/Github/metanetwork/R/sgeEnrichSub/SUB',id,sep='.'), "w+")
   cat('#!/bin/bash', 
       'sleep 30', 
@@ -40,8 +37,7 @@ for (id in All.Files$file.id){
   fp_all = file(paste('./sgeEnrichSub/allSubmissions.sh'),'a+')    
   cat(paste('qsub','-cwd','-V',paste('/home/ec2-user/Work/Github/metanetwork/R/sgeEnrichSub/SUB',id,sep='.'),
             '-o',paste('/home/ec2-user/Work/Github/metanetwork/R/sgeEnrichSub/SUB',id,'o',sep='.'),
-            '-e',paste('/home/ec2-user/Work/Github/metanetwork/R/sgeEnrichSub/SUB',id,'e',sep='.'),
-	    '-l mem=7GB'),
+            '-e',paste('/home/ec2-user/Work/Github/metanetwork/R/sgeEnrichSub/SUB',id,'e',sep='.')),
       file=fp_all,
       sep='\n')
   close(fp_all)

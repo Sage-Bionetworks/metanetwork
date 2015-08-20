@@ -25,6 +25,7 @@ library(biomaRt)
 # Needs the dev branch
 library(rGithubClient)
 
+
 # login to synapse
 synapseLogin()
 ############################################################################################################
@@ -113,7 +114,7 @@ rownameToFirstColumn <- function(DF,colname){
 ############################################################################################################
 #### Get gene sets ####
 # Download enrichr gene sets from synapse
-GL_OBJ = synGet('syn4867851')
+GL_OBJ = synGet('syn4893059'); #synGet('syn4867851')
 ALL_USED_IDs = GL_OBJ$properties$id
 load(GL_OBJ@filePath)
 
@@ -129,7 +130,7 @@ gsets = c("Achilles_fitness_decrease", "Achilles_fitness_increase", "Allen_Brain
           "TargetScan_microRNA", "Tissue_Protein_Expression_from_Human_Proteome_Map", "Tissue_Protein_Expression_from_ProteomicsDB",
           "Transcription_Factor_PPIs", "Virus_Perturbations_from_GEO_down", "Virus_Perturbations_from_GEO_up", "WikiPathways_2015",
           "GeneFamily","CellMarkers")
-GeneSets = GeneSets[gsets]
+GeneSets = list(ADRelated = GeneSets); #GeneSets = GeneSets[gsets]
 ############################################################################################################
 
 ############################################################################################################
@@ -156,7 +157,7 @@ MOD = merge(MOD, ensg2hgnc, by.x = 'GeneIDs', by.y = 'ensembl_gene_id', all.x=T)
 
 ############################################################################################################
 #### Filter gene list ####
-GeneSets = filterGeneSets(GeneSets, backGroundGenes)
+GeneSets = filterGeneSets(GeneSets, backGroundGenes, minSize = 1, maxSize = 10000)
 ############################################################################################################
 
 ############################################################################################################
@@ -191,8 +192,8 @@ for(name in names(enrichResults))
 enrichmentResults = as.data.frame(rbindlist(enrichResults))
 enrichmentResults$ngenes = unlist(enrichmentResults$ngenes)
 enrichmentResults$noverlap = unlist(enrichmentResults$noverlap)
-enrichmentResults = enrichmentResults[enrichmentResults$pval<=0.5,]
-write.table(enrichmentResults, file = paste(gsub(' ','_',FNAME),'enrichmentResults.tsv',sep='_'), sep='\t', row.names=F, quote=F)
+enrichmentResults = enrichmentResults[enrichmentResults$pval<=1,]
+write.table(enrichmentResults, file = paste(gsub(' ','_',FNAME),'AD.enrichmentResults.tsv',sep='_'), sep='\t', row.names=F, quote=F)
 collectGarbage()
 ############################################################################################################
 
@@ -200,10 +201,11 @@ collectGarbage()
 #### Write to synapse ####
 # Write results to synapse
 algo = 'Fisher'
-ENR_OBJ = File(paste(gsub(' ','_',FNAME),'enrichmentResults.tsv',sep='_'), name = paste(FNAME,algo), parentId = parentId)
+ENR_OBJ = File(paste(gsub(' ','_',FNAME),'AD.enrichmentResults.tsv',sep='_'), name = paste(FNAME,'AD',algo), parentId = parentId)
 annotations(ENR_OBJ) = annotations(MOD_OBJ)
 ENR_OBJ@annotations$fileType = 'tsv'
 ENR_OBJ@annotations$enrichmentMethod = 'Fisher'
+ENR_OBJ@annotations$enrichmentGeneSet = 'AD'
 ENR_OBJ = synStore(ENR_OBJ, 
                    executed = thisFile,
                    used = ALL_USED_IDs,
