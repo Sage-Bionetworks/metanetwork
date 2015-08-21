@@ -41,7 +41,7 @@ setnames(human_ensg2symbol, 'ensembl_gene_id', 'hsapiens_homolog_ensembl_gene')
 mouse_human_mapping = merge(mouse_mapping, human_ensg2symbol, by = 'hsapiens_homolog_ensembl_gene', all=T)
 
 GeneSets_mouse = lapply(MG, function(x, mouse_human_mapping){  
-  entrz_id = x$EntrezGene[(x$FDR <= 0.05 & abs(x[,colnames(x) %in% c('foldchange','FDR')]) >= 1.5)]  
+  entrz_id = x$EntrezGene[(x$FDR <= 0.05 & abs(x[,colnames(x) %in% c('foldchange','FC_ratio')]) >= 1.5)]  
   gs = unique(mouse_human_mapping$hgnc_symbol[mouse_human_mapping$entrezgene %in% entrz_id])
   gs = gs[!is.na(gs)]
   return(gs)

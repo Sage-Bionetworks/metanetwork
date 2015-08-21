@@ -17,7 +17,7 @@ synapseLogin()
 Module.Files = synQuery('select * from file where projectId=="syn2397881" and fileType == "tsv" and moduleMethod == "igraph:fast_greedy"', blockSize = 100)
 Module.Files = Module.Files$collectAll()
 Module.Files = Module.Files[is.na(Module.Files$file.enrichmentMethod),]
-#Enrich.Files = synQuery('select * from file where projectId=="syn2397881" and fileType == "tsv" and enrichmentMethod == "Fisher" and enrichmentGeneSet == "AD"', blocksize = 100)
+#Enrich.Files = synQuery('select * from file where projectId=="syn2397881" and fileType == "tsv" and enrichmentMethod == "Fisher" and enrichmentGeneSet == "Enrichr and AD"', blocksize = 100)
 #Enrich.Files = Enrich.Files$collectAll()
 
 # Make directory and write shell scripts for running these files
