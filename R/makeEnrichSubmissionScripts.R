@@ -14,18 +14,26 @@ library(synapseClient)
 synapseLogin()
 
 # Get all files and folder
-Module.Files = synQuery('select * from file where projectId=="syn2397881" and fileType == "tsv" and moduleMethod == "igraph:fast_greedy"', blockSize = 100)
-Module.Files = Module.Files$collectAll()
-Module.Files = Module.Files[is.na(Module.Files$file.enrichmentMethod),]
-#Enrich.Files = synQuery('select * from file where projectId=="syn2397881" and fileType == "tsv" and enrichmentMethod == "Fisher" and enrichmentGeneSet == "Enrichr and AD"', blocksize = 100)
-#Enrich.Files = Enrich.Files$collectAll()
+# Get all files
+All.Files = synQuery('select * from file where projectId=="syn2397881" and fileType == "tsv"', blockSize = 100)
+All.Files = All.Files$collectAll()
+
+# Get module files
+Module.Files = filter(All.Files, is.na(file.enrichmentMethod) & file.moduleMethod == "igraph:fast_greedy")
+
+# Get all enrichment files
+Enrich.Files = filter(All.Files, file.enrichmentMethod == "Fisher" & file.enrichmentGeneSet == 'Enrichr and AD' & !is.na(file.enrichmentGeneSet))
+
+# Unfinished enrichment files
+UEnrich.Files = Module.Files[!(paste(sapply(Module.Files$file.name, function(x){strsplit(x," ")[[1]][1]}), Module.Files$file.disease) %in%
+                                 paste(sapply(Enrich.Files$file.name, function(x){strsplit(x," ")[[1]][1]}), Enrich.Files$file.disease)),]
 
 # Make directory and write shell scripts for running these files
 system('mkdir sgeEnrichSub')
 fp_all = file(paste('./sgeEnrichSub/allSubmissions.sh'),'w+')    
 cat('#!/bin/bash',file=fp_all,sep='\n')
 close(fp_all)
-for (id in Module.Files$file.id){
+for (id in UEnrich.Files$file.id){
   fp = file (paste('/home/ec2-user/Work/Github/metanetwork/R/sgeEnrichSub/SUB',id,sep='.'), "w+")
   cat('#!/bin/bash', 
       'sleep 30', 

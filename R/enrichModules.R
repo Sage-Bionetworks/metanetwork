@@ -193,7 +193,7 @@ for (name in unique(MOD$modulelabels)){
     enrichResults[[name]] = as.data.frame(rbindlist(tmp))
     enrichResults[[name]]$fdr = p.adjust(enrichResults[[name]]$pval, 'fdr')
   } else {
-    enrichResults[[name]] = data.frame(GeneSetName =NA, pval =NA, ngenes =NA, noverlap = NA, category = NA)
+    enrichResults[[name]] = data.frame(GeneSetName = NA, pval = NA, ngenes = NA, noverlap = NA, OR = NA, category = NA, fdr = NA)
   }
   writeLines(paste0('Completed ',name))  
 }
@@ -206,6 +206,7 @@ enrichmentResults$ngenes = unlist(enrichmentResults$ngenes)
 enrichmentResults$noverlap = unlist(enrichmentResults$noverlap)
 enrichmentResults$fdr = unlist(enrichmentResults$fdr)
 enrichmentResults$OR = unlist(enrichmentResults$OR)
+enrichmentResults$pval = unlist(enrichmentResults$pval)
 
 write.table(enrichmentResults, file = paste(gsub(' ','_',FNAME),'enrichmentResults.tsv',sep='_'), sep='\t', row.names=F)
 collectGarbage()
