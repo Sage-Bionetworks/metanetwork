@@ -9,6 +9,7 @@ setwd('/home/ec2-user/Work/Github/metanetwork/R')
 
 # Load libraries
 library(synapseClient)
+library(dplyr)
 
 # login to synapse
 synapseLogin()
