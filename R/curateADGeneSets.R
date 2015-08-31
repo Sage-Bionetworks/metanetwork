@@ -59,7 +59,24 @@ tmp = fread(synGet('syn4891675')@filePath, data.table=F, header=F)
 ALL_USED_IDs = c(ALL_USED_IDs, 'syn4891675')
 GeneSets_GeneticLoci = list("AD:GeneticLoci" = tmp$V1)
 
-GeneSets = c(GeneSets_CM, GeneSets_GeneticLoci, GeneSets_mouse)
+FDR = fread(synGet('syn4239887')@filePath, data.table=F, header=T)
+FC = fread(synGet('syn4239883')@filePath, data.table=F, header = T)
+
+vals = FDR$ensembl_gene_id[FDR[,'ROSMAP.RNASeq.PrefrontalCortex.cogdx1-cogdx4'] <= 0.05]
+human_ensg2symbol = getBM(attributes = c("ensembl_gene_id","hgnc_symbol"),
+                          filters = "ensembl_gene_id",                         
+                          values = vals,
+                          mart = Hs)
+ROSMAP.NCIvsAD = unique(human_ensg2symbol$hgnc_symbol)
+
+vals = FDR$ensembl_gene_id[FDR[,'ROSMAP.RNASeq.PrefrontalCortex.cogdx2-cogdx4'] <= 0.05]
+human_ensg2symbol = getBM(attributes = c("ensembl_gene_id","hgnc_symbol"),
+                          filters = "ensembl_gene_id",                         
+                          values = vals,
+                          mart = Hs)
+ROSMAP.MCIvsAD = unique(human_ensg2symbol$hgnc_symbol)
+
+GeneSets = c(GeneSets_CM, GeneSets_GeneticLoci, GeneSets_mouse, list(ROSMAP.NCIvsAD = ROSMAP.NCIvsAD, ROSMAP.MCIvsAD = ROSMAP.MCIvsAD))
 
 thisFileName <- 'curateADGeneSets.R'
 
