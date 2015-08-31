@@ -21,7 +21,6 @@ library(igraph)
 # Needs the dev branch
 library(rGithubClient)
 
-
 # login to synapse
 synapseLogin()
 
