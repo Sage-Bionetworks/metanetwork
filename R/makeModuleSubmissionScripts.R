@@ -14,10 +14,10 @@ library(synapseClient)
 synapseLogin()
 
 # Get all files and folder
-Data.Files = synQuery('select * from file where projectId=="syn2397881" and fileType == "rda"', blockSize = 100)
+Data.Files = synQuery('select * from file where projectId=="syn2397881" and fileType == "rda" and sparsityMethod != "correlationFDR" and sparsityMethod != "wgcna"', blockSize = 100)
 Data.Files = Data.Files$collectAll()
 
-Module.Files = synQuery('select * from file where projectId=="syn2397881" and fileType == "tsv" and moduleMethod == "igraph:fast_greedy"', blockSize = 100)
+Module.Files = synQuery('select * from file where projectId=="syn2397881" and fileType == "tsv" and moduleMethod == "igraph:fast_greedy" and sparsityMethod != "correlationFDR" and sparsityMethod != "wgcna"', blockSize = 100)
 Module.Files = Module.Files$collectAll()
 Module.Files = Module.Files[is.na(Module.Files$file.enrichmentMethod),]
 
