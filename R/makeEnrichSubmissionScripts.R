@@ -16,11 +16,11 @@ synapseLogin()
 
 # Get all files and folder
 # Get all files
-All.Files = synQuery('select * from file where projectId=="syn2397881" and fileType == "tsv"', blockSize = 100)
+All.Files = synQuery('select * from file where projectId=="syn2397881" and fileType == "tsv" and sparsityMethod != "correlationFDR" and sparsityMethod != "wgcna"', blockSize = 100)
 All.Files = All.Files$collectAll()
 
 # Get module files
-Module.Files = filter(All.Files, is.na(file.enrichmentMethod) & file.moduleMethod == "igraph:fast_greedy")
+Module.Files = filter(All.Files, is.na(file.enrichmentMethod) & file.moduleMethod == "igraph:fast_greedy" & file.sparsityMethod != "correlationFDR" & file.sparsityMethod != "wgcna")
 
 # Get all enrichment files
 Enrich.Files = filter(All.Files, file.enrichmentMethod == "Fisher" & file.enrichmentGeneSet == 'Enrichr and AD' & !is.na(file.enrichmentGeneSet))
