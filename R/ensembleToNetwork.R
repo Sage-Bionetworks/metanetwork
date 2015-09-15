@@ -12,8 +12,6 @@ ensembleToNetwork <- function(Y){
     }
   }
   
-  
-  
   regs <- lapply(1:ncol(Y),internal,Y)
   
   collapseToMatrix <- function(x,i){
