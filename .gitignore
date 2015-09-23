@@ -1,6 +1,9 @@
 .Rproj.user
 .Rhistory
-.RData
+*.RData
 .DS_Store
 .httr-oauth
 dataMatrix.tsv
+*.png
+*.rdb
+*.html
