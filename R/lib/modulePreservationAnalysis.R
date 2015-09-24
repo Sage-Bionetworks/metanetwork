@@ -1,54 +1,18 @@
 modulePreservationAnalysis <- function(refNet, testNet, refModLabels, testModLabels){
+  
+  refModules = unique(refModLabels); #setdiff(unique(refModLabels), 'NoModule')
+  testModules = unique(testModLabels); #setdiff(unique(testModLabels), 'NoModule')
 
-refModules = setdiff(unique(refModLabels), 'NoModule')
-testModules = setdiff(unique(testModLabels), 'NoModule')
+  actualPresMetrics = lapply(refModules, modulePreservationMetrics, refModLabels, refNet, testNet)
 
-netPresMetrics <- function(x, refModLabels, refNet, testNet){
-  
-  moduleSize = sum(refModLabels == x)
-  
-  sgRef = induced_subgraph(refNet, names(refModLabels)[refModLabels == x])
-  sgTest = induced_subgraph(testNet, names(refModLabels)[refModLabels == x])
-  
-  # Sub-network properties
-  meanAdj = graph.density(sgTest)
-  meanClCoeff = transitivity(sgTest, type = "global")
-  
-  # Connectivity presevation stats
-  adjRef = as_adjacency_matrix(sgRef)
-  adjTest = as_adjacency_matrix(sgTest)
-  adjTest = adjTest[rownames(adjRef), colnames(adjRef)]
-  cor.Adj = cor(as.vector(adjRef), as.vector(adjTest))
-  
-  refDegree = degree(sgRef)
-  testDegree = degree(sgTest)
-  cor.kIM = bicor(refDegree, testDegree[names(refDegree)])
-  
-  transRef = transitivity(sgRef, v=V(sgRef), type = 'barrat')
-  names(transRef) = V(sgRef)$name
-  transTest = transitivity(sgTest, v=V(sgTest), type = 'barrat')
-  names(transTest) = V(sgTest)$name
-  cor.Cl.Coef = cor(transRef, transTest[names(transRef)], use='p')
-  
-  return(data.frame(
-    moduleSize = moduleSize,
-    meanAdj = meanAdj,
-    meanClCoeff = meanClCoeff,
-    cor.Adj = cor.Adj,
-    cor.kIM = cor.kIM,
-    cor.Cl.Coef = cor.Cl.Coef))
-}
+  actualPresMetrics = plyr::ldply(actualPresMetrics)
+  actualPresMetrics = cbind(data.frame(moduleName = refModules), actualPresMetrics)
 
-actualPresMetrics = lapply(refModules, netPresMetrics, refModLabels, refNet, testNet)
-
-actualPresMetrics = plyr::ldply(actualPresMetrics)
-actualPresMetrics = cbind(data.frame(moduleName = refModules), actualPresMetrics)
-
-tmp = do.call(cbind, lapply(actualPresMetrics[,-(1:2)], rank))
-colnames(tmp) = paste(colnames(tmp), 'rank',sep='.')
-actualPresMetrics.rank = cbind(actualPresMetrics[,1:2,drop=F], 
-                               as.data.frame(tmp), 
-                               data.frame(median.rank = rank(apply(tmp,1,median))))
+  tmp = do.call(cbind, lapply(actualPresMetrics[,-(1:2)], rank))
+  colnames(tmp) = paste(colnames(tmp), 'rank',sep='.')
+  actualPresMetrics.rank = cbind(actualPresMetrics[,1:2,drop=F], 
+                                 as.data.frame(tmp), 
+                                 data.frame(median.rank = rank(apply(tmp,1,median))))
                               
 randomPresMetrics = lapply(1:100, function(i, refModLabels, testModLabels, refNet, testNet){  
   ind = sample(vcount(refNet))
