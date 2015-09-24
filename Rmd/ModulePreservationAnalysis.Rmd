@@ -32,8 +32,10 @@ synapseLogin()
 
 options(xtable.type="html")
 
-source('../R/modulePreservationAnalysis.R')
-source('../R/multiplot.R')
+# source utility files from ../R/lib folder
+file.sources = list.files('../R/lib',pattern="*.R")
+file.sources = sapply(file.sources,function(x){return(paste('../R/lib',x,sep='/'))})
+tmp = sapply(file.sources,source,.GlobalEnv)
 
 knitr::opts_chunk$set(
   echo=FALSE,
@@ -102,25 +104,21 @@ names(enrichResults) = Enrich.Files$file.disease
 enrichResults = enrichResults[names(networks)]
 ```
 
-### Get overlap statistics
-```{r overlap.stats, fig.height = 10, fig.width=20}
-comparisons  = combn(names(networks),2)
+### Download expression data
+```{r download.expression}
+# Download expression data
+EXP_ID = 'syn4259377'
+EXP = fread(synGet(EXP_ID)@filePath, data.table = F, header=T)
 
-for (i in 1:dim(comparisons)[2]){
-  tmp = overlapTable(modules[[comparisons[1,i]]], modules[[comparisons[2,i]]])
-  
-  cTable = tmp$countTable %>% data.frame 
-  cTable = cTable[!(rownames(cTable) %in% 'NoModule'), !(colnames(cTable) %in% 'NoModule')]
-  
-  pTable = tmp$pTable
-  pTable = -log10(pTable)
-  pTable[is.infinite(pTable)] = max(pTable[!is.infinite(pTable)])  
-  pTable = pTable[!(rownames(pTable) %in% 'NoModule'), !(colnames(pTable) %in% 'NoModule')]
-    
-  ht1 = Heatmap(cTable, name = 'nOverlap', col = RColorBrewer::brewer.pal(5,'Reds'), row_title = comparisons[1,i], column_title = comparisons[2,i])
-  ht2 = Heatmap(pTable, name = '-log10(p.val)', col = RColorBrewer::brewer.pal(5,'Greens'), row_title = comparisons[1,i], column_title = comparisons[2,i])
-  draw(ht1 + ht2)  
-}
+# Download covariates data
+COV_ID = 'syn4259379'
+COVARIATES = fread(synGet(COV_ID)@filePath, data.table = F, header = T)
+COVARIATES = split(COVARIATES, COVARIATES$cogdx)
+
+# Separate expression based on cogdx
+exp = lapply(COVARIATES, function(x,EXP) { x = EXP[, colnames(EXP) %in% x$SampleID]; x = cbind(EXP[,'ensembl_gene_id', drop=F],x)}, EXP)
+exp = exp[c(4,2,1)]
+names(exp) = names(networks)
 ```
 
 ### Get module annotations
@@ -138,6 +136,32 @@ for (i in names(networks)){
 
 ```
 
+### Get overlap statistics
+```{r overlap.stats, fig.height = 10, fig.width=20}
+comparisons  = combn(names(networks),2)
+
+for (i in 1:dim(comparisons)[2]){
+  tmp = overlapStats(modules[[comparisons[1,i]]], modules[[comparisons[2,i]]])
+  
+  cTable = tmp$countTable %>% data.frame 
+  cTable = cTable[!(rownames(cTable) %in% 'NoModule'), !(colnames(cTable) %in% 'NoModule')]
+  
+  pTable = tmp$pTable
+  pTable = -log10(pTable)
+  pTable[is.infinite(pTable)] = max(pTable[!is.infinite(pTable)])  
+  pTable = pTable[!(rownames(pTable) %in% 'NoModule'), !(colnames(pTable) %in% 'NoModule')]
+    
+  orTable = tmp$orTable
+  orTable[is.infinite(orTable)] = max(orTable[!is.infinite(orTable)])  
+  orTable = orTable[!(rownames(orTable) %in% 'NoModule'), !(colnames(orTable) %in% 'NoModule')]
+    
+  ht1 = Heatmap(cTable, name = 'nOverlap', col = RColorBrewer::brewer.pal(5,'Reds'), row_title = comparisons[1,i], column_title = comparisons[2,i])
+  ht2 = Heatmap(pTable, name = '-log10(p.val)', col = RColorBrewer::brewer.pal(5,'Greens'), row_title = comparisons[1,i], column_title = comparisons[2,i])
+  ht3 = Heatmap(orTable, name = 'odds ratio', col = RColorBrewer::brewer.pal(5,'Greys'), row_title = comparisons[1,i], column_title = comparisons[2,i])
+  draw(ht3 + ht1 + ht2)  
+}
+```
+
 ### Calculate preservation statistics
 ```{r preservation.stats, fig.height=10, fig.width=20, eval=FALSE}
 presAnal = list()
@@ -148,12 +172,12 @@ for (ref in names(networks)[-(2)]){
     if (ref != test){
       plotLists = list()
       presAnal[[ref]][[test]] = modulePreservationAnalysis(networks[[ref]], networks[[test]], modules[[ref]], modules[[test]])    
-
       }    
     print(paste(ref,test))
     }  
   }
 ```
+
 ```{r plot.data, fig.height=6, fig.width=20}
 load('temp.RData')
 for (ref in names(networks)[-(2)]){
