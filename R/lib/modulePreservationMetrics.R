@@ -13,7 +13,7 @@ modulePreservationMetrics <- function(x, refModLabels, refNet, testNet, refExp, 
   
   refExp = filter(refExp, ensembl_gene_id %in% refModuleNames)
   refExp = refExp[,-(1)]
-  
+    
   ## Connectivity preservation stats
   # Correlation between adjacency matrices
   adjRef = as_adjacency_matrix(sgRef)
@@ -32,9 +32,7 @@ modulePreservationMetrics <- function(x, refModLabels, refNet, testNet, refExp, 
   transTest = transitivity(sgTest, v=V(sgTest), type = 'barrat')
   names(transTest) = V(sgTest)$name
   cor.Cl.Coef = bicor(transRef, transTest[names(transRef)], use='p')
-  
-  ## Expression preservation stats  
-  
+    
   ## Module properties in test network
   meanAdj = graph.density(sgTest)
   meanClCoeff = transitivity(sgTest, type = "global")

@@ -15,7 +15,6 @@ modulePreservationAnalysis <- function(refNet, testNet, refModLabels, testModLab
                                  data.frame(median.rank = rank(apply(tmp,1,median))))
   
   randomPresMetrics = lapply(1:n, function(i, refModLabels, testModLabels, refNet, testNet, refExp, testExp){  
-    browser()
     ind = sample(vcount(refNet))
     adjRefNet = as_adj(refNet)
     refModLabels = refModLabels[rownames(adjRefNet)]
