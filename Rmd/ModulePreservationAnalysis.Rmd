@@ -5,7 +5,7 @@ date: "`r date()`"
 output: html_document
 ---
   
-```{r libs, echo=FALSE, warning=FALSE, message=FALSE, include=FALSE}
+```{r libs, echo=FALSE, warning=FALSE, message=FALSE, include=FALSE, cache=FALSE}
 ## It is assumed your working directory is where this file is
 
 # Clear R console screen output
@@ -23,19 +23,24 @@ library(rGithubClient)
 library(WGCNA)
 library(dplyr)
 library(RColorBrewer)
-library(ggplot2)
+#library(ggplot2)
 library(knitr)
 library(stringr)
-library(ComplexHeatmap)
+#library(ComplexHeatmap)
+#library(ape)
+#library(parallel)
+
+#library(snow)
 
 synapseLogin()
 
 options(xtable.type="html")
 
 # source utility files from ../R/lib folder
-file.sources = list.files('../R/lib',pattern="*.R")
-file.sources = sapply(file.sources,function(x){return(paste('../R/lib',x,sep='/'))})
-tmp = sapply(file.sources,source,.GlobalEnv)
+source('../R/lib/makeModulePreservationSubmissions.R')
+#file.sources = list.files('../R/lib',pattern="*.R")
+#file.sources = sapply(file.sources,function(x){return(paste('../R/lib',x,sep='/'))})
+#tmp = sapply(file.sources,source,.GlobalEnv)
 
 knitr::opts_chunk$set(
   echo=FALSE,
@@ -137,7 +142,7 @@ for (i in names(networks)){
 ```
 
 ### Get overlap statistics
-```{r overlap.stats, fig.height = 10, fig.width=20}
+```{r overlap.stats, fig.height = 10, fig.width=20, eval=F}
 comparisons  = combn(names(networks),2)
 
 for (i in 1:dim(comparisons)[2]){
@@ -163,22 +168,44 @@ for (i in 1:dim(comparisons)[2]){
 ```
 
 ### Calculate preservation statistics
-```{r preservation.stats, fig.height=10, fig.width=20, eval=FALSE}
-presAnal = list()
-for (ref in names(networks)[-(2)]){
-  presAnal[[ref]] = list()
-  for (test in names(networks)){
-    presAnal[[ref]][[test]] = list()
+```{r preservation.stats, fig.height=10, fig.width=20, eval=T}
+# Write input files to sge as RData
+for (ref in names(networks))
+  for (test in names(networks))
     if (ref != test){
-      plotLists = list()
-      presAnal[[ref]][[test]] = modulePreservationAnalysis(networks[[ref]], networks[[test]], modules[[ref]], modules[[test]])    
+      # Package data to send to sge queue
+      makeModulePreservationSubmissions(ref = ref,
+                                        test = test,
+                                        refNet = networks[[ref]], 
+                                        testNet = networks[[test]], 
+                                        refModLabels = modules[[ref]], 
+                                        testModLabels = modules[[test]], 
+                                        refExp = exp[[ref]], 
+                                        testExp = exp[[test]],
+                                        n=100)
       }    
-    print(paste(ref,test))
-    }  
-  }
 ```
 
-```{r plot.data, fig.height=6, fig.width=20}
+### Consolidate preservation statistics results
+```{r preservation.stats.results, fig.height=10, fig.width=20, eval=F}
+# Read results from files
+for (ref in names(networks))
+  for (test in names(networks))
+    if (ref != test){
+      # Package data to send to sge queue
+      makeModulePreservationSubmissions(ref = ref,
+                                        test = test,
+                                        refNet = networks[[ref]], 
+                                        testNet = networks[[test]], 
+                                        refModLabels = modules[[ref]], 
+                                        testModLabels = modules[[test]], 
+                                        refExp = exp[[ref]], 
+                                        testExp = exp[[test]],
+                                        n=100)
+      }    
+```
+
+```{r plot.data, fig.height=6, fig.width=20, eval=F}
 load('temp.RData')
 for (ref in names(networks)[-(2)]){
   for (test in names(networks)){    
@@ -207,4 +234,3 @@ for (ref in names(networks)[-(2)]){
     }
   }
 ```
-
