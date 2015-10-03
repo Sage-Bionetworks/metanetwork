@@ -4,6 +4,8 @@
 
 ## It is assumed your working directory is where this file is
 
+setwd('/home/ec2-user/Work/Github/metanetwork/R')
+
 # Clear R console screen output
 cat("\014")  
 
@@ -38,7 +40,8 @@ COVARIATES = split(COVARIATES, COVARIATES$cogdx)
 #### Separate expression based on cogdx ####
 exp = lapply(COVARIATES, function(x,EXP) { x = EXP[, colnames(EXP) %in% x$SampleID]; x = cbind(EXP[,'ensembl_gene_id', drop=F],x)}, EXP)
 exp = exp[c(4,2,1)]
-names(exp) = c("AD","MCI","NC\I")
+names(exp) = c("AD","MCI","NCI")
+collectGarbage()
 
 #### Get reference network: cell type markers ####
 # Download AD related gene sets from synapse
@@ -68,41 +71,19 @@ Module.Files2 = synQuery('select * from file where projectId=="syn2397881" and f
 Module.Files = rbind(Module.Files1, Module.Files2)
 Module.Files = unique(Module.Files[grep('Modules',Module.Files$file.name),])
 rownames(Module.Files) = paste(Module.Files$file.method, Module.Files$file.sparsityMethod, Module.Files$file.disease, sep='.')
+collectGarbage()
 
 # Generate submission scripts for each comaprison
 for (name in rownames(Data.Files)){
   # Download test adjacency matrix and formulate an igraph object
   load(synGet(Data.Files[name,'file.id'])@filePath)
-  testNet = igraph::graph.adjacency(sparseNetwork, mode = 'undirected', weighted = NULL, diag = F)
   
   # Download test modules
   testModLabels = fread(synGet(Module.Files[name,'file.id'])@filePath, data.table=F, header=T)
     
   # Get test expression data
   testExp = exp[[Data.Files[name,'file.disease']]]
-  
-  # Make reference adjacency matrix
-  refNetwork = matrix(0, dim(sparseNetwork)[1], dim(sparseNetwork)[2])
-  colnames(refNetwork) = colnames(sparseNetwork)
-  rownames(refNetwork) = rownames(sparseNetwork)
-  
-  # Make reference modules
-  refModLabels = testModLabels
-  refModLabels$moduleNumber = 0
-  refModLabels$modulelabels = "NoModule"
     
-  # Assign cell specific network and modules
-  for (i in names(NGeneSets)){
-    refNetwork[rownames(refNetwork) %in% NGeneSets[[i]], colnames(refNetwork) %in% NGeneSets[[i]]] = 1
-    refModLabels$moduleNumber[refModLabels$GeneIDs %in% NGeneSets[i]] = 0
-    refModLabels$modulelabels[refModLabels$GeneIDs %in% NGeneSets[i]] = str_replace_all(i,':','.')
-  }
-  diag(refNetwork) = 0
-  refNet = igraph::graph.adjacency(refNetwork, mode = 'undirected', weighted = NULL, diag = F)
-  
-  # Get test expression data
-  refExp = exp[[Data.Files[name,'file.disease']]]
-  
   # Create folder to save files
   folderName = paste(Data.Files[name,c('file.method','file.sparsityMethod','file.disease')], collapse='_')
   folderName = paste(getwd(), 
@@ -111,11 +92,10 @@ for (name in rownames(Data.Files)){
   system(paste('mkdir',folderName))
     
   # Package actual data and submit them to sge
-  netData = list(refNet = refNet, testNet = testNet, 
-                 refModLabels = refModLabels, testModLabels = testModLabels, 
-                 refExp = refExp, testExp = testExp)                                    
-  save(list = 'netData', file = paste(folderName, 'Input.RData',sep='/'))
-    
+  netData.test = list(testNet = sparseNetwork, testModLabels = testModLabels, testExp = testExp)                                    
+  save(list = 'netData.test', file = paste(folderName, 'testInput.RData',sep='/'))
+  collectGarbage()
+  
   # Track all subission scripts in one shell script
   fp_all = file(paste0(folderName, '/allSubmissions.sh'),'w+')    
   cat('#!/bin/bash',file=fp_all,sep='\n')
@@ -125,7 +105,7 @@ for (name in rownames(Data.Files)){
   fp = file (paste0(folderName,'/Main.sh'), "w+")
   cat('#!/bin/bash',
       'sleep 30',
-      paste('Rscript','/home/ec2-user/Work/Github/metanetwork/R/modulePreservationAnalysis.SGE.R','Input.RData',folderName,'Main'),
+      paste('Rscript','/home/ec2-user/Work/Github/metanetwork/R/modulePreservationAnalysis.SGE.R','testInput.RData',folderName,'Main'),
       file = fp,
       sep = '\n')
   close(fp)
@@ -141,12 +121,12 @@ for (name in rownames(Data.Files)){
   close(fp_all)
   
   # Create random networks for sge submission
-  for (i in 1:2){
+  for (i in 1:100){
     # Create main submission script
     fp = file (paste(folderName, paste('Rand',i,'sh',sep='.'),sep='/'), "w+")
     cat('#!/bin/bash',
         'sleep 30',
-        paste('Rscript','/home/ec2-user/Work/Github/metanetwork/R/modulePreservationAnalysis.SGE.R',paste(folderName, 'Input.RData',sep='/'),folderName,paste('Rand',i,sep='.')),
+        paste('Rscript','/home/ec2-user/Work/Github/metanetwork/R/modulePreservationAnalysis.SGE.R',paste(folderName, 'testInput.RData',sep='/'),folderName,paste('Rand',i,sep='.')),
         file = fp,
         sep = '\n')
     close(fp)
@@ -161,5 +141,4 @@ for (name in rownames(Data.Files)){
         sep='\n')
     close(fp_all)
   }
-
 }
