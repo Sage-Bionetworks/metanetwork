@@ -9,8 +9,14 @@ library(dplyr)
 
 # Read command line arguments
 args = commandArgs(TRUE)
+
+# Load input RData
 load(args[1])
+
+# Get folder names to save
 folderName = args[2]
+
+# Get filenames to save 
 fileName = args[3]
 
 # Set working directory
@@ -75,6 +81,32 @@ testModLabels = netData$testModLabels
 refExp = netData$refExp
 testExp = netData$testExp
   
+# Perform randomisation (if needed)
+if (fileName != 'Main'){
+  print('Performing randomization...')
+  ind = sample(vcount(refNet))
+  adjRefNet = as_adj(refNet)
+  refModLabels = refModLabels[rownames(adjRefNet)]
+  rownames(adjRefNet)[ind] = rownames(adjRefNet)
+  colnames(adjRefNet)[ind] = colnames(adjRefNet)
+  permRefNet = igraph::graph.adjacency(adjRefNet, mode = 'undirected', weighted = NULL, diag = F)
+  
+  permModLabels = refModLabels
+  names(permModLabels)[ind] = names(refModLabels)
+  
+  ind = sample(vcount(testNet))
+  adjTestNet = as_adj(testNet)
+  testModLabels = testModLabels[rownames(adjTestNet)]
+  rownames(adjTestNet)[ind] = rownames(adjTestNet)
+  colnames(adjTestNet)[ind] = colnames(adjTestNet)
+  permTestNet = igraph::graph.adjacency(adjTestNet, mode = 'undirected', weighted = NULL, diag = F)
+
+  # Package actual data and submit them to sge
+  refNet = permRefNet;
+  testNet = permTestNet;
+  refModLabels = permModLabels                                    
+}
+
 refModules = setdiff(unique(refModLabels), 'NoModule')
 testModules = setdiff(unique(testModLabels), 'NoModule')
   
@@ -91,4 +123,3 @@ write.table(presMetrics, file = paste(folderName, paste(fileName,'tsv',sep='.'),
 # Write completed file list
 write.table(paste(folderName, paste(fileName,'tsv',sep='.'),sep='/'), file = paste(folderName, 'Completed.txt', sep='/'), sep='\n', append=T, quote=F, col.names=F, row.names=F)
 #############################################################################################
-
