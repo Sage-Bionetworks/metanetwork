@@ -33,9 +33,9 @@ synapseLogin()
 
 # Github links
 thisRepo <- getRepo(repository = "th1vairam/metanetwork", ref="branch", refName="moduleAnal")
-thisFile1 <- getPermlink(repository = thisRepo, repositoryPath = 'modulePreservationAnalysis.SGE.R')
-thisFile2 <- getPermlink(repository = thisRepo, repositoryPath = 'modulePreservationAnalysis.cellMarkers.R')
-thisFile3 <- getPermlink(repository = thisRepo, repositoryPath = 'modulePreservationAnalysis.consolidateResults.R')
+thisFile1 <- getPermlink(repository = thisRepo, repositoryPath = 'R/modulePreservationAnalysis.SGE.R')
+thisFile2 <- getPermlink(repository = thisRepo, repositoryPath = 'R/modulePreservationAnalysis.cellMarkers.R')
+thisFile3 <- getPermlink(repository = thisRepo, repositoryPath = 'R/modulePreservationAnalysis.consolidatedResults.R')
 
 # Write reulst to synapse folder
 parentId = "syn4974056"
@@ -141,18 +141,21 @@ foldObj = synStore(foldObj)
 # Create results metric file
 modPresMetric = File(paste0(folderName, '/Main.tsv'), name = "Module Preservation Metrics", parentId = foldObj$properties$id)
 annotations(modPresMetric) = annotateList
-modPresMetric = synStore(modPresMetric, activityName = activityName, activityDescription = activityDescription, used = used, executed = c(thisFile1, thisFile2, thisFile3))
+annotations(modPresMetric)$fileType = "tsv"
+modPresMetric = synStore(modPresMetric, activityName = activityName, activityDescription = activityDescription, used = used, executed = list(thisFile1, thisFile2, thisFile3))
                      
 # Create permuted results metric file
 write.table(Rand, file = paste0(folderName, '/Rand.tsv'), sep = '\t', row.names=F, quote=F)
 modPermPresMetric = File(paste0(folderName, '/Rand.tsv'), name = "Permuted Module Preservation Metrics", parentId = foldObj$properties$id)
 annotations(modPermPresMetric) = annotateList
-modPermPresMetric = synStore(modPermPresMetric, activityName = activityName, activityDescription = activityDescription, used = used, executed = c(thisFile1, thisFile2, thisFile3))
+annotations(modPresMetric)$fileType = "tsv"
+modPermPresMetric = synStore(modPermPresMetric, activityName = activityName, activityDescription = activityDescription, used = used, executed = list(thisFile1, thisFile2, thisFile3))
 
 # Create zstats file
 write.table(zstats, file = paste0(folderName, '/zstats.tsv'), sep = '\t', row.names=F, quote=F)
 zstatObj = File(paste0(folderName, '/zstats.tsv'), name = "Module Preservation Zscores", parentId = foldObj$properties$id)
 annotations(zstatObj) = annotateList
-zstatObj = synStore(zstatObj, activityName = activityName, activityDescription = activityDescription, used = used, executed = c(thisFile1, thisFile2, thisFile3))
+annotations(modPresMetric)$fileType = "tsv"
+zstatObj = synStore(zstatObj, activityName = activityName, activityDescription = activityDescription, used = used, executed = list(thisFile1, thisFile2, thisFile3))
 
 }
