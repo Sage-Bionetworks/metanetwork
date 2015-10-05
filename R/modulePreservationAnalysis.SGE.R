@@ -5,11 +5,16 @@ library(synapseClient)
 library(data.table)
 library(igraph)
 library(WGCNA)
-library(dplyr)
 library(plyr)
+library(dplyr)
 
-install.packages('glasso')
-library(glasso)
+tmp = available.packages()
+if (any(tmp[,1] %in% "glasso")){
+	library('glasso')
+} else {
+	install.packages('glasso'); 
+	library('glasso')
+}
 
 synapseLogin()
 
