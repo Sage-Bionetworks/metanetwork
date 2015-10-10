@@ -10,10 +10,10 @@ library(dplyr)
 
 tmp = available.packages()
 if (any(tmp[,1] %in% "glasso")){
-	library('glasso')
+  library('glasso')
 } else {
-	install.packages('glasso'); 
-	library('glasso')
+  install.packages('glasso'); 
+  library('glasso')
 }
 
 synapseLogin()
@@ -30,9 +30,6 @@ folderName = args[2]
 # Get filenames to save 
 fileName = args[3]
 
-# Load input reference RData from synapse
-load(synGet('syn4973033')@filePath)
-
 # Set working directory
 setwd(folderName)
 
@@ -40,7 +37,7 @@ setwd(folderName)
 #### Function to calculate partial correlation coefficients ####
 partialCorrelation <- function(C, adjMatrix){
   
-#   browser()
+  #   browser()
   ind = arrayInd(which(adjMatrix == 0), dim(adjMatrix))
   gl = glasso(C, rho = 0, zero = ind)
   
@@ -49,7 +46,7 @@ partialCorrelation <- function(C, adjMatrix){
   colnames(pc) = colnames(adjMatrix)
   rownames(pc) = rownames(adjMatrix)
   
-#   print('Completed pc successfully')
+  #   print('Completed pc successfully')
   return(pc)
 }
 
@@ -85,16 +82,19 @@ modulePreservationMetrics <- function(x, refModLabels, testModLabels, refNet, te
   
   # Module density in test network
   meanAdj = igraph::graph.density(sgTest)
-    
+  
+  # Fold change in adjacency
+  changeAdj = meanAdj/igraph::graph.density(sgRef)
+  
   ### Correlation preservation stats
   # Get correlation matrix
   refCor = WGCNA::bicor(t(refExp),  use = 'pairwise.complete.obs')
   testCor = WGCNA::bicor(t(testExp),  use = 'pairwise.complete.obs')
   
   try({
-  # Get partial correlation matrix
-  refCor = partialCorrelation(refCor, adjRef)
-  testCor = partialCorrelation(testCor, adjTest)
+    # Get partial correlation matrix
+    refCor = partialCorrelation(refCor, adjRef)
+    testCor = partialCorrelation(testCor, adjTest)
   }, silent = T)
   
   # Correlation between partial correlation matrices
@@ -112,47 +112,48 @@ modulePreservationMetrics <- function(x, refModLabels, testModLabels, refNet, te
   
   # Degree of all nodes in sub-netowrk (k.in)
   testDegree = igraph::degree(sgTest)
+  refDegree = igraph::degree(sgRef)
+  meankIM = mean(testDegree, na.rm=T)
+    
+  # Correlation between 
+  cor.kIM = WGCNA::bicor(as.vector(refDegree), as.vector(testDegree), use = 'pairwise.complete.obs')
   
-  # Calculate mean intra modular connectivity
-  meankIM = mean(testDegree)
-  changekIM2kALL = mean(testDegree/testDegreeAll[names(testDegree)], na.rm=T)
+  # Calculate summary stats of intra modular connectivity
+  kIM2kALL = testDegree/testDegreeAll[names(testDegree)]
+  meankIM2kALL = mean(kIM2kALL, na.rm=T)
+  mediankIM2kALL = median(kIM2kALL, na.rm=T)
+  sdkIM2kALL = sd(kIM2kALL, na.rm = T)
   
   return(data.frame(
     moduleSize = moduleSize,
     modTest = modTest,
     cor.Adj = cor.Adj,
     meanAdj = meanAdj,
+    changeAdj = changeAdj,
     cor.PCor = cor.PCor, 
     meanPCor = meanPCor,
     changePCor = changePCor, 
     meankIM = meankIM,
-    changekIM2kALL = changekIM2kALL))
+    meankIM2kALL = meankIM2kALL,
+    mediankIM2kALL = mediankIM2kALL,
+    sdkIM2kALL = sdkIM2kALL))
 }
 #############################################################################################
 
 #############################################################################################
 #### Data download and preparation ####
-refNet = igraph::graph.adjacency(netData.ref$refNet, mode = 'undirected', weighted = NULL, diag = F)
-testNet = igraph::graph.adjacency(netData.test$testNet, mode = 'undirected', weighted = NULL, diag = F)
+refNet = igraph::graph.adjacency(netData$refNet, mode = 'undirected', weighted = NULL, diag = F)
+testNet = igraph::graph.adjacency(netData$testNet, mode = 'undirected', weighted = NULL, diag = F)
 
-refModLabels = netData.ref$refModLabels$modulelabels
-names(refModLabels) = netData.ref$refModLabels$GeneIDs
+refModLabels = netData$refModLabels$modulelabels
+names(refModLabels) = netData$refModLabels$GeneIDs
 
 # Assign modules wiht less than 20 genes to NoModule
-testModLabels = netData.test$testModLabels
-testModLabels = split(testModLabels, testModLabels$modulelabels)
-tmp = sapply(testModLabels, dim)
-testModLabels[which(tmp[1,]<20)] = lapply(testModLabels[which(tmp[1,]<20)], function(x){
-  x$moduleNumber = 0
-  x$modulelabels = "NoModule"
-  return(x)
-})
-tmp = ldply(testModLabels)[,-(1)]
-testModLabels = tmp$modulelabels
-names(testModLabels) = tmp$GeneIDs
+testModLabels = netData$testModLabels$modulelabels
+names(testModLabels) = netData$testModLabels$GeneIDs
 
-refExp = netData.ref$refExp
-testExp = netData.test$testExp
+refExp = netData$refExp
+testExp = netData$testExp
 
 # Perform randomisation (if needed)
 if (fileName != 'Main'){

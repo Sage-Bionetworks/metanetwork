@@ -97,12 +97,12 @@ for (name in rownames(Data.Files)){
   collectGarbage()
   
   # Track all subission scripts in one shell script
-  fp_all = file(paste0(folderName, '/allSubmissions.sh'),'w+')    
+  fp_all = file(paste0(folderName, '/allSubmissions.sh'),'w')    
   cat('#!/bin/bash',file=fp_all,sep='\n')
   close(fp_all)
   
   # Create main submission script
-  fp = file (paste0(folderName,'/Main.sh'), "w+")
+  fp = file (paste0(folderName,'/Main.sh'), "w")
   cat('#!/bin/bash',
       'sleep 30',
       paste('Rscript','/home/ec2-user/Work/Github/metanetwork/R/modulePreservationAnalysis.SGE.R','testInput.RData',folderName,'Main'),
@@ -121,9 +121,9 @@ for (name in rownames(Data.Files)){
   close(fp_all)
   
   # Create random networks for sge submission
-  for (i in 1:100){
+  for (i in 101:150){
     # Create main submission script
-    fp = file (paste(folderName, paste('Rand',i,'sh',sep='.'),sep='/'), "w+")
+    fp = file (paste(folderName, paste('Rand',i,'sh',sep='.'),sep='/'), "w")
     cat('#!/bin/bash',
         'sleep 30',
         paste('Rscript','/home/ec2-user/Work/Github/metanetwork/R/modulePreservationAnalysis.SGE.R',paste(folderName, 'testInput.RData',sep='/'),folderName,paste('Rand',i,sep='.')),

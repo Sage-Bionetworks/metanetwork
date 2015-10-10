@@ -89,7 +89,7 @@ Module.Files = unique(Module.Files[grep('Modules',Module.Files$file.name),])
 rownames(Module.Files) = paste(Module.Files$file.method, Module.Files$file.sparsityMethod, Module.Files$file.disease, sep='.')
 collectGarbage()
 
-# Generate submission scripts for each comaprison
+# Extract results from each submissions
 for (name in rownames(Data.Files)){
   # Get folder name to retrive results
   folderName = paste(Data.Files[name,c('file.method','file.sparsityMethod','file.disease')], collapse='_')
@@ -101,13 +101,13 @@ for (name in rownames(Data.Files)){
   Main = fread(paste0(folderName, '/Main.tsv'), data.table=F, header = T)
 
   # Read random permutation results
-  Rand = lapply(1:100, function(i, folderName){ try({results = fread(paste0(folderName, '/Rand.', i, '.tsv'),data.table=F,header=T)}, silent = T)}, folderName)
+  Rand = lapply(1:150, function(i, folderName){ try({results = fread(paste0(folderName, '/Rand.', i, '.tsv'),data.table=F,header=T)}, silent = T)}, folderName)
 
   # Remove failed runs
   Rand[which(sapply(Rand, length) == 1)] = NULL
 
   # Combine all permutation runs
-  Rand = plyr::join_all(Rand, by = "moduleName")
+  Rand = plyr::join_all(Rand[1:min(100, length(Rand))], by = "moduleName")
 
   # Calculate z-scores
   propertyName = c("modTest", "cor.Adj", "meanAdj", "cor.PCor", "meanPCor", "changePCor", "meankIM", "changekIM2kALL")
