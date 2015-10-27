@@ -2,7 +2,7 @@ mpiWrapper = function(data,nodes,pathv,regressionFunction,outputpath,eigen=NULL,
   #initialize MPI
   library('Rmpi');
   #load sparrow library
-  library('metaNet');
+  library('metanetwork');
   nslaves <- nodes;
   #nslaves/nodes: cluster size
   mpi.spawn.Rslaves(nslaves=nslaves,hosts=hosts);
@@ -27,7 +27,7 @@ mpiWrapper = function(data,nodes,pathv,regressionFunction,outputpath,eigen=NULL,
   
   foldslave <- function() {
     # Get a task 
-    require("metaNet")
+    require("metanetwork")
     task <- mpi.recv.Robj(mpi.any.source(),mpi.any.tag()) 
     task_info <- mpi.get.sourcetag() 
     tag <- task_info[2] 

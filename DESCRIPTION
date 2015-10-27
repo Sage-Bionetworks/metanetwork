@@ -1,7 +1,7 @@
-Package: metaNet
+Package: metanetwork
 Type: Package
 Title: Network meta analysis
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: person("Logsdon", "Benjamin", email="ben.logsdon@sagebase.org", role = c("aut", "cre"))
 Description: Package to infer multiple types of coexpression network representations of high dimensional gene expression data.  Builds network ensembles, extract network statistics, and run enrichments on network features.
 Depends: R (>= 3.1.0)

@@ -1,7 +1,7 @@
 ###Function to run tigress on the data
-tigress<- function(y,x){
+tigressRootN<- function(y,x){
   alpha = 0.2;
-  L = 5;
+  L = floor(sqrt(length(y)));
   R = 100;
   n <- length(y);
   require(lars);

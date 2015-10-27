@@ -1,7 +1,7 @@
 #function to grab BIC solution for lasso
-lassoAIC <- function(y,x){
+elasticNetAIC <- function(y,x){
   require(glmnet)
-  res <- glmnet(y=y,x=x)
+  res <- glmnet(y=y,x=x,alpha=0.5)
   resid <- y - x%*%res$beta;
   error <- apply(resid^2,2,mean)
   nonzero <- apply(res$beta,2,function(x) sum(x!=0))
