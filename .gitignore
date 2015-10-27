@@ -3,6 +3,8 @@
 .RData
 .DS_Store
 .httr-oauth
-dataMatrix.tsv
 *.tsv
 *.txt
+*.png
+*.rdb
+*.html
