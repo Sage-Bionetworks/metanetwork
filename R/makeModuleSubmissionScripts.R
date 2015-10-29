@@ -8,21 +8,40 @@ cat("\014")
 setwd('/home/ec2-user/Work/Github/metanetwork/R')
 
 # Load libraries
+library(plyr)
+library(dplyr)
 library(synapseClient)
 
 # login to synapse
 synapseLogin()
 
 # Get all files and folder
-Data.Files = synQuery('select * from file where projectId=="syn2397881" and fileType == "rda" and sparsityMethod != "correlationFDR" and sparsityMethod != "wgcna"', blockSize = 100)
+Data.Files = synQuery('select * from file where 
+                      projectId=="syn2397881" and 
+                      fileType == "rda" and 
+                      method == "rankconsensus" and 
+                      sparsityMethod != "correlationBonferroni" and
+                      sparsityMethod != "correlationFDR" and 
+                      sparsityMethod != "wgcna"', blockSize = 100)
 Data.Files = Data.Files$collectAll()
+Data.Files = Data.Files %>%
+  dplyr::mutate(uniqueName = paste(tools::file_path_sans_ext(file.name), file.disease, file.tissueType, sep = "."))
 
-Module.Files = synQuery('select * from file where projectId=="syn2397881" and fileType == "tsv" and moduleMethod == "igraph:fast_greedy" and sparsityMethod != "correlationFDR" and sparsityMethod != "wgcna"', blockSize = 100)
+Module.Files = synQuery('select * from file where 
+                        projectId=="syn2397881" and 
+                        fileType == "tsv" and 
+                        method == "rankconsensus" and
+                        moduleMethod == "igraph:fast_greedy" and
+                        sparsityMethod != "correlationBonferroni" and
+                        sparsityMethod != "correlationFDR" and 
+                        sparsityMethod != "wgcna"', blockSize = 100)
 Module.Files = Module.Files$collectAll()
-Module.Files = Module.Files[is.na(Module.Files$file.enrichmentMethod),]
+Module.Files = Module.Files %>%
+  dplyr::filter(!is.na(file.enrichmentMethod)) %>%
+  tidyr::separate(file.name, into = c("file.name","moduleAlgorithm","analysis","method"), sep = " ") %>%
+  dplyr::mutate(uniqueName = paste(file.name, file.disease, file.tissueType, sep = "."))
 
-All.Files = Data.Files[!(paste(tools::file_path_sans_ext(Data.Files$file.name),Data.Files$file.disease) %in%
-                         paste(sapply(Module.Files$file.name, function(x){strsplit(x," ")[[1]][1]}), Module.Files$file.disease)),]
+All.Files = filter(Data.Files, !(uniqueName %in% Module.Files$uniqueName))
 
 # Make directory and write shell scripts for running these files
 system('mkdir sgeModuleSubmissions')
