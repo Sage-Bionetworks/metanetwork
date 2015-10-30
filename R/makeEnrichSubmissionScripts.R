@@ -9,6 +9,8 @@ setwd('/home/ec2-user/Work/Github/metanetwork/R')
 
 # Load libraries
 library(synapseClient)
+library(dplyr)
+library(tidyr)
 
 # login to synapse
 synapseLogin()
@@ -48,7 +50,7 @@ system('mkdir sgeEnrichSub')
 fp_all = file(paste('./sgeEnrichSub/allSubmissions.sh'),'w+')    
 cat('#!/bin/bash',file=fp_all,sep='\n')
 close(fp_all)
-for (id in Module.Files$file.id){
+for (id in UEnrich.Files$file.id){
   fp = file (paste('/home/ec2-user/Work/Github/metanetwork/R/sgeEnrichSub/SUB',id,sep='.'), "w+")
   cat('#!/bin/bash', 
       'sleep 30', 
