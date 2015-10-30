@@ -13,12 +13,35 @@ library(synapseClient)
 # login to synapse
 synapseLogin()
 
-# Get all files and folder
-Module.Files = synQuery('select * from file where projectId=="syn2397881" and fileType == "tsv" and moduleMethod == "igraph:fast_greedy"', blockSize = 100)
+Module.Files = synQuery('select * from file where 
+                        projectId=="syn2397881" and 
+                        fileType == "tsv" and 
+                        method == "rankconsensus" and
+                        moduleMethod == "igraph:fast_greedy" and
+                        sparsityMethod != "correlationBonferroni" and
+                        sparsityMethod != "correlationFDR" and 
+                        sparsityMethod != "wgcna"', blockSize = 100)
 Module.Files = Module.Files$collectAll()
-Module.Files = Module.Files[is.na(Module.Files$file.enrichmentMethod),]
-#Enrich.Files = synQuery('select * from file where projectId=="syn2397881" and fileType == "tsv" and enrichmentMethod == "Fisher" and enrichmentGeneSet == "AD"', blocksize = 100)
-#Enrich.Files = Enrich.Files$collectAll()
+Module.Files = Module.Files %>%
+  dplyr::filter(is.na(file.enrichmentMethod), file.name %in% grep('fast_greedy Modules', Module.Files$file.name, value=T)) %>%
+  tidyr::separate(file.name, into = c("file.name","method","analysis"), sep = " ") %>%
+  dplyr::mutate(uniqueName = paste(file.name, file.disease, file.tissueType, sep = "."))
+
+Enrich.Files = synQuery('select * from file where 
+                        projectId=="syn2397881" and 
+                        fileType == "tsv" and 
+                        method == "rankconsensus" and
+                        moduleMethod == "igraph:fast_greedy" and
+                        sparsityMethod != "correlationBonferroni" and
+                        sparsityMethod != "correlationFDR" and 
+                        sparsityMethod != "wgcna"', blockSize = 100)
+Enrich.Files = Enrich.Files$collectAll()
+Enrich.Files = Enrich.Files %>%
+  dplyr::filter(!is.na(file.enrichmentMethod)) %>%
+  tidyr::separate(file.name, into = c("file.name","moduleMethod","analysis","enrichMethod"), sep = " ") %>%
+  dplyr::mutate(uniqueName = paste(file.name, file.disease, file.tissueType, sep = "."))
+
+Module.Files = filter(Module.Files, !(uniqueName %in% Enrich.Files$uniqueName))
 
 # Make directory and write shell scripts for running these files
 system('mkdir sgeEnrichSub')
