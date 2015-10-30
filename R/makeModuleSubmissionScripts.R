@@ -37,8 +37,8 @@ Module.Files = synQuery('select * from file where
                         sparsityMethod != "wgcna"', blockSize = 100)
 Module.Files = Module.Files$collectAll()
 Module.Files = Module.Files %>%
-  dplyr::filter(!is.na(file.enrichmentMethod)) %>%
-  tidyr::separate(file.name, into = c("file.name","moduleAlgorithm","analysis","method"), sep = " ") %>%
+  dplyr::filter(is.na(file.enrichmentMethod), file.name %in% grep('fast_greedy Modules', Module.Files$file.name, value=T)) %>%
+  tidyr::separate(file.name, into = c("file.name","method","analysis"), sep = " ") %>%
   dplyr::mutate(uniqueName = paste(file.name, file.disease, file.tissueType, sep = "."))
 
 All.Files = filter(Data.Files, !(uniqueName %in% Module.Files$uniqueName))
