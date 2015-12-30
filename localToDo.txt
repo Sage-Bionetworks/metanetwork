@@ -1,0 +1,74 @@
+Wednesday, December 30th
+Network reboot.
+1) Methods that are currently available
+  i) lasso (cv min)
+  ii) lasso (cv 1se)
+  iii) lasso (aic)
+  iv) lasso (bic)
+  v) ridge (cv min)
+  vi) ridge (cv 1se)
+  vii) ridge (aic) 
+  viii) ridge (bic)
+  ix) elastic net (cv min) (alpha=0.5)
+  x) elastic net (cv 1se) (alpha=0.5)
+  xi) elastic net (aic) (alpha=0.5)
+  xii) elastic net (bic) (alpha=0.5)
+  xiii) sparrow1
+  xiv) sparrow2
+  xv) aracne
+  xvi) wgcna (hard threshold)
+  xvii) tigress (5 predictors)
+  xviii) tigress (root-n predictors)
+  xix) genie3
+  
+try to add to current implementation
+  i) BLCD+HITON-PC
+  ii) CATNET
+  iii) nonlinear correlation coefficient
+  iv) c3net
+  v) ggm
+  vi) mrnet (parmigene)
+  vii) wgcna (soft threshold)
+  viii) stability selection
+  
+remove from current implementation
+  i) elastic net
+  ii) all aic/bic/cvmin
+
+2) Methods from dream5 paper
+  i) tigress (5 predictors)
+  ii) steady-state and time series data combined with group lasso (time varying)
+  iii) artiva (time varying lasso RJ-MCMC)
+  iv) lasso + bootstrapping
+  v) lasso + area under the stability selection curve
+  vi) lasso toolbox GENLAB with standard parameters
+  vii) lasso models are combined by the maximum regularization parameter selecting a given edge for the first time
+  viii) linear regression
+  ix) Context likeilhood of relatedness
+  x) Mutual information is computed from discretized expression values
+  xi) ARACNE
+  xii) BLCD and HITON-PC algorithm applied to MI or pearson correlation (or both)
+  xiii) absolute value of Person's correlation coefficient
+  xiv) signed value of pearson's correlation coefficient
+  xv) signed value of spearmen's correlation coefficient
+  xvi) catnet +simulated annealing
+  xvii) Max-min parent and children algorithm + bootstrapping
+  xviii) Markov blanket algorithm (HITON-PC), bootstrapped data sets.
+  xix) Markov boundary induction algorithm (TIE*), bootstrapped data sets.
+  xx) Models transcription factor perturbation data and time series using dynamic Bayesian networks (Infer.NET toolbox, http://research.microsoft.com/infernet/).
+  xxi) genie3
+  xxii) nonlinear correlation coefficient (two-way anova)
+  xxiii) Transcription factors are selected by maximizing the conditional entropy for target genes, which are represented as Boolean vectors with probabilities to avoid discretization.
+  xxiii) Transcription factors are preselected from transcription-factor perturbation data or by Pearson's correlation and then tested by iterative Bayesian model averaging (BMA).
+  xxiv) A Gaussian noise model is used to estimate whether the expression of a target gene changes in transcription-factor perturbation measurements.
+  xxv) After scaling, target genes are clustered by Pearson's correlation. A neural network is trained (genetic algorithm) and parameterized (back-propagation).
+  xxvi) Data is discretized by Gaussian mixture models and clustering; interactions are detected by generalized logical network modeling (χ2 test).
+  xxvii) The χ2 test is applied to evaluate the probability of a shift in transcription-factor and target-gene expression in transcription-factor perturbation experiments.
+  
+3) Methods from plosCB paper
+  i) DREAM5
+  ii) c3net
+  iii) ggm
+  iv) mrnet
+  
+4) Read systems bio review
