@@ -22,17 +22,17 @@ Network reboot.
   xix) genie3
   
 try to add to current implementation
-  i) BLCD+HITON-PC
-  ii) CATNET
-  iii) nonlinear correlation coefficient
-  iv) c3net
-  v) ggm
-  vi) mrnet (parmigene)
-  vii) wgcna (soft threshold)
-  viii) stability selection
+  i) BLCD+HITON-PC (NO)
+  ii) CATNET (NO)
+  iii) nonlinearcorrelation coefficient (YES)
+  iv) c3net (YES)
+  v) ggm (Maybe) (NO)
+  vi) mrnet (parmigene) (YES)
+  vii) wgcna (soft threshold) (YES)
+  viii) stability selection (YES)
   
 remove from current implementation
-  i) elastic net
+  i) elastic net (maybe)
   ii) all aic/bic/cvmin
 
 2) Methods from dream5 paper
