@@ -6,3 +6,5 @@
 dataMatrix.tsv
 contrib
 result_c3net.rda
+result_wgcna.rda
+result_wgcnaSoftThreshold.rda
