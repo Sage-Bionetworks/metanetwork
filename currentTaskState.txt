@@ -11,16 +11,18 @@ January 5th, 2016
 
 
 final method list for paper pipeline!
+(regression)
 ridge cv1se
-elastic net cv1se
 lasso cv1se
 sparrow1 (updated with bugs fixed)
-aracne
-wgcna (Hard threshold)
-wgcna (Soft threshold)
 tigress (classic 5 predictors)
 genie3
+
+(mi)
+aracne
 c3net
 mrnet
-stability selection
-nonlinear correlation
+
+(cor)
+wgcna (Hard threshold)
+wgcna (Soft threshold)
