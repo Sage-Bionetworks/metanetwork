@@ -24,5 +24,6 @@ c3net
 mrnet
 
 (cor)
-wgcna (Hard threshold)
+correlation
+wgcna (TOM)
 wgcna (Soft threshold)
