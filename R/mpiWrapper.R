@@ -180,28 +180,7 @@ mpiWrapper = function(data,nodes,pathv,regressionFunction,outputpath,eigen=NULL,
   network <- data.frame(network)
   network$fold <- as.integer(network$fold)
   network <- network[,-1]
-  if(regressionFunction=='lassoCV1se'|regressionFunction=='lassoCVmin'|regressionFunction=='lassoAIC'|regressionFunction=='lassoBIC'|regressionFunction=='tigress'){
-    cat(paste(regressionFunction,sum((network+t(network))!=0)/2,sep=','),'\n',file=paste0(outputpath,'sparsity.csv'),sep='',append=TRUE)
-  }else if (regressionFunction=='sparrowZ'){
-    #bonferroni
-    network2 <- applySparrowBonferroni(network)
-    cat(paste('sparrow1Bonferroni',sum(network2!=0)/2,sep=','),'\n',file=paste0(outputpath,'sparsity.csv'),sep='',append=TRUE)
-    rm(network2)
-    gc()
-    network2 <- applySparrowFDR(network)
-    cat(paste('sparrow1FDR',sum(network2!=0)/2,sep=','),'\n',file=paste0(outputpath,'sparsity.csv'),sep='',append=TRUE)
-    rm(network2)
-    gc()
-  }else if (regressionFunction=='sparrow2Z'){
-    network2 <- applySparrowBonferroni(network)
-    cat(paste('sparrow2Bonferroni',sum(network2!=0)/2,sep=','),'\n',file=paste0(outputpath,'sparsity.csv'),sep='',append=TRUE)
-    rm(network2)
-    gc()
-    network2 <- applySparrowFDR(network)
-    cat(paste('sparrow2FDR',sum(network2!=0)/2,sep=','),'\n',file=paste0(outputpath,'sparsity.csv'),sep='',append=TRUE)
-    rm(network2)
-    gc()    
-  }
+
   save(network,file=paste(outputpath,'result_',regressionFunction,'.rda',sep=''));
   
   #a <- mpi.close.Rslaves()
