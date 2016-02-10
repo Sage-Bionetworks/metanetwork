@@ -180,7 +180,8 @@ mpiWrapper = function(data,nodes,pathv,regressionFunction,outputpath,eigen=NULL,
   network <- data.frame(network)
   network$fold <- as.integer(network$fold)
   network <- network[,-1]
-
+  network <- network/2+t(network)/2
+  gc()
   save(network,file=paste(outputpath,'result_',regressionFunction,'.rda',sep=''));
   
   #a <- mpi.close.Rslaves()
