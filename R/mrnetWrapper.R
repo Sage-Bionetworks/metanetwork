@@ -9,5 +9,5 @@ mrnetWrapper = function(data,path=NULL,pval=1,outputpath){
   cat('fileName:',fileName,'\n')
   load(fileName)
   network <- parmigene::mrnet(network)
-  save(network,file='result_mrnet.rda')
+  save(network,file=paste0(outputpath,'result_mrnet.rda'))
 }
