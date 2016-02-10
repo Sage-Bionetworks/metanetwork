@@ -43,5 +43,6 @@ aracne <- function(data,path=NULL,pval=NULL,outputpath){
     fileName <- paste0(outputpath,'aracneThresholdNetwork.csv')
   }
   #save(network,file=fileName)
+  network <- network*upper.tri(network)
   write.csv(network,file=fileName,quote=F)
 }

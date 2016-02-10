@@ -14,7 +14,10 @@ mrnetWrapper = function(data,path=NULL,pval=1,outputpath){
   network <- data.table::fread(fileName,data.table=F) %>%
     data.frame(row.names=1) %>%
     data.matrix
+  network <- network+t(network)
+  gc()
   network <- parmigene::mrnet(data.matrix(network))
   #save(network,file=paste0(outputpath,'result_mrnet.rda'))
+  network <- network*upper.tri(network)
   write.csv(network,file=paste0(outputpath,'mrnetNetwork.csv'),quote=F)
 }

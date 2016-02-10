@@ -12,5 +12,6 @@ wgcnaTOM <- function(data,path=NULL,pval=1,outputpath,RsquaredCut=.80,defaultNaP
   colnames(network) <- cn
   rownames(network) <- cn
   #save(network,file=paste0(outputpath,'result_wgcnaTOM.rda'))
+  network <- network*upper.tri(network)
   write.csv(network,file=paste0(outputpath,'wgcnaTopologicalOverlapMatrixNetwork.csv'),quote=F)
 }
