@@ -38,9 +38,10 @@ aracne <- function(data,path=NULL,pval=NULL,outputpath){
   }
   #return(network)
   if(pval==1){
-    fileName <- paste0(outputpath,'result_aracneFull.rda')
+    fileName <- paste0(outputpath,'aracneNetwork.csv')
   }else{
-    fileName <- paste0(outputpath,'result_aracne.rda')
+    fileName <- paste0(outputpath,'aracneThresholdNetwork.csv')
   }
-  save(network,file=fileName)
+  #save(network,file=fileName)
+  write.csv(network,file=fileName,quote=F)
 }

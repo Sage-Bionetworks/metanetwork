@@ -8,5 +8,6 @@ wgcnaTOM <- function(data,path=NULL,pval=1,outputpath,RsquaredCut=.80,defaultNaP
   #save(network,file='result_wgcnaSoftThreshold.rda')
   print(res$powerEstimate)
   network <- TOMsimilarity(network)
-  save(network,file=paste0(outputpath,'result_wgcnaTOM.rda'))
+  #save(network,file=paste0(outputpath,'result_wgcnaTOM.rda'))
+  write.csv(network,file=paste0(outputpath,'wgcnaTopologicalOverlapMatrixNetwork.csv'),quote=F)
 }

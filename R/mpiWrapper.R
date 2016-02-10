@@ -181,14 +181,9 @@ mpiWrapper = function(data,nodes,pathv,regressionFunction,outputpath,eigen=NULL,
   network$fold <- as.integer(network$fold)
   network <- network[,-1]
   network <- network/2+t(network)/2
-  gc()
-  save(network,file=paste(outputpath,'result_',regressionFunction,'.rda',sep=''));
+  #save(network,file=paste(outputpath,'result_',regressionFunction,'.rda',sep=''));
+  write.csv(network,file=paste0(regressionFunction,'Network.csv'),quote=F)
   
-  #a <- mpi.close.Rslaves()
-  #cat('did the cluster shut down?',a,'\n')
-  #while(a==0){
-  #  a <- mpi.close.Rslaves()
-  #}
   mpi.bcast.cmd(q("no"));
   mpi.quit(save="no")
   
