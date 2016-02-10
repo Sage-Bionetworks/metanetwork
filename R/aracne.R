@@ -41,7 +41,6 @@ aracne <- function(data,path=NULL,pval=NULL,outputpath){
     fileName <- paste0(outputpath,'result_aracneFull.rda')
   }else{
     fileName <- paste0(outputpath,'result_aracne.rda')
-    cat(paste('aracne',sum(network!=0)/2,sep=','),'\n',file=paste0(outputpath,'sparsity.csv'),sep='',append=TRUE)
   }
   save(network,file=fileName)
 }

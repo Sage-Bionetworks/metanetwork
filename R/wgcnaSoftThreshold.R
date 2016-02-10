@@ -1,4 +1,4 @@
-wgcnaSoftThreshold <- function(data,path=NULL,outputpath,RsquaredCut=.80,defaultNaPower=6){
+wgcnaSoftThreshold <- function(data,path=NULL,pval=1,outputpath,RsquaredCut=.80,defaultNaPower=6){
   library(WGCNA)
   res <- WGCNA::pickSoftThreshold(data,RsquaredCut=RsquaredCut)
   if(is.na(res$powerEstimate)){
