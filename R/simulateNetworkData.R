@@ -1,9 +1,10 @@
-simulateNetworkData <- function(n,p,prop){
+simulateNetworkData <- function(n,p,prop,adjustment=1e1){
   library(MASS)
   
   LAM <- matrix(rnorm(p^2)*rbinom(p^2,1,prop),p,p)
   diag(LAM) <- 1;
   OM <- LAM%*%t(LAM)
+  OM <- OM + diag(adjustment,p)
   
   
   
