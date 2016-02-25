@@ -44,7 +44,7 @@ covarianceSelectionBisection = function(S,rankedEdges,numberObservations,lowerBo
       bicEnd <- -2*resEnd$loglik + upperBoundEdge*log(numberObservations)
     }
   
-    foo <- which.min(abs(c(bicStart,bicEnd)-bicMiddle))
+    foo <- which.min((c(bicStart,bicEnd)-bicMiddle))
     
     if(foo==2){
       lowerBoundEdge <- middleEdge
