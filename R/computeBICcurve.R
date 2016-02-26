@@ -12,7 +12,7 @@ computeBICcurve <- function(network,exprData,maxEdges=NULL){
   
   foo <- data.matrix(network)[which(upper.tri(data.matrix(network)))]
   foo <- foo^2
-  thresVal <- sort(foo,decreasing=T)[maxEdges]
+  thresVal <- sort(foo,decreasing=T)[min(maxEdges,length(foo))]
   
   #add in check for zero edges
   if(thresVal==0){
@@ -34,5 +34,5 @@ computeBICcurve <- function(network,exprData,maxEdges=NULL){
   edgeList <- arrange(edgeList,desc(weight))
   bicPath <- metanetwork::covarianceSelectionMBPath(data.matrix(exprData),rankedEdges=edgeList[,1:2],start=1)
   
-  return(bicPath)
+  return(list(bicPath=bicPath,edgeList=edgeList,bicMin=which.min(bicPath$bic)))
 }

@@ -22,6 +22,7 @@ covarianceSelectionMBPath = function(X,rankedEdges,numberObservations,startI=1){
     if(count==startI){
       for(i in 1:ncol(X)){
         bicNeighborhood[i] <- fastlmbic(X[,i],X[,neighborhoods[[i]]])
+        #print(i)
       }
       bicCurrent <- sum(bicNeighborhood)
     }
