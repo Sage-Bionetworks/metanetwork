@@ -1,4 +1,4 @@
-computeBICcurve <- function(network,exprData,maxEdges=NULL){
+computeBICcurve <- function(network,exprData,maxEdges=NULL,exact=NULL){
   library(dplyr)  
   if(is.null(maxEdges)){
     maxEdges <- round((nrow(exprData)*ncol(exprData))/10)
@@ -33,6 +33,10 @@ computeBICcurve <- function(network,exprData,maxEdges=NULL){
   edgeList <- data.frame(edgeList,stringsAsFactors=F)
   edgeList <- arrange(edgeList,desc(weight))
   bicPath <- metanetwork::covarianceSelectionMBPath(data.matrix(exprData),rankedEdges=edgeList[,1:2],start=1)
+  bicPath2 <- NA;
+  if(!is.null(exact)){
+    bicPath2 <- metanetwork::covarianceSelectionPath(cor(exprData),edgeList[,1:2],nrow(exprData)*ncol(exprData),nrow(exprData))
+  }
   
-  return(list(bicPath=bicPath,edgeList=edgeList,bicMin=which.min(bicPath$bic)))
+  return(list(bicPath=bicPath,edgeList=edgeList,bicMin=which.min(bicPath$bic),bicPath2=bicPath2))
 }

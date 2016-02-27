@@ -5,7 +5,7 @@ covarianceSelectionMBPath = function(X,rankedEdges,numberObservations,startI=1){
   bic <- rep(0,nedges)
   neighborhoods <- vector('list',ncol(X))
   names(neighborhoods)<- colnames(X)
-  bicNeighborhood <- apply(X,2,fastlmbic)
+  bicNeighborhood <- apply(X,2,fastlmbic,correction=ncol(X))
   names(bicNeighborhood) <- colnames(X)
   bicCurrent <- sum(bicNeighborhood)
   p <- ncol(X)
@@ -21,7 +21,7 @@ covarianceSelectionMBPath = function(X,rankedEdges,numberObservations,startI=1){
     
     if(count==startI){
       for(i in 1:ncol(X)){
-        bicNeighborhood[i] <- fastlmbic(X[,i],X[,neighborhoods[[i]]])
+        bicNeighborhood[i] <- fastlmbic(X[,i],X[,neighborhoods[[i]]],correction=ncol(X))
         #print(i)
       }
       bicCurrent <- sum(bicNeighborhood)
@@ -30,8 +30,8 @@ covarianceSelectionMBPath = function(X,rankedEdges,numberObservations,startI=1){
       bicCurrent <- bicCurrent - sum(bicNeighborhood[c(gene1,gene2)])
       bicGene1 <- NA
       bicGene2 <- NA
-      try(bicGene1 <- fastlmbic(X[,gene1],X[,neighborhoods[[gene1]]]),silent=T)
-      try(bicGene2 <- fastlmbic(X[,gene2],X[,neighborhoods[[gene2]]]),silent=T)
+      try(bicGene1 <- fastlmbic(X[,gene1],X[,neighborhoods[[gene1]]],correction=ncol(X)),silent=T)
+      try(bicGene2 <- fastlmbic(X[,gene2],X[,neighborhoods[[gene2]]],correction=ncol(X)),silent=T)
       if(!is.na(bicGene1)){
         bicNeighborhood[gene1] <- bicGene1
       }else{
