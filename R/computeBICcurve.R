@@ -12,6 +12,8 @@ computeBICcurve <- function(network,exprData,maxEdges=NULL,exact=NULL){
   
   foo <- data.matrix(network)[which(upper.tri(data.matrix(network)))]
   foo <- foo^2
+  network[which(lower.tri)]<-0
+  diag(network) <- 0
   thresVal <- sort(foo,decreasing=T)[min(maxEdges,length(foo))]
   
   #add in check for zero edges
