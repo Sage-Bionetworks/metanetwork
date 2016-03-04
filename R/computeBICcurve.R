@@ -3,7 +3,7 @@ computeBICcurve <- function(network,exprData,maxEdges=NULL,exact=NULL){
   if(is.null(maxEdges)){
     maxEdges <- round((nrow(exprData)*ncol(exprData))/25)
   }
-  maxEdges <- min(maxEdges,choose(ncol(exprData),2))
+  maxEdges <- min(maxEdges,round((nrow(exprData)*ncol(exprData))/25))
 
   foo <- data.matrix(network)[which(upper.tri(data.matrix(network)))]
   foo <- abs(foo)
