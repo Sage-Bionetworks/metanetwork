@@ -37,5 +37,5 @@ computeBICcurve <- function(network,exprData,maxEdges=NULL,exact=NULL){
   #}
   library(Matrix)
   network <- network>=edgeList$weight[which.min(bicPath$bic)]
-  return(list(network=Matrix(network,sparse=T),bicMin=which.min(bicPath$bic)))
+  return(list(network=Matrix(network,sparse=T),bicMin=min(bicPath$bic),bicPath=bicPath$bic))
 }
