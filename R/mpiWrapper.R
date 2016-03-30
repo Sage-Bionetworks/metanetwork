@@ -183,7 +183,7 @@ mpiWrapper = function(data,nodes,pathv,regressionFunction,outputpath,eigen=NULL,
   network <- network/2+t(network)/2
   network <- network*upper.tri(network)
   #save(network,file=paste(outputpath,'result_',regressionFunction,'.rda',sep=''));
-  write.csv(network,file=paste0('outputpath',regressionFunction,'Network.csv'),quote=F)
+  write.csv(network,file=paste0(outputpath,regressionFunction,'Network.csv'),quote=F)
   
   mpi.bcast.cmd(q("no"));
   mpi.quit(save="no")

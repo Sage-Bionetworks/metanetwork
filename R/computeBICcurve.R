@@ -1,34 +1,29 @@
 computeBICcurve <- function(network,exprData,maxEdges=NULL,exact=NULL){
-  library(dplyr)  
+  library(dplyr)
   if(is.null(maxEdges)){
-    maxEdges <- round((nrow(exprData)*ncol(exprData))/10)
+    maxEdges <- round((nrow(exprData)*ncol(exprData))/20)
   }
-  
-  #networkObj <- synGet('syn5652395',downloadLocation='./')
-  #network <- data.table::fread(networkObj@filePath,stringsAsFactors=FALSE,data.table=F)
-  #rownames(network) <- network$V1
-  #network <- network[,-1]
-  #exprData <- read.csv('cranioRNAseq.csv',stringsAsFactors=F,row.names=1)
-  
+  maxEdges <- min(maxEdges,round((nrow(exprData)*ncol(exprData))/20))
+
   foo <- data.matrix(network)[which(upper.tri(data.matrix(network)))]
-  foo <- foo^2
+  foo <- abs(foo)
   network[which(lower.tri(network))]<-0
   diag(network) <- 0
   thresVal <- sort(foo,decreasing=T)[min(maxEdges,length(foo))]
-  
+
   #add in check for zero edges
   if(thresVal==0){
     thresVal <- min(foo[which(foo>0)])
   }
-  
-  network <- network^2
+
+  network <- abs(network)
   edgeList <- which(network >=thresVal,T)
   edval <- rep(0,nrow(edgeList))
-  
+
   for (i in 1:nrow(edgeList)){
     edval[i] <- network[edgeList[i,1],edgeList[i,2]]
   }
-  
+
   edgeList <- cbind(edgeList,edval)
   colnames(edgeList) <- c('node1','node2','weight')
   rownames(edgeList) <- paste0('e',1:nrow(edgeList))
@@ -36,9 +31,11 @@ computeBICcurve <- function(network,exprData,maxEdges=NULL,exact=NULL){
   edgeList <- arrange(edgeList,desc(weight))
   bicPath <- metanetwork::covarianceSelectionMBPath(data.matrix(exprData),rankedEdges=edgeList[,1:2],start=1)
   bicPath2 <- NA;
-  if(!is.null(exact)){
-    bicPath2 <- metanetwork::covarianceSelectionPath(cor(exprData),edgeList[,1:2],nrow(exprData)*ncol(exprData),nrow(exprData))
-  }
-  
-  return(list(bicPath=bicPath,edgeList=edgeList,bicMin=which.min(bicPath$bic),bicPath2=bicPath2))
+
+  #if(!is.null(exact)){
+  #  bicPath2 <- metanetwork::covarianceSelectionPath(cor(exprData),edgeList[,1:2],nrow(exprData)*ncol(exprData),nrow(exprData))
+  #}
+  library(Matrix)
+  network <- network>=edgeList$weight[which.min(bicPath$bic)]
+  return(list(network=Matrix(network,sparse=T),bicMin=min(bicPath$bic),bicPath=bicPath$bic))
 }
