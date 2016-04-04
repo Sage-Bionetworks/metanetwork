@@ -173,15 +173,22 @@ mpiWrapper = function(data,nodes,pathv,regressionFunction,outputpath,eigen=NULL,
   
   # save list to file
   network <- simplify2array(res_list);
+  rm(res_list)
+  gc()
   colnames(network) <- colnames(data)
   rownames(network) <- c('fold',colnames(data))
   
   network <- t(network)
+  gc()
   network <- data.frame(network)
+  gc()
   network$fold <- as.integer(network$fold)
   network <- network[,-1]
+  gc()
   network <- network/2+t(network)/2
+  gc()
   network <- network*upper.tri(network)
+  gc()
   #save(network,file=paste(outputpath,'result_',regressionFunction,'.rda',sep=''));
   write.csv(network,file=paste0(outputpath,regressionFunction,'Network.csv'),quote=F)
   
