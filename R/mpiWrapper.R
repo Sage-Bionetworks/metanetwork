@@ -170,7 +170,8 @@ mpiWrapper = function(data,nodes,pathv,regressionFunction,outputpath,eigen=NULL,
   for (i in 1:n_slaves) {
     mpi.recv.Robj(mpi.any.source(),2)
   }
-  
+  mpi.bcast.cmd(rm(list=ls()));
+  mpi.bcast.cmd(gc())
   # save list to file
   network <- simplify2array(res_list);
   rm(res_list)
