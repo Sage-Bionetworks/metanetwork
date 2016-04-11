@@ -17,13 +17,17 @@ rankConsensus <- function(networks){
                      which
   cat('extracted lower triangular indices\n')
   aggregateRank <- rep(0,length(upperTriIndices))
-  for (i in 1:length(networks)){
-    cat('i:',i,'\n')
-    aggregateRank <- aggregateRankFunction(networks[[i]],upperTriIndices,aggregateRank)
-    gc()
-  }
-  save(aggregateRank,file='/shared/CRANIO/aggregateRank.rda')
+  #for (i in 1:length(networks)){
+  #  cat('i:',i,'\n')
+  #  aggregateRank <- aggregateRankFunction(networks[[i]],upperTriIndices,aggregateRank)
+  #  gc()
+  #}
+  #save(aggregateRank,file='/shared/CRANIO/aggregateRank.rda')
+  load('/shared/CRANIO/aggregateRank.rda')
   cat('building final rank\n')
+  print(aggregateRank[1:10])
+  library(bit64)
+  print(aggregateRank[1:10])
   finalRank <- rank(-aggregateRank,ties.method = 'min')
   cat('renormalizing final rank\n')
   finalRank <- finalRank/max(finalRank)
