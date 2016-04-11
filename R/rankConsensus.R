@@ -11,17 +11,18 @@ rankConsensus <- function(networks){
   upperTriIndices <- networks[[1]] %>%
                      upper.tri %>%
                      which
-
+  cat('extracted upper triangular indices\n')
   lowerTriIndices <- networks[[1]] %>%
                      lower.tri %>%
                      which
-
+  cat('extracted lower triangular indices\n')
   aggregateRank <- rep(0,length(upperTriIndices))
   for (i in 1:length(networks)){
+    cat('i:',i,'\n')
     aggregateRank <- aggregateRankFunction(networks[[i]],upperTriIndices,aggregateRank)
     gc()
   }
-
+  cat('building final rank\n')
   finalRank <- rank(-aggregateRank,ties.method = 'min')
   finalRank <- finalRank/max(finalRank)
   network <- matrix(0,nrow(networks[[1]]),ncol(networks[[1]]))
