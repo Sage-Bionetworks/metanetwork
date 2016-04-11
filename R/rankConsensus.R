@@ -31,6 +31,10 @@ rankConsensus <- function(networks){
   cat('make negative\n')
   aggregateRank <- -aggregateRank
   print(aggregateRank[1:10])
+  sessionInfo()
+  cat('newway\n')
+  finalRankT1 <- rank.integer64(aggregateRank)
+  cat('oldway\n')
   finalRank <- rank(aggregateRank,ties.method = 'min')
   cat('renormalizing final rank\n')
   finalRank <- finalRank/max(finalRank)
