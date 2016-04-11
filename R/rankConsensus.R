@@ -22,9 +22,12 @@ rankConsensus <- function(networks){
     aggregateRank <- aggregateRankFunction(networks[[i]],upperTriIndices,aggregateRank)
     gc()
   }
+  save(aggregateRank,file='/shared/CRANIO/aggregateRank.rda')
   cat('building final rank\n')
   finalRank <- rank(-aggregateRank,ties.method = 'min')
+  cat('renormalizing final rank\n')
   finalRank <- finalRank/max(finalRank)
+  cat('turning into network\n')
   network <- matrix(0,nrow(networks[[1]]),ncol(networks[[1]]))
   colnames(network) <- colnames(networks[[1]])
   rownames(network) <- rownames(networks[[1]])
