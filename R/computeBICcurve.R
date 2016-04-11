@@ -12,9 +12,9 @@ computeBICcurve <- function(network,exprData,maxEdges=NULL,exact=NULL){
   network[which(lower.tri(network))]<-0
   cat('set diagonal to zero\n')
   diag(network) <- 0
-  cat('thresVal:',thresVal,'\n')
+ 
   thresVal <- sort(foo,decreasing=T)[min(maxEdges,length(foo))]
-
+  cat('thresVal:',thresVal,'\n')
   #add in check for zero edges
   if(thresVal==0){
     thresVal <- min(foo[which(foo>0)])
