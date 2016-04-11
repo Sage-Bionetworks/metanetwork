@@ -28,7 +28,10 @@ rankConsensus <- function(networks){
   print(aggregateRank[1:10])
   library(bit64)
   print(aggregateRank[1:10])
-  finalRank <- rank(-aggregateRank,ties.method = 'min')
+  cat('make negative\n')
+  aggregateRank <- -aggregateRank
+  print(aggregateRank[1:10])
+  finalRank <- rank(aggregateRank,ties.method = 'min')
   cat('renormalizing final rank\n')
   finalRank <- finalRank/max(finalRank)
   cat('turning into network\n')
