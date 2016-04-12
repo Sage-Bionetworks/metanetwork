@@ -17,13 +17,13 @@ rankConsensus <- function(networks){
                      which
   cat('extracted lower triangular indices\n')
   aggregateRank <- rep(0,length(upperTriIndices))
-  #for (i in 1:length(networks)){
-  #  cat('i:',i,'\n')
-  #  aggregateRank <- aggregateRankFunction(networks[[i]],upperTriIndices,aggregateRank)
-  #  gc()
-  #}
+  for (i in 1:length(networks)){
+    cat('i:',i,'\n')
+    aggregateRank <- aggregateRankFunction(networks[[i]],upperTriIndices,aggregateRank)
+    gc()
+  }
   #save(aggregateRank,file='/shared/CRANIO/aggregateRank.rda')
-  load('/shared/CRANIO/aggregateRank.rda')
+  #load('/shared/CRANIO/aggregateRank.rda')
   cat('building final rank\n')
   print(aggregateRank[1:10])
   library(bit64)
@@ -31,7 +31,7 @@ rankConsensus <- function(networks){
   cat('make negative\n')
   aggregateRank <- -aggregateRank
   print(aggregateRank[1:10])
-  sessionInfo()
+  #sessionInfo()
   cat('newway\n')
   finalRank <- rank.integer64(aggregateRank)
   cat('oldway\n')
