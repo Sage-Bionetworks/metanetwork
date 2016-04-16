@@ -9,6 +9,7 @@ setwd('/shared/Github/metanetwork/R')
 
 # Load libraries
 library(synapseClient)
+library(plyr)
 library(dplyr)
 library(WGCNA)
 library(tools)
@@ -102,4 +103,4 @@ GeneSets = c(GeneSets.enrichr,
 ### Store results in synapse ###
 save(list = 'GeneSets', file = 'metaNetGeneSets.RData')
 obj = File('metaNetGeneSets.RData', name = 'Genesets for metanetworks', parentId = 'syn5923956')
-obj = synStore(obj, used = ALL_USED_IDs, executed = thisFile, activity = 'Combine all related genesets')
+obj = synStore(obj, used = ALL_USED_IDs, executed = thisFile, activityName = 'Combine all related genesets')
