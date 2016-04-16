@@ -136,9 +136,11 @@ MOD = data.table::fread(MOD_OBJ@filePath, data.table=F, header=T)
 ############################################################################################################
 #### Background gene list ####
 # Convert ensemble gene id's to hgnc symbols using biomart
-ensembl = useMart("ensembl",dataset="hsapiens_gene_ensembl")
-ensg2hgnc = getBM(attributes = c('ensembl_gene_id','hgnc_symbol'), filters = 'ensembl_gene_id', values = MOD$EnsembleID, mart = ensembl)
-backGroundGenes = unique(ensg2hgnc$hgnc_symbol)
+# ensembl = useMart("ensembl", dataset="hsapiens_gene_ensembl")
+# ensg2hgnc = getBM(attributes = c('ensembl_gene_id','hgnc_symbol'), filters = 'ensembl_gene_id', values = MOD$EnsembleID, mart = ensembl)
+ensg2hgnc = downloadFile('syn5923981')
+ALL_USED_IDs = c(ALL_USED_IDs, 'syn5923981')
+backGroundGenes = uniqensg2hgncue(ensg2hgnc$hgnc_symbol)
 
 MOD = merge(MOD, ensg2hgnc, by.x = 'EnsembleID', by.y = 'ensembl_gene_id', all.x=T)
 ############################################################################################################
