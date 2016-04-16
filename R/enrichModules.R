@@ -114,6 +114,14 @@ fisherEnrichment <- function(genesInSignificantSet, # A character vector of diff
 ############################################################################################################
 
 ############################################################################################################
+#### Get gene sets ####
+# Download enrichr gene sets from synapse
+GL_OBJ = synGet('syn5923958')
+ALL_USED_IDs = GL_OBJ$properties$id
+load(GL_OBJ@filePath)
+############################################################################################################
+
+############################################################################################################
 #### Get modules ####
 # Download modules from synapse
 MOD_OBJ = synapseClient::synGet(args[1])
@@ -133,14 +141,6 @@ ensg2hgnc = getBM(attributes = c('ensembl_gene_id','hgnc_symbol'), filters = 'en
 backGroundGenes = unique(ensg2hgnc$hgnc_symbol)
 
 MOD = merge(MOD, ensg2hgnc, by.x = 'EnsembleID', by.y = 'ensembl_gene_id', all.x=T)
-############################################################################################################
-
-############################################################################################################
-#### Get gene sets ####
-# Download enrichr gene sets from synapse
-GL_OBJ = synGet('syn5923958')
-ALL_USED_IDs = GL_OBJ$properties$id
-load(GL_OBJ@filePath)
 ############################################################################################################
 
 ############################################################################################################
