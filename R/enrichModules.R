@@ -140,7 +140,7 @@ MOD = data.table::fread(MOD_OBJ@filePath, data.table=F, header=T)
 # ensg2hgnc = getBM(attributes = c('ensembl_gene_id','hgnc_symbol'), filters = 'ensembl_gene_id', values = MOD$EnsembleID, mart = ensembl)
 ensg2hgnc = downloadFile('syn5923981')
 ALL_USED_IDs = c(ALL_USED_IDs, 'syn5923981')
-backGroundGenes = uniqensg2hgncue(ensg2hgnc$hgnc_symbol)
+backGroundGenes = unique(ensg2hgnc$hgnc_symbol)
 
 MOD = merge(MOD, ensg2hgnc, by.x = 'EnsembleID', by.y = 'ensembl_gene_id', all.x=T)
 ############################################################################################################
@@ -205,7 +205,7 @@ ENR_OBJ@annotations$enrichmentGeneSet = 'Enrichr, AD, SCZ, cranio, genefamily, c
 ENR_OBJ@annotations$moduleMethod = NULL
 ENR_OBJ@annotations$modularity = NULL
 ENR_OBJ = synStore(ENR_OBJ, 
-                   executed = thisFile,
+                   executed = list(thisFile1, thisFile2),
                    used = ALL_USED_IDs,
                    activityName = activityName,
                    activityDescription = activityDescription)

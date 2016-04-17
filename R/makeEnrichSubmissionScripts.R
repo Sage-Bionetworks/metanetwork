@@ -22,6 +22,13 @@ synapseLogin(username = 'th_vairam', apiKey = key$V1)
 module.files = synQuery('select * from file where projectId == "syn5584871" and analysisType == "statisticalNetworkReconstruction" and method == "bic" and organism == "HomoSapiens" and moduleMethod == "igraph:fast greedy"') %>%
   dplyr::mutate(uniqueName = paste(file.disease, file.tissueTypeAbrv, file.study, file.cogdx, sep = '.'))
 
+# Get finished enrichment files
+enrich.files = synQuery('select * from file where projectId == "syn5584871" and analysisType == "moduleEnrichment" and method == "bic" and organism == "HomoSapiens"') %>%
+  dplyr::mutate(uniqueName = paste(file.disease, file.tissueTypeAbrv, file.study, file.cogdx, sep = '.'))
+
+# module.files = module.files %>%
+#   filter(!(uniqueName %in% enrich.files$uniqueName)) 
+
 # Make directory and write shell scripts for running these files
 system('mkdir sgeEnrichSub')
 fp_all = file(paste('./sgeEnrichSub/allSubmissions.sh'),'w+')    
