@@ -1,0 +1,29 @@
+January 5th, 2016
+1) attempting to integrate mrnet (in parmigene package)
+  i) implementation: first run ARACNE to get MI estimates
+  ii) then run mrnet - works on test data
+2) attempting to integrate ggm - NO
+3) c3 net - YES (in c3net package, c3net function (gene x samples))
+4) nonlinear correlation - working on it
+5) stability selection
+6) wgcna (soft threshold)
+7) elastic net fix
+
+
+final method list for paper pipeline!
+(regression)
+ridge cv1se
+lasso cv1se
+sparrow1 (updated with bugs fixed)
+tigress (classic 5 predictors)
+genie3
+
+(mi)
+aracne
+c3net
+mrnet
+
+(cor)
+correlation
+wgcna (TOM)
+wgcna (Soft threshold)
