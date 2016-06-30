@@ -1,1 +1,0 @@
-#make degree power plots
