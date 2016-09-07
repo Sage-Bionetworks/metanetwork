@@ -50,6 +50,8 @@ mpiWrapper = function(data,nodes,pathv,regressionFunction,outputpath,eigen=NULL,
         }
         
         #try(res <- do.call(regressionFunction,fxnArgs),silent=TRUE)
+        print(regressionFunction)
+        print(fxnArgs)
         res <- do.call(regressionFunction,fxnArgs)
         
         if(!is.na(res)){
