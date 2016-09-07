@@ -3,8 +3,10 @@ covarianceSelectionMBPath = function(X,rankedEdges,numberObservations,startI=1){
   nedges <- nrow(rankedEdges)
   count <- 1
   bic <- rep(0,nedges)
+  cat('bic\n')
   neighborhoods <- vector('list',ncol(X))
   names(neighborhoods)<- colnames(X)
+  cat('fastlm\n')
   bicNeighborhood <- apply(X,2,fastlmbic,correction=ncol(X))
   names(bicNeighborhood) <- colnames(X)
   bicCurrent <- sum(bicNeighborhood)
