@@ -53,9 +53,9 @@ mpiWrapper = function(data,nodes,pathv,regressionFunction,outputpath,eigen=NULL,
         #print(regressionFunction)
         #print(str(fxnArgs$x))
         #print(fxnArgs)
-        #res <- do.call(regressionFunction,fxnArgs)
-        try(res <- do.call(regressionFunction,fxnArgs),silent=TRUE)
-        geterrmessage()
+        res <- do.call(regressionFunction,fxnArgs)
+        #try(res <- do.call(regressionFunction,fxnArgs),silent=TRUE)
+        #geterrmessage()
         
         if(!is.na(res)){
           temp_vbsr[-foldNumber]<- res;
