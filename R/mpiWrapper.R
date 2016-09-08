@@ -60,8 +60,8 @@ mpiWrapper = function(data,nodes,pathv,regressionFunction,outputpath,eigen=NULL,
         #print(fxnArgs$y)
         #print(str(fxnArgs$x))
         #print(apply(fxnArgs$x,2,sd))
-        print(foldNumber)
-        print(res)
+        #print(foldNumber)
+        #print(res)
 
         #geterrmessage()
         
