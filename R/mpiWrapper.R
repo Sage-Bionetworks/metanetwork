@@ -28,6 +28,7 @@ mpiWrapper = function(data,nodes,pathv,regressionFunction,outputpath,eigen=NULL,
   foldslave <- function() {
     # Get a task 
     require("metanetwork")
+    require("utilityFunctions")
     task <- mpi.recv.Robj(mpi.any.source(),mpi.any.tag()) 
     task_info <- mpi.get.sourcetag() 
     tag <- task_info[2] 
@@ -49,7 +50,20 @@ mpiWrapper = function(data,nodes,pathv,regressionFunction,outputpath,eigen=NULL,
           fxnArgs$eigen <- eigen
         }
         
+        
+        #print(regressionFunction)
+        #print(str(fxnArgs$x))
+        #print(fxnArgs)
+        #res <- do.call(regressionFunction,fxnArgs)
         try(res <- do.call(regressionFunction,fxnArgs),silent=TRUE)
+
+        #print(fxnArgs$y)
+        #print(str(fxnArgs$x))
+        #print(apply(fxnArgs$x,2,sd))
+        #print(foldNumber)
+        #print(res)
+
+        #geterrmessage()
         
         if(!is.na(res)){
           temp_vbsr[-foldNumber]<- res;
