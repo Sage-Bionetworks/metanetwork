@@ -1,4 +1,0 @@
-code audit of metanetwork pipeline
-
-
-###two different types of mpi functions.  Ones that are parallelized across machines using mpiWrapper
