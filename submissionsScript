@@ -1,6 +1,0 @@
-#!/bin/bash
-nthreads=319
-
-qsub -v s3="s3://metanetworks/testNetwork/",dataFile="/shared/testNetwork/testData.csv",pathv="/shared/metanetworkSynapse/",c3net=1,mrnet=1,aracne=1,wgcnaST=1,wgcnaTOM=1,sparrowZ=1,lassoCV1se=1,ridgeCV1se=1,genie3=1,tigress=1,numberCore=$nthreads,outputpath="/shared/testNetwork/",s3b="testNetwork",parentId="syn5646308",annotationFile="/shared/testNetwork/annoFile.txt",provenanceFile="/shared/testNetwork/provenanceFile.txt" -pe orte $nthreads -S /bin/bash -V -cwd -N testingNetworkFunctionality -e /shared/testNetwork/error.txt -o /shared/testNetwork/out.txt /shared/metanetworkSynapse/buildNet.sh
-
-qsub -v s3="s3://metanetworks/testNetwork/",dataFile="/shared/testNetwork/testData.csv",pathv="/shared/metanetworkSynapse/",c3net=1,mrnet=1,aracne=1,wgcnaST=1,wgcnaTOM=1,sparrowZ=1,lassoCV1se=1,ridgeCV1se=1,genie3=1,tigress=1,numberCore=2,outputpath="/shared/testNetwork/",s3b="testNetwork",parentId="syn5646308",annotationFile="/shared/testNetwork/annoFile.txt",provenanceFile="/shared/testNetwork/provenanceFile.txt" -pe orte 2 -S /bin/bash -V -cwd -N testingNetworkFunctionality -e /shared/testNetwork/error.txt -o /shared/testNetwork/out.txt /shared/metanetworkSynapse/buildNet.sh
