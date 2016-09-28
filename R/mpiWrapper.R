@@ -28,6 +28,7 @@ mpiWrapper = function(data,nodes,pathv,regressionFunction,outputpath,eigen=NULL,
   foldslave <- function() {
     # Get a task 
     require("metanetwork")
+    require("utilityFunctions")
     task <- mpi.recv.Robj(mpi.any.source(),mpi.any.tag()) 
     task_info <- mpi.get.sourcetag() 
     tag <- task_info[2] 
@@ -42,14 +43,27 @@ mpiWrapper = function(data,nodes,pathv,regressionFunction,outputpath,eigen=NULL,
         fxnArgs <- list()
         fxnArgs$y <- data[,foldNumber]
         fxnArgs$x <- data[,-foldNumber]
-        if(regressionFunction=='vbsrWrapperZ' | regressionFunction=='vbsrWrapperZ2' | regressionFunction=='vbsrWrapperZ2FDR'){
+        if(regressionFunction=='sparrowZ' | regressionFunction=='sparrow2Z' | regressionFunction=='sparrow2ZFDR'){
           fxnArgs$n_orderings<-12
         }
         if(!is.null(eigen)){
           fxnArgs$eigen <- eigen
         }
         
+        
+        #print(regressionFunction)
+        #print(str(fxnArgs$x))
+        #print(fxnArgs)
+        #res <- do.call(regressionFunction,fxnArgs)
         try(res <- do.call(regressionFunction,fxnArgs),silent=TRUE)
+
+        #print(fxnArgs$y)
+        #print(str(fxnArgs$x))
+        #print(apply(fxnArgs$x,2,sd))
+        #print(foldNumber)
+        #print(res)
+
+        #geterrmessage()
         
         if(!is.na(res)){
           temp_vbsr[-foldNumber]<- res;
@@ -81,7 +95,7 @@ mpiWrapper = function(data,nodes,pathv,regressionFunction,outputpath,eigen=NULL,
           fxnArgs <- list()
           fxnArgs$y <- data[,foldNumber]
           fxnArgs$x <- data[,regulatorIndex]
-          if(regressionFunction=='vbsrWrapperZ' | regressionFunction=='vbsrWrapperZ2' | regressionFunction=='vbsrWrapperZ2FDR'){
+          if(regressionFunction=='sparrowZ' | regressionFunction=='sparrow2Z' | regressionFunction=='sparrow2ZFDR'){
             fxnArgs$n_orderings<-12
           }
           try(res <- do.call(regressionFunction,fxnArgs),silent=TRUE)
@@ -170,18 +184,26 @@ mpiWrapper = function(data,nodes,pathv,regressionFunction,outputpath,eigen=NULL,
   for (i in 1:n_slaves) {
     mpi.recv.Robj(mpi.any.source(),2)
   }
-  
+  mpi.bcast.cmd(rm(list=ls()));
+  mpi.bcast.cmd(gc())
   # save list to file
   network <- simplify2array(res_list);
+  rm(res_list)
+  gc()
   colnames(network) <- colnames(data)
   rownames(network) <- c('fold',colnames(data))
   
   network <- t(network)
+  gc()
   network <- data.frame(network)
+  gc()
   network$fold <- as.integer(network$fold)
   network <- network[,-1]
+  gc()
   network <- network/2+t(network)/2
+  gc()
   network <- network*upper.tri(network)
+  gc()
   #save(network,file=paste(outputpath,'result_',regressionFunction,'.rda',sep=''));
   write.csv(network,file=paste0(outputpath,regressionFunction,'Network.csv'),quote=F)
   
