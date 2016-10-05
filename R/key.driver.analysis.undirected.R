@@ -3,11 +3,11 @@ key.driver.analysis <- function(adj, G, h=3, FDR = 0.05){
   key.drivers = list()
   # Convert adjacency to igraph object
   g = igraph::graph_from_adjacency_matrix(adj, mode = 'upper')
-  background.genes = V(g)$name
+  background.genes = igraph::V(g)$name
   
   # Find H-Layer neighborhood
   neighbor.nodes = lapply(1:h, function(hi,sg){
-    ego(sg, order = hi, nodes = V(sg), mode = 'all')
+    igraph::ego(sg, order = hi, nodes = igraph::V(sg), mode = 'all')
   },g)
   
   # Perform enrichment analysis for every gene in every layer and pick the minimum p-value
@@ -22,7 +22,7 @@ key.driver.analysis <- function(adj, G, h=3, FDR = 0.05){
   names(p.val) = background.genes
   
   # Calculate node degree for identifying global drivers
-  node.degree = degree(g)
+  node.degree = igraph::degree(g)
   mean.node.degree = mean(node.degree, na.rm = T)
   stddev.node.degree = sd(node.degree, na.rm = T)
   
