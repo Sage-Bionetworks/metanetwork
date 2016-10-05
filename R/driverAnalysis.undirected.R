@@ -1,4 +1,4 @@
-key.driver.analysis <- function(adj, G, h=3, FDR = 0.05){
+driverAnalysis.undirected <- function(adj, G, h=3, FDR = 0.05){
   
   key.drivers = list()
   # Convert adjacency to igraph object

@@ -1,4 +1,4 @@
-weighted.key.driver.analysis.undirected <- function(adj, G, h = 3, n = 100, FDR = 0.05){
+driverAnalysis.undirected_weighted <- function(adj, G, h = 3, n = 100, FDR = 0.05){
   
   # Convert adjacency to igraph object
   g = igraph::graph_from_adjacency_matrix(adj, mode = 'upper')
