@@ -1,6 +1,5 @@
-driverAnalysis.undirected <- function(adj, G, h=3, FDR = 0.05){
+regulatorAnalysis.undirected <- function(adj, G, h=3, FDR = 0.05){
   
-  key.drivers = list()
   # Convert adjacency to igraph object
   g = igraph::graph_from_adjacency_matrix(adj, mode = 'upper')
   background.genes = igraph::V(g)$name
@@ -21,14 +20,16 @@ driverAnalysis.undirected <- function(adj, G, h=3, FDR = 0.05){
     stats::p.adjust(method = 'fdr')
   names(p.val) = background.genes
   
-  # Calculate node degree for identifying global drivers
+  # Calculate node degree for identifying global regulators
   node.degree = igraph::degree(g)
   mean.node.degree = mean(node.degree, na.rm = T)
   stddev.node.degree = sd(node.degree, na.rm = T)
   
-  key.drivers$fdr = p.val
-  key.drivers$global.regulators = names(p.val)[(node.degree > (mean.node.degree + 2*stddev.node.degree)) & (p.val <= FDR)]
-  key.drivers$local.regulators = names(p.val)[(node.degree < (mean.node.degree + 2*stddev.node.degree)) & (p.val <= FDR)]
+  # Coallate results
+  key.regulators = list()
+  key.regulators$fdr = p.val
+  key.regulators$global.regulators = names(p.val)[(node.degree > (mean.node.degree + 2*stddev.node.degree)) & (p.val <= FDR)]
+  key.regulators$local.regulators = names(p.val)[(node.degree < (mean.node.degree + 2*stddev.node.degree)) & (p.val <= FDR)]
   
-  return(key.drivers)
+  return(key.regulators)
 }
