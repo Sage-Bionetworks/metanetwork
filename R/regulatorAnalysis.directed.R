@@ -1,7 +1,8 @@
 # Function to perform un-weighted key regulator analysis for directed networks
-regulatorAnalysis.directed <- function(g, G, h=3, FDR = 0.05){
+regulatorAnalysis.directed <- function(adj, G, h=3, FDR = 0.05){
   
   # Convert adjacency to igraph object
+  g = igraph::graph_from_adjacency_matrix(adj, mode = 'directed')
   background.genes = igraph::V(g)$name
   
   # Find H-Layer neighborhood
@@ -14,7 +15,7 @@ regulatorAnalysis.directed <- function(g, G, h=3, FDR = 0.05){
     foreach::foreach(i = 1:length(neighborNodes[[x]]), 
                      .combine = c, 
                      .export =c('neighborNodes', 'G', 'backgroundGenes', 'fisherEnrichment')) %dopar% {
-                       fisherEnrichment(names(neighborNodes[[x]][i][[1]]), G, backgroundGenes)$pval
+                       metanetwork::fisherEnrichment(names(neighborNodes[[x]][i][[1]]), G, backgroundGenes)$pval
                      }
   }, neighbor.nodes, G, background.genes) %>%
     apply(1, min, na.rm = T) %>%
@@ -27,7 +28,7 @@ regulatorAnalysis.directed <- function(g, G, h=3, FDR = 0.05){
   stddev.node.degree = sd(node.degree, na.rm = T)
   
   # Find leaf nodes to identify global regulators
-  node.in.degree = degree(g, mode = 'in')
+  node.in.degree = igraph::degree(g, mode = 'in')
   
   key.regulators = list()
   key.regulators$fdr = fdr
