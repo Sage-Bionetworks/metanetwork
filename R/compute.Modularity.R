@@ -21,7 +21,7 @@ compute.Modularity <- function(adj, mod, method = 'Newman1'){
   
   # Convert lsparseNetwork to igraph graph object
   g = igraph::graph.adjacency(adj, mode = 'upper', weighted = NULL, diag = F)
-  adj = adj*1 + t(adj*1)
+  adj = as.matrix(adj) + t(as.matrix(adj))
   
   # Get modules
   modules = mod$moduleNumber+1

@@ -19,7 +19,7 @@ compute.LocalModularity <- function(adj, mod){
     stop('Module label matrix should be a nx3 data frame')
   
   # Convert lsparseNetwork upper to symmetric
-  adj = adj + t(adj)
+  adj = as.matrix(adj) + t(as.matrix(adj))
   
   # Get unique communities
   comm = plyr::dlply(mod, .(moduleNumber), .fun = function(x){ unique(x$Gene.ID) })
