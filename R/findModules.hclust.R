@@ -1,8 +1,5 @@
-# Function to get modules from network adjacency matrix using Link communities algorithm
-findModules.linkcommunities <- function(adj, min.module.size = 3){
-  
-  # Note: For this function to work get the package linkcomm from CRAN
-  
+# Function to get modules from network adjacency matrix
+findModules.hclust <- function(adj, agglom.method = 'ward', clustDistance = 'euclidean', min.module.size = 3){
   # Input
   #      adj = n x n upper triangular adjacency in the matrix class format
   #      min.module.size = integer between 1 and n genes 
@@ -20,25 +17,23 @@ findModules.linkcommunities <- function(adj, min.module.size = 3){
   if(!all(adj[lower.tri(adj)] == 0))
     stop('Adjacency matrix should be upper triangular')
   
-  # Convert lsparseNetwork to igraph graph object
-  g = igraph::graph.adjacency(adj, mode = 'upper', weighted = T, diag = F)
+  adj = adj + t(adj)
   
-  ## Get edgelist
-  elist = igraph::as_edgelist(g)
+  TOM = WGCNA::TOMsimilarity(adj);
+  dissTOM = 1-TOM
   
-  ## Run link communities function
-  comm = linkcomm::getLinkCommunities(elist)
+  dissStruct = dist(dissTOM, method = clustDistance)
   
-  # Get individual clusters from the community object
-  geneModules = comm$nodeclusters %>%
-    dplyr::mutate(cluster = as.numeric(as.character(cluster))) %>%
-    plyr::rename(c('node' = 'Gene.ID', 'cluster' = 'moduleNumber'))
-
-  # Add missing genes
-  Gene.ID = setdiff(igraph::V(g)$name, geneModules$Gene.ID)
-  geneModules = rbind(geneModules, 
-                      data.frame(Gene.ID = Gene.ID,
-                                 moduleNumber = max(geneModules$moduleNumber, na.rm = T) + seq(1,length(Gene.ID))))
+  geneTree = flashClust::hclust(dissStruct, method = agglom.method)
+  
+  mod = dynamicTreeCut::cutreeDynamic(dendro = geneTree, 
+                                          method = 'hybrid',
+                                          distM = dissTOM,
+                                          pamRespectsDendro = F,
+                                          minClusterSize = min.module.size)
+  names(mod) = rownames(adj)
+  geneModules = data.frame(Gene.ID = names(mod),
+                           moduleNumber = mod)
   
   # Rename modules with size less than min module size to 0
   filteredModules = geneModules %>% 
@@ -46,7 +41,7 @@ findModules.linkcommunities <- function(adj, min.module.size = 3){
     dplyr::summarise(counts = length(unique(Gene.ID))) %>%
     dplyr::filter(counts >= min.module.size)
   geneModules$moduleNumber[!(geneModules$moduleNumber %in% filteredModules$moduleNumber)] = 0
-  
+
   # Change cluster number to color labels
   geneModules$moduleLabel = WGCNA::labels2colors(geneModules$moduleNumber)
   

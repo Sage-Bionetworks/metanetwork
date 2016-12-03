@@ -1,7 +1,24 @@
 # Function to get modules from network adjacency matrix
-findModules.fast_greedy <- function(adj, min.module.size = 20){
+findModules.fast_greedy <- function(adj, min.module.size = 3){
+  # Input
+  #      adj = n x n upper triangular adjacency in the matrix class format
+  #      min.module.size = integer between 1 and n genes 
+  
+  # Output
+  #      geneModules = n x 3 dimensional data frame with column names as Gene.ID, moduleNumber, and moduleLabel
+  
+  # Error functions
+  if(class(adj) != "matrix")
+    stop('Adjacency matrix should be of class matrix')
+  
+  if(dim(adj)[1] != dim(adj)[2])
+    stop('Adjacency matrix should be symmetric')
+  
+  if(!all(adj[lower.tri(adj)] == 0))
+    stop('Adjacency matrix should be upper triangular')
+  
   # Convert lsparseNetwork to igraph graph object
-  g = igraph::graph.adjacency(adj, mode = 'upper', weighted = NULL, diag = F)
+  g = igraph::graph.adjacency(adj, mode = 'upper', weighted = T, diag = F)
   
   # Get modules using fast greedy method (http://arxiv.org/abs/cond-mat/0408187)
   mod = igraph::cluster_fast_greedy(g)
