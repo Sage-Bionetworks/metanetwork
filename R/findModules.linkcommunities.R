@@ -1,5 +1,8 @@
-# Function to get modules from network adjacency matrix
-findModules.walktrap <- function(adj, min.module.size = 3){
+# Function to get modules from network adjacency matrix using Link communities algorithm
+findModules.linkcommunities <- function(adj, min.module.size = 3){
+  
+  # Note: For this function to work get the package linkcomm from CRAN
+  
   # Input
   #      adj = n x n upper triangular adjacency in the matrix class format
   #      min.module.size = integer between 1 and n genes 
@@ -20,17 +23,22 @@ findModules.walktrap <- function(adj, min.module.size = 3){
   # Convert lsparseNetwork to igraph graph object
   g = igraph::graph.adjacency(adj, mode = 'upper', weighted = T, diag = F)
   
-  # Get modules using walktrap algorithm (http://arxiv.org/abs/physics/0512106)
-  mod = igraph::cluster_walktrap(g)
+  ## Get edgelist
+  elist = igraph::as_edgelist(g)
   
-  # Get individual clusters from the igraph community object
-  geneModules = igraph::membership(mod) %>%
-    unclass %>%
-    as.data.frame %>%
-    plyr::rename(c('.' = 'moduleNumber'))
+  ## Run link communities function
+  comm = linkcomm::getLinkCommunities(elist)
   
-  geneModules = cbind(data.frame(Gene.ID = rownames(geneModules)),
-                      geneModules)              
+  # Get individual clusters from the community object
+  geneModules = comm$nodeclusters %>%
+    dplyr::mutate(cluster = as.numeric(as.character(cluster))) %>%
+    plyr::rename(c('node' = 'Gene.ID', 'cluster' = 'moduleNumber'))
+
+  # Add missing genes
+  Gene.ID = setdiff(igraph::V(g)$name, geneModules$Gene.ID)
+  geneModules = rbind(geneModules, 
+                      data.frame(Gene.ID = Gene.ID,
+                                 moduleNumber = max(geneModules$moduleNumber, na.rm = T) + seq(1,length(Gene.ID))))
   
   # Rename modules with size less than min module size to 0
   filteredModules = geneModules %>% 
