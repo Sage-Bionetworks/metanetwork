@@ -208,6 +208,7 @@ mpiWrapper = function(data,nodes,pathv,regressionFunction,outputpath,eigen=NULL,
   write.csv(network,file=paste0(outputpath,regressionFunction,'Network.csv'),quote=F)
 
   #mpi.bcast.cmd(q("no"));
+  mpi.close.Rslaves()
   mpi.quit(save="no")
 
 }
