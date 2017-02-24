@@ -12,7 +12,7 @@ mpiWrapper = function(data,nodes,pathv,regressionFunction,outputpath,eigen=NULL,
     cat('More slave processes required.\n');
     mpi.quit();
   }
-  
+
   #clean up function
   .Last <- function(){
     if (is.loaded("mpi_initialize")){
@@ -24,15 +24,15 @@ mpiWrapper = function(data,nodes,pathv,regressionFunction,outputpath,eigen=NULL,
       .Call("mpi_finalize")
     }
   }
-  
+
   foldslave <- function() {
-    # Get a task 
+    # Get a task
     require("metanetwork")
     require("utilityFunctions")
-    task <- mpi.recv.Robj(mpi.any.source(),mpi.any.tag()) 
-    task_info <- mpi.get.sourcetag() 
-    tag <- task_info[2] 
-    # While task is not a "done" message. Note the use of the tag to indicate 
+    task <- mpi.recv.Robj(mpi.any.source(),mpi.any.tag())
+    task_info <- mpi.get.sourcetag()
+    tag <- task_info[2]
+    # While task is not a "done" message. Note the use of the tag to indicate
     # the type of message
     while (tag != 2) {
       foldNumber <- task$foldNumber
@@ -49,8 +49,8 @@ mpiWrapper = function(data,nodes,pathv,regressionFunction,outputpath,eigen=NULL,
         if(!is.null(eigen)){
           fxnArgs$eigen <- eigen
         }
-        
-        
+
+
         #print(regressionFunction)
         #print(str(fxnArgs$x))
         #print(fxnArgs)
@@ -64,19 +64,19 @@ mpiWrapper = function(data,nodes,pathv,regressionFunction,outputpath,eigen=NULL,
         #print(res)
 
         #geterrmessage()
-        
+
         if(!is.na(res)){
           temp_vbsr[-foldNumber]<- res;
         }
         temp_res <- c(foldNumber,temp_vbsr);
       }else{
         temp_vbsr <- rep(0,length(regulatorIndex));
-        
+
         if(foldNumber%in%regulatorIndex){
           wi <- which(regulatorIndex%in%foldNumber);
           res <- NA;
           set.seed(foldNumber)
-          
+
           fxnArgs <- list()
           fxnArgs$y <- data[,foldNumber]
           fxnArgs$x <- data[,regulatorIndex][,-wi]
@@ -84,14 +84,14 @@ mpiWrapper = function(data,nodes,pathv,regressionFunction,outputpath,eigen=NULL,
             fxnArgs$n_orderings<-12
           }
           try(res <- do.call(regressionFunction,fxnArgs),silent=TRUE)
-          
+
           if(!is.na(res)){
             temp_vbsr[-wi] <- res;
           }
         }else{
           res <- NA;
           set.seed(foldNumber)
-          
+
           fxnArgs <- list()
           fxnArgs$y <- data[,foldNumber]
           fxnArgs$x <- data[,regulatorIndex]
@@ -99,29 +99,29 @@ mpiWrapper = function(data,nodes,pathv,regressionFunction,outputpath,eigen=NULL,
             fxnArgs$n_orderings<-12
           }
           try(res <- do.call(regressionFunction,fxnArgs),silent=TRUE)
-                    
+
           if(!is.na(res)){
             temp_vbsr <- res;
           }
         }
         temp_res <- c(foldNumber,temp_vbsr);
       }
-      
+
       # Construct and send message back to master
       result <- list(result=temp_res,foldNumber=foldNumber)
       mpi.send.Robj(result,0,1)
-      
-      # Get a task 
-      task <- mpi.recv.Robj(mpi.any.source(),mpi.any.tag()) 
-      task_info <- mpi.get.sourcetag() 
-      tag <- task_info[2] 
+
+      # Get a task
+      task <- mpi.recv.Robj(mpi.any.source(),mpi.any.tag())
+      task_info <- mpi.get.sourcetag()
+      tag <- task_info[2]
     }
-    
+
     junk <- 0
     mpi.send.Robj(junk,0,2)
   }
-  
-  
+
+
   p <- ncol(data)
   n <- nrow(data)
   if(regressionFunction=='ridgeAIC'|regressionFunction=='ridgeBIC'){
@@ -145,18 +145,18 @@ mpiWrapper = function(data,nodes,pathv,regressionFunction,outputpath,eigen=NULL,
   for (i in 1:p) {
     tasks[[i]] <- list(foldNumber=i)
   }
-  
+
   # Make the round-robin list for slaves
   n_slaves <- mpi.comm.size()-1
   slave_ids <- rep(1:n_slaves, length=length(tasks))
-  
+
   # Send tasks
   for (i in 1:length(tasks)) {
     slave_id <- slave_ids[i]
     #print(slave_id);
     mpi.send.Robj(tasks[[i]],slave_id,1)
   }
-  
+
   # Collect results
   res_list <- vector("list",p);
   #rssresult <- matrix(0,p,10)
@@ -174,13 +174,13 @@ mpiWrapper = function(data,nodes,pathv,regressionFunction,outputpath,eigen=NULL,
     results    <- message$result
     res_list[[foldNumber]]<- results
   }
-  
+
   # Perform closing handshake
   for (i in 1:n_slaves) {
     junk <- 0
     mpi.send.Robj(junk,i,2)
   }
-  
+
   for (i in 1:n_slaves) {
     mpi.recv.Robj(mpi.any.source(),2)
   }
@@ -192,7 +192,7 @@ mpiWrapper = function(data,nodes,pathv,regressionFunction,outputpath,eigen=NULL,
   gc()
   colnames(network) <- colnames(data)
   rownames(network) <- c('fold',colnames(data))
-  
+
   network <- t(network)
   gc()
   network <- data.frame(network)
@@ -206,8 +206,9 @@ mpiWrapper = function(data,nodes,pathv,regressionFunction,outputpath,eigen=NULL,
   gc()
   #save(network,file=paste(outputpath,'result_',regressionFunction,'.rda',sep=''));
   write.csv(network,file=paste0(outputpath,regressionFunction,'Network.csv'),quote=F)
-  
-  mpi.bcast.cmd(q("no"));
+
+  #mpi.bcast.cmd(q("no"));
+  mpi.close.Rslaves()
   mpi.quit(save="no")
-  
+
 }
