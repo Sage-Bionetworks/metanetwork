@@ -25,7 +25,7 @@ compute.LocalModularity <- function(adj, mod){
   adj = as.matrix(adj) + t(as.matrix(adj))
   
   # Get unique communities
-  comm = plyr::dlply(mod, .(moduleNumber), .fun = function(x){ unique(x$Gene.ID) }, .parallel = T)
+  comm = plyr::dlply(mod, .variables = 'moduleNumber', .fun = function(x){ unique(x$Gene.ID) }, .parallel = T)
     
   # Get number of edges between communities
   edge.comm = foreach::foreach(ci = names(comm), .packages = c('foreach', 'doParallel'), .combine = cbind) %dopar% {
