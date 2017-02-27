@@ -3,11 +3,9 @@
 .RData
 .DS_Store
 .httr-oauth
-dataMatrix.tsv
-contrib
-result_c3net.rda
-result_wgcna.rda
-result_wgcnaSoftThreshold.rda
-result_wgcnaST.rda
-result_wgcnaTOM.rda
-Rplot.jpeg
+*.tsv
+*.txt
+*.png
+*.rdb
+*.html
+packrat/lib*/
