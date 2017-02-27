@@ -21,61 +21,72 @@ compute.ModuleQualityMetric <- function(adj, mod){
   if(dim(mod)[2] != 3)
     stop('Module label matrix should be a nx3 data frame')
   
-  # Convert upper to symmetric matrix
-  adj = adj + t(adj)
+  # Convert lsparseNetwork upper adj matrix to graph
+  g = igraph::graph.adjacency(adj, mode = 'upper', weighted = TRUE, diag = F)
+  rownames(mod) = mod$Gene.ID
+  igraph::V(g)$moduleNumber = paste0('mod.',mod[V(g)$name, 'moduleNumber'])
   
-  # Get unique communities
-  comm = plyr::dlply(mod, .variables = 'moduleNumber', .fun = function(x){ unique(x$Gene.ID) }, .parallel = T)
-  
+  rm(list = c('adj', 'mod'))
+  gc()
   
   # Get number of edges between communities
-  edge.comm = foreach::foreach(ci = names(comm), .packages = c('foreach', 'doParallel'), .combine = cbind) %dopar% {
-    foreach::foreach(cj = names(comm), .combine = c) %dopar% {
-      sum(adj[as.character(comm[[ci]]), as.character(comm[[cj]])], na.rm = T)
-    }
-  }
-  rownames(edge.comm) = names(comm)
-  colnames(edge.comm) = names(comm)
+  edge.comm = foreach::foreach(ci = unique(igraph::V(g)$moduleNumber), 
+                               .packages = c('foreach', 'doParallel'), 
+                               .combine = cbind, 
+                               .export = c('g')) %dopar% {
+                                 foreach::foreach(cj = unique(igraph::V(g)$moduleNumber), 
+                                                  .combine = c,
+                                                  .packages = c('foreach', 'doParallel', 'dplyr'),
+                                                  .export = c('g', 'ci')) %dopar% {
+                                                    gi = igraph::induced_subgraph(g, vids = which(igraph::V(g)$moduleNumber == ci))
+                                                    gj = igraph::induced_subgraph(g, vids = which(igraph::V(g)$moduleNumber == cj))
+                                                    igraph::ecount(igraph::intersection(gi,gj))
+                                                  }
+                               }
+  edge.comm = data.frame(edge.comm)
+  rownames(edge.comm) = unique(igraph::V(g)$moduleNumber)
+  colnames(edge.comm) = unique(igraph::V(g)$moduleNumber)
+  edge.comm = data.matrix(edge.comm)
   
   # Get size of each modules
-  mod.sz = sapply(comm, length)
+  mod.sz = summary(factor(igraph::V(g)$moduleNumber))
+  
+  rm(list = c('g'))
+  gc()
   
   # Intra edges
-  IE = data.frame(moduleNumber = names(comm),
+  IE = data.frame(moduleNumber = rownames(edge.comm),
                   IE = diag(edge.comm))
   
   # Intra density
-  ID = data.frame(moduleNumber = names(comm),
+  ID = data.frame(moduleNumber = rownames(edge.comm),
                   ID = 2*diag(edge.comm)/(mod.sz * (mod.sz - 1)))
   
   # Contraction
-  CNT = data.frame(moduleNumber = names(comm),
+  CNT = data.frame(moduleNumber = rownames(edge.comm),
                    CNT = 2*diag(edge.comm)/mod.sz)
   
   # Boundary Edges
-  BE = data.frame(moduleNumber = names(comm),
+  BE = data.frame(moduleNumber = rownames(edge.comm),
                   BE = rowSums(edge.comm, na.rm = T) - diag(edge.comm))
   
   # Expansion
-  EXP = data.frame(moduleNumber = names(comm),
+  EXP = data.frame(moduleNumber = rownames(edge.comm),
                    EXP = BE$BE/mod.sz)
   
   # Conductance
-  CND = data.frame(moduleNumber = names(comm),
+  CND = data.frame(moduleNumber = rownames(edge.comm),
                    CND = BE$BE/(2*IE$IE + BE$BE))
   
   # Fitness function
-  FIT = data.frame(moduleNumber = names(comm),
+  FIT = data.frame(moduleNumber = rownames(edge.comm),
                    FIT = IE$IE/(IE$IE + BE$BE))
   
   # Average modularity degree
-  AMD = data.frame(moduleNumber = names(comm),
+  AMD = data.frame(moduleNumber = rownames(edge.comm),
                    AMD = (2*IE$IE - BE$BE)/mod.sz)
   
-  metrics = plyr::join_all(list(IE, ID, CNT, BE, EXP, CND, FIT, AMD)) %>%
-    dplyr::inner_join(mod %>% 
-                        dplyr::select(moduleNumber, moduleLabel) %>%
-                        dplyr::mutate(moduleNumber = factor(moduleNumber)) %>%
-                        unique, .)
+  metrics = plyr::join_all(list(IE, ID, CNT, BE, EXP, CND, FIT, AMD))
+  
   return(metrics)
 }

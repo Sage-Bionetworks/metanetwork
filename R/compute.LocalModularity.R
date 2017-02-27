@@ -21,31 +21,47 @@ compute.LocalModularity <- function(adj, mod){
   if(dim(mod)[2] != 3)
     stop('Module label matrix should be a nx3 data frame')
   
-  # Convert lsparseNetwork upper to symmetric
-  adj = as.matrix(adj) + t(as.matrix(adj))
+  # Convert lsparseNetwork upper adj matrix to graph
+  g = igraph::graph.adjacency(adj, mode = 'upper', weighted = TRUE, diag = F)
+  rownames(mod) = mod$Gene.ID
+  igraph::V(g)$moduleNumber = paste0('mod.',mod[V(g)$name, 'moduleNumber'])
   
-  # Get unique communities
-  comm = plyr::dlply(mod, .variables = 'moduleNumber', .fun = function(x){ unique(x$Gene.ID) }, .parallel = T)
-    
+  rm(list = c('adj', 'mod'))
+  gc()
+  
   # Get number of edges between communities
-  edge.comm = foreach::foreach(ci = names(comm), .packages = c('foreach', 'doParallel'), .combine = cbind) %dopar% {
-    foreach::foreach(cj = names(comm), .combine = c) %dopar% {
-      sum(adj[as.character(comm[[ci]]), as.character(comm[[cj]])], na.rm = T)
+  edge.comm = foreach::foreach(ci = unique(igraph::V(g)$moduleNumber), 
+                               .packages = c('foreach', 'doParallel'), 
+                               .combine = cbind, 
+                               .export = c('g')) %dopar% {
+                                 foreach::foreach(cj = unique(igraph::V(g)$moduleNumber), 
+                                                  .combine = c,
+                                                  .packages = c('foreach', 'doParallel', 'dplyr'),
+                                                  .export = c('g', 'ci')) %dopar% {
+                                                    gi = igraph::induced_subgraph(g, vids = which(igraph::V(g)$moduleNumber == ci))
+                                                    gj = igraph::induced_subgraph(g, vids = which(igraph::V(g)$moduleNumber == cj))
+                                                    igraph::ecount(igraph::intersection(gi,gj))
       }
   }
-  rownames(edge.comm) = names(comm)
-  colnames(edge.comm) = names(comm)
+  edge.comm = data.frame(edge.comm)
+  rownames(edge.comm) = unique(igraph::V(g)$moduleNumber)
+  colnames(edge.comm) = unique(igraph::V(g)$moduleNumber)
+  
+  rm(list = c('g'))
+  gc()
   
   # Calculate local modularity
-  NQ = foreach::foreach(ci = names(comm), .combine = c) %dopar% {
-    if(edge.comm[ci,ci] != 0){
-      Ein = edge.comm[ci,ci]
-      Eout = sum(edge.comm[ci,], na.rm = T) - edge.comm[ci,ci]
-      ind = which(edge.comm[ci,] != 0)
-      Eneighbor = sum(edge.comm[ind,ind], na.rm = T) 
-      ((Ein/Eneighbor)-((2*Ein + Eout)/(2*Eneighbor))^2)
-    }
-  }
+  NQ = foreach::foreach(ci = rownames(edge.comm), 
+                        .combine = c,
+                        .export = c('edge.comm')) %dopar% {
+                          if(edge.comm[ci,ci] != 0){
+                            Ein = edge.comm[ci,ci]
+                            Eout = sum(edge.comm[ci,], na.rm = T) - edge.comm[ci,ci]
+                            ind = which(edge.comm[ci,] != 0)
+                            Eneighbor = sum(edge.comm[ind,ind], na.rm = T) 
+                            ((Ein/Eneighbor)-((2*Ein + Eout)/(2*Eneighbor))^2)
+                          }
+                        }
   NQ = sum(NQ)
   
   return(NQ)
