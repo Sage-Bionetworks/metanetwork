@@ -44,8 +44,8 @@ findModules.CFinder <- function(adj, path, min.module.size = 3){
   mod = read.table(paste0(d[2],'/communities'), skip = 7, sep = '\n') 
   mod$moduleNumber = 1:dim(mod)[1]
   geneModules = plyr::ddply(mod, .(moduleNumber), .fun = function(x){
-    mod = data.frame(Gene.ID = str_split(x$V1, ':')[[1]][2] %>%
-                       str_split(' ') %>% 
+    mod = data.frame(Gene.ID = stringr::str_split(x$V1, ':')[[1]][2] %>%
+                       stringr::str_split(' ') %>% 
                        unlist %>%
                        unique %>%
                        setdiff(c('')))
