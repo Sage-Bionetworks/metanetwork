@@ -1,5 +1,6 @@
 compareTwoNetworks <- function(network1,network2){
   #get networks into the same format
+  #must be in full matrix form (no upper triangular form only matrices allowed)
   geneName1 <- colnames(network1)
   geneName2 <- colnames(network2)
   geneName <- intersect(geneName1,geneName2)
@@ -10,7 +11,7 @@ compareTwoNetworks <- function(network1,network2){
   table1 <- table(net1!=0,net2!=0)
   model <- list()
   model$fisher <- fisher.test(table1)
-  model$overlapNet1 <- table1[1,1]/(rowSums(table1)[1])
-  model$overlapNet2 <- table1[2,2]/(rowSums(table1)[2])
+  model$overlapNet1 <- table1[2,2]/(rowSums(table1)[2])
+  model$overlapNet2 <- table1[2,2]/(colSums(table1)[2])
   return(model)
 }
