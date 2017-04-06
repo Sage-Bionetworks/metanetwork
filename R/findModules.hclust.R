@@ -17,39 +17,18 @@ findModules.hclust <- function(adj, aggloMethod = 'ward', clustDistance = 'eucli
   if(!all(adj[lower.tri(adj)] == 0))
     stop('Adjacency matrix should be upper triangular')
   
-  # Convert lsparseNetwork to igraph graph object
-  g = igraph::graph.adjacency(adj, mode = 'upper', weighted = T, diag = F)
-  
-  # Find connected components
-  scc = igraph::components(g)
-  
-  # Find modules for each component using spinglass algorithm (http://arxiv.org/abs/cond-mat/0603718)
-  mod = lapply(unique(scc$membership), function(x, g, scc){
-    sg = igraph::induced_subgraph(g, which(scc$membership == x))
-    if (sum(scc$membership == x) == 1){
-      geneModules = data.frame(Gene.ID = igraph::V(g)$name[scc$membership == x],
-                               moduleNumber = 1)
-    } else{
-    }
-  
-  
-  
-  # Use TOM dissimilarity matrix for 
-  adj = adj + t(adj)
-  TOM = WGCNA::TOMsimilarity(adj);
-  
   # Use fast hierarchichal clustering
-  geneTree = fastcluster::hclust.vector(dissTOM, method = aggloMethod, metric = clustDistance)
+  geneTree = fastcluster::hclust.vector(adj, method = aggloMethod, metric = clustDistance)
   
   # Find distance between matrix
-  distTOM = stats::dist(TOM, method = clustDistance, diag = T, upper = T)
+  distAdj = stats::dist(adj, method = clustDistance, diag = T, upper = T)
   
   # Cut tree to form clusters
   mod = dynamicTreeCut::cutreeDynamic(dendro = geneTree, 
-                                      minClusterSize = min.module.size,
+                                      minClusterSize = minModuleSize,
                                       
                                       method = 'hybrid',
-                                      distM = as.matrix(distTOM),
+                                      distM = as.matrix(distAdj),
                                       deepSplit =FALSE,
                                       
                                       pamRespectsDendro = FALSE)
