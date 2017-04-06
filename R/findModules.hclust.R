@@ -1,5 +1,5 @@
 # Function to get modules from network adjacency matrix
-findModules.hclust <- function(adj, agglom.method = 'ward', clustDistance = 'euclidean', min.module.size = 3){
+findModules.hclust <- function(adj, aggloMethod = 'ward', clustDistance = 'euclidean', minModuleSize = 3){
   # Input
   #      adj = n x n upper triangular adjacency in the matrix class format
   #      min.module.size = integer between 1 and n genes 
@@ -17,29 +17,51 @@ findModules.hclust <- function(adj, agglom.method = 'ward', clustDistance = 'euc
   if(!all(adj[lower.tri(adj)] == 0))
     stop('Adjacency matrix should be upper triangular')
   
+  # Convert lsparseNetwork to igraph graph object
+  g = igraph::graph.adjacency(adj, mode = 'upper', weighted = T, diag = F)
+  
+  # Find connected components
+  scc = igraph::components(g)
+  
+  # Find modules for each component using spinglass algorithm (http://arxiv.org/abs/cond-mat/0603718)
+  mod = lapply(unique(scc$membership), function(x, g, scc){
+    sg = igraph::induced_subgraph(g, which(scc$membership == x))
+    if (sum(scc$membership == x) == 1){
+      geneModules = data.frame(Gene.ID = igraph::V(g)$name[scc$membership == x],
+                               moduleNumber = 1)
+    } else{
+    }
+  
+  
+  
+  # Use TOM dissimilarity matrix for 
   adj = adj + t(adj)
-  
   TOM = WGCNA::TOMsimilarity(adj);
-  dissTOM = 1-TOM
   
-  dissStruct = dist(dissTOM, method = clustDistance)
+  # Use fast hierarchichal clustering
+  geneTree = fastcluster::hclust.vector(dissTOM, method = aggloMethod, metric = clustDistance)
   
-  geneTree = flashClust::hclust(dissStruct, method = agglom.method)
+  # Find distance between matrix
+  distTOM = stats::dist(TOM, method = clustDistance, diag = T, upper = T)
   
+  # Cut tree to form clusters
   mod = dynamicTreeCut::cutreeDynamic(dendro = geneTree, 
-                                          method = 'hybrid',
-                                          distM = dissTOM,
-                                          pamRespectsDendro = F,
-                                          minClusterSize = min.module.size)
-  names(mod) = rownames(adj)
-  geneModules = data.frame(Gene.ID = names(mod),
+                                      minClusterSize = min.module.size,
+                                      
+                                      method = 'hybrid',
+                                      distM = as.matrix(distTOM),
+                                      deepSplit =FALSE,
+                                      
+                                      pamRespectsDendro = FALSE)
+  
+  geneModules = data.frame(Gene.ID = rownames(adj),
                            moduleNumber = mod)
   
   # Rename modules with size less than min module size to 0
   filteredModules = geneModules %>% 
     dplyr::group_by(moduleNumber) %>%
     dplyr::summarise(counts = length(unique(Gene.ID))) %>%
-    dplyr::filter(counts >= min.module.size)
+    dplyr::filter(counts >= minModuleSize)
   geneModules$moduleNumber[!(geneModules$moduleNumber %in% filteredModules$moduleNumber)] = 0
 
   # Change cluster number to color labels

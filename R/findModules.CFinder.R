@@ -50,15 +50,25 @@ findModules.CFinder <- function(adj, path, min.module.size = 3){
                        unique %>%
                        setdiff(c('')))
     mod$moduleNumber = x$moduleNumber
+    mod$moduleSize = length(unique(mod$Gene.ID))
     return(mod)
   })
   system('rm -rf ./tmp')
   
+  # Get individual cluster assignment for each gene from the community object
+  geneModules = geneModules %>%
+    group_by(Gene.ID) %>%
+    dplyr::top_n(1, moduleSize) %>%
+    dplyr::top_n(1, moduleNumber) %>%
+    dplyr::select(-moduleSize) %>%
+    dplyr::mutate(moduleNumber = factor(moduleNumber),
+                  moduleNumber = as.numeric(moduleNumber))
+  
   # Add missing genes
   Gene.ID = setdiff(igraph::V(g)$name, geneModules$Gene.ID)
-  geneModules = rbind(geneModules, 
+  geneModules = rbind(data.frame(geneModules), 
                       data.frame(Gene.ID = Gene.ID,
-                                 moduleNumber = max(geneModules$moduleNumber, na.rm = T) + seq(1,length(Gene.ID))))
+                                 moduleNumber = 0))
   
   # Rename modules with size less than min module size to 0
   filteredModules = geneModules %>% 
@@ -68,6 +78,7 @@ findModules.CFinder <- function(adj, path, min.module.size = 3){
   geneModules$moduleNumber[!(geneModules$moduleNumber %in% filteredModules$moduleNumber)] = 0
   
   # Change cluster number to color labels
+  geneModules$moduleNumber = as.numeric(factor(geneModules$moduleNumber))
   geneModules$moduleLabel = WGCNA::labels2colors(geneModules$moduleNumber)
   
   return(unique(geneModules))

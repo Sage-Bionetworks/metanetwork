@@ -33,8 +33,11 @@ findModules.linkcommunities <- function(adj, min.module.size = 3){
   eclust = cutree(comm$hclust, h = comm$pdmax)
   names(eclust) = igraph::E(comm$igraph)
   
-  ## Get node communities
-  nodes = lapply(seq(max(eclust)), function(x, eclust, comm){
+  ## Filter communities less than min.module.size
+  comm.to.remove = which(table(eclust) <= min.module.size)
+  eclust[eclust %in% comm.to.remove] = 0
+  
+  nodes = lapply(setdiff(unique(eclust), 0), function(x, eclust, comm){
     tmp.g = igraph::subgraph.edges(comm$igraph, eids = which(eclust == x), delete.vertices = T)
     data.frame(Gene.ID = igraph::V(tmp.g)$name) %>%
       dplyr::mutate(moduleNumber = x,
@@ -53,12 +56,12 @@ findModules.linkcommunities <- function(adj, min.module.size = 3){
     dplyr::select(-moduleSize) %>%
     dplyr::mutate(moduleNumber = factor(moduleNumber),
                   moduleNumber = as.numeric(moduleNumber))
-  
+
   # Add missing genes
   Gene.ID = setdiff(igraph::V(g)$name, geneModules$Gene.ID)
   geneModules = rbind(data.frame(geneModules), 
                       data.frame(Gene.ID = Gene.ID,
-                                 moduleNumber = max(geneModules$moduleNumber, na.rm = T) + seq(1,length(Gene.ID))))
+                                 moduleNumber = 0))
   
   # Rename modules with size less than min module size to 0
   filteredModules = geneModules %>% 
@@ -68,6 +71,7 @@ findModules.linkcommunities <- function(adj, min.module.size = 3){
   geneModules$moduleNumber[!(geneModules$moduleNumber %in% filteredModules$moduleNumber)] = 0
   
   # Change cluster number to color labels
+  geneModules$moduleNumber = as.numeric(factor(geneModules$moduleNumber))
   geneModules$moduleLabel = WGCNA::labels2colors(geneModules$moduleNumber)
   
   return(geneModules)
