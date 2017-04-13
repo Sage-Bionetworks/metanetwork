@@ -29,16 +29,39 @@ findModules.linkcommunities <- function(adj, min.module.size = 3){
   ## Run link communities function
   comm = linkcomm::getLinkCommunities(elist)
   
+  ## Get edge clusters
+  eclust = cutree(comm$hclust, h = comm$pdmax)
+  names(eclust) = igraph::E(comm$igraph)
+  
+  ## Filter communities less than min.module.size
+  comm.to.remove = which(table(eclust) <= min.module.size)
+  eclust[eclust %in% comm.to.remove] = 0
+  
+  nodes = lapply(setdiff(unique(eclust), 0), function(x, eclust, comm){
+    tmp.g = igraph::subgraph.edges(comm$igraph, eids = which(eclust == x), delete.vertices = T)
+    data.frame(Gene.ID = igraph::V(tmp.g)$name) %>%
+      dplyr::mutate(moduleNumber = x,
+                    moduleSize = length(unique(Gene.ID)))
+  }, eclust, comm) %>%
+    data.table::rbindlist(use.names = T, fill = T)
+  
+  ## Combine smaller modules to form a no module
+  nodes$moduleNumber[nodes$moduleSize < min.module.size] = 0
+  
   # Get individual clusters from the community object
-  geneModules = comm$nodeclusters %>%
-    dplyr::mutate(cluster = as.numeric(as.character(cluster))) %>%
-    plyr::rename(c('node' = 'Gene.ID', 'cluster' = 'moduleNumber'))
+  geneModules = dplyr::filter(nodes, moduleNumber != 0) %>%
+    dplyr::group_by(Gene.ID) %>%
+    dplyr::top_n(1, moduleSize) %>%
+    dplyr::top_n(1, moduleNumber) %>%
+    dplyr::select(-moduleSize) %>%
+    dplyr::mutate(moduleNumber = factor(moduleNumber),
+                  moduleNumber = as.numeric(moduleNumber))
 
   # Add missing genes
   Gene.ID = setdiff(igraph::V(g)$name, geneModules$Gene.ID)
-  geneModules = rbind(geneModules, 
+  geneModules = rbind(data.frame(geneModules), 
                       data.frame(Gene.ID = Gene.ID,
-                                 moduleNumber = max(geneModules$moduleNumber, na.rm = T) + seq(1,length(Gene.ID))))
+                                 moduleNumber = 0))
   
   # Rename modules with size less than min module size to 0
   filteredModules = geneModules %>% 
@@ -48,6 +71,7 @@ findModules.linkcommunities <- function(adj, min.module.size = 3){
   geneModules$moduleNumber[!(geneModules$moduleNumber %in% filteredModules$moduleNumber)] = 0
   
   # Change cluster number to color labels
+  geneModules$moduleNumber = as.numeric(factor(geneModules$moduleNumber))
   geneModules$moduleLabel = WGCNA::labels2colors(geneModules$moduleNumber)
   
   return(geneModules)

@@ -28,7 +28,7 @@ findModules.spinglass <- function(adj, min.module.size = 3){
     sg = igraph::induced_subgraph(g, which(scc$membership == x))
     if (sum(scc$membership == x) == 1){
       geneModules = data.frame(Gene.ID = igraph::V(g)$name[scc$membership == x],
-                               moduleNumber = 1)
+                               moduleNumber = 0)
     } else{
       mod = igraph::cluster_spinglass(sg)
       geneModules = data.frame(Gene.ID = igraph::V(sg)$name,
