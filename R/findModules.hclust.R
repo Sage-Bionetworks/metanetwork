@@ -1,5 +1,5 @@
 # Function to get modules from network adjacency matrix
-findModules.hclust <- function(adj, aggloMethod = 'ward', clustDistance = 'euclidean', minModuleSize = 3){
+findModules.hclust <- function(adj, aggloMethod = 'ward', clustDistance = 'euclidean', minModuleSize = 30){
   # Input
   #      adj = n x n upper triangular adjacency in the matrix class format
   #      min.module.size = integer between 1 and n genes 

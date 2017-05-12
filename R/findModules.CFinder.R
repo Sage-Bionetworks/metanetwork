@@ -1,5 +1,5 @@
 # Function to get modules from network adjacency matrix using CFinder algorithm
-findModules.CFinder <- function(adj, path, min.module.size = 3){
+findModules.CFinder <- function(adj, path, nperm = 10, min.module.size = 30){
   
   # Note: For this function to work get the source software from syn7806853,
   # unzip and supply the path for CFinder executable
@@ -7,6 +7,7 @@ findModules.CFinder <- function(adj, path, min.module.size = 3){
   # Input
   #      adj = n x n upper triangular adjacency in the matrix class format
   #      path = location of CFinder
+  #      nperm = number of permutation on the gene ordering 
   #      min.module.size = integer between 1 and n genes 
   
   # Output
@@ -22,10 +23,46 @@ findModules.CFinder <- function(adj, path, min.module.size = 3){
   if(!all(adj[lower.tri(adj)] == 0))
     stop('Adjacency matrix should be upper triangular')
   
-  # Convert lsparseNetwork to igraph graph object
-  g = igraph::graph.adjacency(adj, mode = 'upper', weighted = T, diag = F)
+  # Make adjacency matrix symmetric
+  adj = adj + t(adj)
+  adj[diag(adj)] = 0
   
-  # Get modules using GANXiS
+  # Compute modules by permuting the labels nperm times
+  all.modules = plyr::llply(1:nperm, .fun= function(i, adj, path, min.module.size){
+    # Permute gene ordering
+    ind = sample(1:dim(adj)[1], dim(adj)[1], replace = FALSE)
+    adj1 = adj[ind,ind]
+    
+    # Find modules 
+    mod = findModules.CFinder.once(adj1, path, min.module.size)
+    
+    # Compute local and global modularity
+    adj1[lower.tri(adj1)] = 0
+    Q = compute.Modularity(adj1, mod)
+    Qds = compute.ModularityDensity(adj1, mod)
+    
+    return(list(mod = mod, Q = Q, Qds = Qds))
+  }, adj, path, min.module.size)
+  
+  # Find the best module based on Q and Qds
+  tmp = plyr::ldply(all.modules, function(x){
+    data.frame(Q = x$Q, Qds = x$Qds)
+  }) %>%
+    dplyr::mutate(r = base::rank(Q)+base::rank(Qds))
+  ind = which.max(tmp$r)
+  
+  mod = all.modules[[ind]]$mod
+  
+  return(mod)
+}
+
+findModules.CFinder.once <- function(adj, path, min.module.size){
+  
+  # Convert lsparseNetwork to igraph graph object
+  g = igraph::graph.adjacency(adj, mode = 'undirected', weighted = T, diag = F)
+  
+  # Get modules using CFinder
+  system('rm -rf ./tmp')
   system('mkdir ./tmp')
   
   ## Write network as an edgelist to a file
