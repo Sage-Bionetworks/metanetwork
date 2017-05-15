@@ -1,26 +1,30 @@
 # Function to perform Fishers enrichment analysis
-fisherEnrichment <- function(genes.in.significant.set, # A character vector of differentially expressed or some significant genes to test
-                             genes.in.gene.set, # A character vector of genes in gene set like GO annotations, pathways etc...
-                             genes.in.background # Background genes 
+fisherEnrichment <- function(genesInModule, # A character vector of differentially expressed genes or genes in a given module to test
+                             genesInGeneSet, # A character vector of genes in a gene set like GO annotations, pathways etc...
+                             genesInBackground # Background genes
 ){
-  genes.in.significant.set = intersect(genes.in.significant.set, genes.in.background) # back ground filtering
-  genes.in.nonsignificant.set = base::setdiff(genes.in.background, genes.in.significant.set)
-  genes.in.gene.set = intersect(genes.in.gene.set, genes.in.background) # back ground filtering
-  genes.our.gene.set = base::setdiff(genes.in.background,genes.in.gene.set)
+  # Background filtering
+  genesInSignificantSet = base::intersect(genesInModule, genesInBackground) # back ground filtering
+  genesInGeneSet = base::intersect(genesInGeneSet, genesInBackground) # back ground filtering
   
-  tp = length(intersect(genes.in.gene.set, genes.in.significant.set))             
-  fp = length(intersect(genes.in.gene.set, genes.in.nonsignificant.set))
-  fn = length(intersect(genes.our.gene.set, genes.in.significant.set))
-  tn = length(intersect(genes.our.gene.set, genes.in.nonsignificant.set))
+  # Get non significant set
+  genesInNonSignificantSet = base::setdiff(genesInBackground, genesInSignificantSet)
+  genesOutGeneSet = base::setdiff(genesInBackground,genesInGeneSet)
   
-  pval = fisher.test(matrix(c(tp, fp, fn, tn),nrow=2, ncol=2), alternative="greater")
-  odds = (tp*tn)/(fp*fn)
+  confusion.matrix = matrix(c(length(intersect(genesInGeneSet, genesInSignificantSet)),             
+                              length(intersect(genesInGeneSet, genesInNonSignificantSet)),
+                              length(intersect(genesOutGeneSet, genesInSignificantSet)),
+                              length(intersect(genesOutGeneSet, genesInNonSignificantSet))),
+                            nrow=2, ncol=2)
+  
+  pval = fisher.test(confusion.matrix, alternative="greater")
+  OR = (confusion.matrix[1,1] * confusion.matrix[2,2])/
+    (confusion.matrix[1,2] * confusion.matrix[2,1])
   
   return(data.frame(pval = pval$p.value,
-                    ngenes = length(genes.in.gene.set),
-                    noverlap = tp,
-                    odds = odds,
-                    Genes = paste(intersect(genes.in.gene.set, genes.in.significant.set), collapse = '|')
-  )
-  )
+                    nTested = length(genesInModule),
+                    nInSet = length(genesInGeneSet),
+                    noverlap = confusion.matrix[1,1],
+                    OR = OR,
+                    Genes = paste(intersect(genesInGeneSet, genesInSignificantSet), collapse = '|')) )
 }
