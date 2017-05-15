@@ -31,6 +31,7 @@ findModules.GANXiS <- function(adj, path, nperm = 10, min.module.size = 30){
     ind = sample(1:dim(adj)[1], dim(adj)[1], replace = FALSE)
     adj1 = adj[ind,ind]
     
+    mod = NA; Q = NA; Qds = NA;
     tryCatch({
       # Find modules 
       mod = findModules.GANXiS.once(adj1, path, min.module.size)
@@ -50,6 +51,7 @@ findModules.GANXiS <- function(adj, path, nperm = 10, min.module.size = 30){
   tmp = plyr::ldply(all.modules, function(x){
     data.frame(Q = x$Q, Qds = x$Qds)
   }) %>%
+    na.omit %>%
     dplyr::mutate(r = base::rank(Q, na.last = FALSE)+base::rank(Qds, na.last = FALSE))
   ind = which.max(tmp$r)
   

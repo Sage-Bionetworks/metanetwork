@@ -33,6 +33,7 @@ findModules.CFinder <- function(adj, path, nperm = 10, min.module.size = 30){
     ind = sample(1:dim(adj)[1], dim(adj)[1], replace = FALSE)
     adj1 = adj[ind,ind]
     
+    mod = NA; Q = NA; Qds = NA;
     tryCatch({
       # Find modules 
       mod = findModules.CFinder.once(adj1, path, min.module.size)
@@ -52,6 +53,7 @@ findModules.CFinder <- function(adj, path, nperm = 10, min.module.size = 30){
   tmp = plyr::ldply(all.modules, function(x){
     data.frame(Q = x$Q, Qds = x$Qds)
   }) %>%
+    na.omit() %>%
     dplyr::mutate(r = base::rank(Q, na.last = F)+base::rank(Qds, na.last = F))
   ind = which.max(tmp$r)
   
