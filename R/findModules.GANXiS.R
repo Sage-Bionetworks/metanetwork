@@ -31,13 +31,17 @@ findModules.GANXiS <- function(adj, path, nperm = 10, min.module.size = 30){
     ind = sample(1:dim(adj)[1], dim(adj)[1], replace = FALSE)
     adj1 = adj[ind,ind]
     
-    # Find modules 
-    mod = findModules.GANXiS.once(adj1, path, min.module.size)
+    tryCatch({
+      # Find modules 
+      mod = findModules.GANXiS.once(adj1, path, min.module.size)
     
-    # Compute local and global modularity
-    adj1[lower.tri(adj1)] = 0
-    Q = compute.Modularity(adj1, mod)
-    Qds = compute.ModularityDensity(adj1, mod)
+      # Compute local and global modularity
+      adj1[lower.tri(adj1)] = 0
+      Q = compute.Modularity(adj1, mod)
+      Qds = compute.ModularityDensity(adj1, mod)
+    }, error = function(e){
+      mod = NA; Q = NA; Qds = NA;
+    })
     
     return(list(mod = mod, Q = Q, Qds = Qds))
   }, adj, path, min.module.size)
@@ -46,7 +50,7 @@ findModules.GANXiS <- function(adj, path, nperm = 10, min.module.size = 30){
   tmp = plyr::ldply(all.modules, function(x){
     data.frame(Q = x$Q, Qds = x$Qds)
   }) %>%
-    dplyr::mutate(r = base::rank(Q)+base::rank(Qds))
+    dplyr::mutate(r = base::rank(Q, na.last = FALSE)+base::rank(Qds, na.last = FALSE))
   ind = which.max(tmp$r)
   
   mod = all.modules[[ind]]$mod
