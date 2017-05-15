@@ -31,6 +31,7 @@ findModules.GANXiS <- function(adj, path, nperm = 10, min.module.size = 30){
     ind = sample(1:dim(adj)[1], dim(adj)[1], replace = FALSE)
     adj1 = adj[ind,ind]
     
+    mod = NA; Q = NA; Qds = NA;
     tryCatch({
       # Find modules 
       mod = findModules.GANXiS.once(adj1, path, min.module.size)
