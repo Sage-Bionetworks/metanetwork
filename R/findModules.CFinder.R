@@ -36,7 +36,7 @@ findModules.CFinder <- function(adj, path, nperm = 10, min.module.size = 30){
     mod = NA; Q = NA; Qds = NA;
     tryCatch({
       # Find modules 
-      mod = findModules.CFinder.once(adj1, path, min.module.size)
+      mod = findModules.CFinder.once(adj1, path, min.module.size, i)
     
       # Compute local and global modularity
       adj1[lower.tri(adj1)] = 0
@@ -46,8 +46,9 @@ findModules.CFinder <- function(adj, path, nperm = 10, min.module.size = 30){
       mod = NA;Q=NA;Qds=NA;
     })
     
-      return(list(mod = mod, Q = Q, Qds = Qds))
-  }, adj, path, min.module.size)
+    return(list(mod = mod, Q = Q, Qds = Qds))
+  }, adj, path, min.module.size, 
+  .parallel = F)
   
   # Find the best module based on Q and Qds
   tmp = plyr::ldply(all.modules, function(x){
@@ -62,27 +63,28 @@ findModules.CFinder <- function(adj, path, nperm = 10, min.module.size = 30){
   return(mod)
 }
 
-findModules.CFinder.once <- function(adj, path, min.module.size){
+findModules.CFinder.once <- function(adj, path, min.module.size, i){
   
   # Convert lsparseNetwork to igraph graph object
   g = igraph::graph.adjacency(adj, mode = 'undirected', weighted = T, diag = F)
   
   # Get modules using CFinder
-  system('rm -rf ./tmp')
-  system('mkdir ./tmp')
+  system(paste0('rm -rf ./tmp',i))
+  system(paste0('mkdir ./tmp',i))
   
   ## Write network as an edgelist to a file
   elist = igraph::as_edgelist(g)
   elist = cbind(elist, 1)
-  write.table(elist, file = './tmp/input.txt', row.names = F, col.names = F, quote=F, sep = '\t')
+  file = paste0('./tmp',i,'/input.txt')
+  write.table(elist, file = file, row.names = F, col.names = F, quote=F, sep = '\t')
   
   ## Run CFinder
   system(paste(paste0(path, 'CFinder_commandline64'),
                '-l',paste0(path, 'licence.txt'),
-               '-i','./tmp/input.txt'))
+               '-i',file))
   
   ## Get output 
-  d = list.dirs('./tmp/input.txt_files/', full.names = T)
+  d = list.dirs(paste0('./tmp',i,'/input.txt_files/'), full.names = T)
   
   mod = read.table(paste0(d[2],'/communities'), skip = 7, sep = '\n') 
   mod$moduleNumber = 1:dim(mod)[1]
@@ -96,7 +98,7 @@ findModules.CFinder.once <- function(adj, path, min.module.size){
     mod$moduleSize = length(unique(mod$Gene.ID))
     return(mod)
   })
-  system('rm -rf ./tmp')
+  system(paste0('rm -rf ./tmp',i))
   
   # Get individual cluster assignment for each gene from the community object
   geneModules = geneModules %>%
