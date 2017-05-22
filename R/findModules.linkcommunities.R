@@ -36,7 +36,7 @@ findModules.linkcommunities <- function(adj, nperm = 10, min.module.size = 30){
     
     # Compute local and global modularity
     adj1[lower.tri(adj1)] = 0
-    Q = compute.Modularity(adj1, x$mod)
+    Q = compute.Modularity(adj1, mod)
     Qds = compute.ModularityDensity(adj1, mod)
     
     return(list(mod = mod, Q = Q, Qds = Qds))
@@ -44,7 +44,7 @@ findModules.linkcommunities <- function(adj, nperm = 10, min.module.size = 30){
   
   all.metrics = plyr::ldply(all.modules, .fun = function(x){
     data.frame(Q = x$Q, Qds = x$Qds)
-  }, adj, .parallel = T) %>%
+  }) %>%
     dplyr::mutate(r = base::rank(Q)+base::rank(Qds))
   ind = which.max(all.metrics$r)
   
