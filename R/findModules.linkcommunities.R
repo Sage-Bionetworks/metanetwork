@@ -42,12 +42,11 @@ findModules.linkcommunities <- function(adj, nperm = 10, min.module.size = 30){
     return(list(mod = mod, Q = Q, Qds = Qds))
   }, adj, path, min.module.size)
   
-  # Find the best module based on Q and Qds
-  tmp = plyr::ldply(all.modules, function(x){
+  all.metrics = plyr::ldply(all.modules, .fun = function(x){
     data.frame(Q = x$Q, Qds = x$Qds)
   }) %>%
     dplyr::mutate(r = base::rank(Q)+base::rank(Qds))
-  ind = which.max(tmp$r)
+  ind = which.max(all.metrics$r)
   
   mod = all.modules[[ind]]$mod
   
@@ -55,7 +54,6 @@ findModules.linkcommunities <- function(adj, nperm = 10, min.module.size = 30){
 }
 
 findModules.linkcommunities.once <- function(adj, min.module.size){
-  
   # Convert lsparseNetwork to igraph graph object
   g = igraph::graph.adjacency(adj, mode = 'undirected', weighted = T, diag = F)
   
