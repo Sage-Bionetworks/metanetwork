@@ -14,7 +14,8 @@ findModules.consensusCluster <- function(d = NULL,
                                          weightsItem = NULL,
                                          weightsFeature = NULL,
                                          corUse = "everything",
-                                         verbose = F) {
+                                         verbose = F,
+                                         useParallelFlag = FALSE) {
   # Set seed 
   if(is.null(seed)==TRUE){
     seed=timeSeed = as.numeric(Sys.time())
@@ -77,7 +78,8 @@ findModules.consensusCluster <- function(d = NULL,
                                     weightsItem=weightsItem,
                                     distance=distance,
                                     verbose=verbose,
-                                    corUse=corUse )
+                                    corUse=corUse,
+                                    useParallel = useParallelFlag)
     
   # Check if ends are maximum 
   fn = splinefun(names(results$areaUnderCDF), results$areaUnderCDF)
@@ -97,7 +99,8 @@ findModules.consensusCluster <- function(d = NULL,
                                           weightsItem=weightsItem,
                                           distance=distance,
                                           verbose=verbose,
-                                          corUse=corUse )
+                                          corUse=corUse,
+                                          useParallel = useParallelFlag)
   
   # Compute the final clusters
   cluster.final = kmeans(1 - results.final$consensus.matrix, k.final, algorithm = "Hartigan-Wong", trace = TRUE)$cluster
@@ -122,7 +125,8 @@ run.consensus.cluster <- function( d=d,
                                    weightsItem=NULL,
                                    weightsFeature=NULL,
                                    verbose=NULL,
-                                   corUse=NULL) {
+                                   corUse=NULL,
+                                   useParallel=FALSE) {
   
   n = ifelse( diss, ncol( as.matrix(d) ), ncol(d) )
   
@@ -173,7 +177,7 @@ run.consensus.cluster <- function( d=d,
   cls = plyr::llply(seq(1, repCount, 1), 
                    .fun = function(i, verbose, d, kGrid, pItem, pFeature, weightsItem, weightsFeature, 
                                    main.dist.obj, clusterAlg, distance, acceptable.distance,
-                                   corUse, innerLinkage){
+                                   corUse, innerLinkage,useParallel){
                      if(verbose){
                        message(paste("random subsample",i));
                      }
@@ -289,7 +293,7 @@ run.consensus.cluster <- function( d=d,
                         return(cls)
                       },
                      verbose, clusterAlg, this_dist, this_cluster, mConsist, sample_x,
-                     .parallel = F,
+                     .parallel = useParallel,
                      .paropts = list(.packages = c('cluster', 'fastcluster')))
                      names(cls) = kGrid
                       
@@ -297,8 +301,8 @@ run.consensus.cluster <- function( d=d,
                    },
                    verbose, d, kGrid, pItem, pFeature, weightsItem, weightsFeature, 
                    main.dist.obj, clusterAlg, distance, acceptable.distance,
-                   corUse, innerLinkage,
-                   .parallel = F,
+                   corUse, innerLinkage, useParallel,
+                   .parallel = useParallel,
                    .paropts = list(.packages = c('cluster', 'fastcluster')))
   
   # Compute consensus fraction and area under the cdf curve
