@@ -10,7 +10,6 @@ aracne <- function(data,path=NULL,pval=NULL,outputpath){
     pval <- 0.05/choose(nrow(data),2)
   }
   
-  setwd('~/ARCANE') # Once using docker function
   dataMatrix <- cbind(rownames(data),rownames(data),data)
   colnames(dataMatrix) <- c('name1','name2',colnames(data))
   write.table(dataMatrix,file='dataMatrix.tsv',sep='\t',quote=FALSE,row.names=FALSE)
