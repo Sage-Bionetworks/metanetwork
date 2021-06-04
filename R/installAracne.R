@@ -2,7 +2,6 @@
 installAracne <- function(path=NULL){
 
   cwd <- getwd()
-  if(dir.exists('~/ARCANE'){
     #str1 <- aracne@filePath;
   #str2 <- strsplit(str1,'ARACNE.src.tar.gz')[[1]]
     str3 <- '~/ARACNE/'
@@ -13,5 +12,5 @@ installAracne <- function(path=NULL){
     #setwd('../')
     setwd(cwd)
     #return(paste(getwd(),'/ARACNE/',sep=''))
-    }
+   
 }
