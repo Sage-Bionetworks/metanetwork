@@ -3,9 +3,10 @@ installAracne <- function(path=NULL){
   system(paste('tar -xzvf ',arc_path,sep=''))
   #str1 <- aracne@filePath;
   #str2 <- strsplit(str1,'ARACNE.src.tar.gz')[[1]]
-  str3 <- 'ARACNE/'
-  cat(str3,'\n')  
-  setwd(str3)
+  temp_path = paste0(config$input_profile$temp_storage_loc,"/ARACNE")
+  setwd(temp_path)
+  cat(temp_path,'\n')  
+  setwd(temp_path)
   #system(paste(str2,'/ARACNE.src/ARACNE/',sep=''))
   system('make')
   #setwd('../')

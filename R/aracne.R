@@ -4,13 +4,12 @@ aracne <- function(data,path=NULL,pval=NULL,outputpath){
   #data is a matrix of the gene expression data of interest
   data <- t(data);
   installAracne()
-  if(!is.null(path)){
-    setwd(paste0(path,'ARACNE/'))
-  }
+
   if(is.null(pval)){
     pval <- 0.05/choose(nrow(data),2)
   }
-  setwd('ARACNE/')
+  temp_path = paste0(config$input_profile$temp_storage_loc,"/ARACNE")
+  setwd(temp_path)
   dataMatrix <- cbind(rownames(data),rownames(data),data)
   colnames(dataMatrix) <- c('name1','name2',colnames(data))
   write.table(dataMatrix,file='dataMatrix.tsv',sep='\t',quote=FALSE,row.names=FALSE)
