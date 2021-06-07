@@ -10,7 +10,7 @@ aracne <- function(data,path=NULL,pval=NULL,outputpath){
   if(is.null(pval)){
     pval <- 0.05/choose(nrow(data),2)
   }
-  setwd('~/ARCANE/')
+  setwd('ARCANE/')
   dataMatrix <- cbind(rownames(data),rownames(data),data)
   colnames(dataMatrix) <- c('name1','name2',colnames(data))
   write.table(dataMatrix,file='dataMatrix.tsv',sep='\t',quote=FALSE,row.names=FALSE)
