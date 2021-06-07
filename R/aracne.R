@@ -3,6 +3,7 @@ aracne <- function(data,path=NULL,pval=NULL,outputpath){
   #path is the a string of the path to th aracne compiled executable
   #data is a matrix of the gene expression data of interest
   data <- t(data);
+  installAracne()
   if(!is.null(path)){
     setwd(paste0(path,'ARACNE/'))
   }
@@ -46,3 +47,5 @@ aracne <- function(data,path=NULL,pval=NULL,outputpath){
   network <- network*upper.tri(network)
   write.csv(network,file=fileName,quote=F)
 }
+
+

@@ -1,10 +1,6 @@
 installAracne <- function(path=NULL){
-  cwd <- getwd()
-  aracne <- synGet(id='syn25834750')
-  if(!is.null(path)){
-    setwd(path)
-  }
-  system(paste('tar -xzvf ',aracne@filePath,sep=''))
+  arc_path = system.file("tools", "ARACNE.src.tar.gz", package = "metanetwork")
+  system(paste('tar -xzvf ',arc_path,sep=''))
     #str1 <- aracne@filePath;
   #str2 <- strsplit(str1,'ARACNE.src.tar.gz')[[1]]
   str3 <- 'ARACNE/'
