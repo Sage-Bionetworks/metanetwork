@@ -9,6 +9,5 @@ installAracne <- function(path=NULL){
   #system(paste(str2,'/ARACNE.src/ARACNE/',sep=''))
   system('make')
   #setwd('../')
-  setwd(cwd)
   #return(paste(getwd(),'/ARACNE/',sep=''))
 }
