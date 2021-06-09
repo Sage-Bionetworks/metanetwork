@@ -9,8 +9,7 @@ aracne <- function(data,path=NULL,pval=NULL,outputpath,na_fill = NULL){
   }
   if(is.null(na_fill)){
     data <- na.omit(data)
-  }
-  else{
+  }else{
     data[is.na(data)] <- na_fill # Ideally, user could insert a large negative number or use min(data)
   }
   temp_path = paste0(config$input_profile$temp_storage_loc,"/ARACNE")
