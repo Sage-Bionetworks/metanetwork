@@ -209,6 +209,6 @@ mpiWrapper = function(data,nodes,pathv,regressionFunction,outputpath,eigen=NULL,
 
   #mpi.bcast.cmd(q("no"));
   mpi.close.Rslaves()
-  mpi.quit(save="no")
+  mpi.exit()
 
 }
