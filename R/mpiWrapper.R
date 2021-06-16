@@ -1,11 +1,9 @@
 mpiWrapper = function(data,nodes,pathv,regressionFunction,outputpath,eigen=NULL,regulatorIndex=NULL,hosts=NULL){
   #initialize MPI
-  library('Rmpi');
   #load sparrow library
   library('metanetwork');
   nslaves <- nodes;
   #nslaves/nodes: cluster size
-  mpi.spawn.Rslaves(nslaves=nslaves,hosts=hosts);
   #if cluster has fewer than 2 nodes, quit
 
   if (mpi.comm.size() <2){
@@ -207,8 +205,6 @@ mpiWrapper = function(data,nodes,pathv,regressionFunction,outputpath,eigen=NULL,
   #save(network,file=paste(outputpath,'result_',regressionFunction,'.rda',sep=''));
   write.csv(network,file=paste0(outputpath,regressionFunction,'Network.csv'),quote=F)
 
-  #mpi.bcast.cmd(q("no"));
-  mpi.close.Rslaves()
-  mpi.exit()
+
 
 }
