@@ -30,7 +30,12 @@ buildConsensus = function(outputpath,networkFolderId, fileName, pattern_id){
   write.csv(networks$rankConsensus,file=paste0(outputpath,'rankConsensusNetwork.csv'),quote=F)
   if(!is.null(fileName)){
     library(Matrix)
-    networkMethods <- sapply(bar,synGetAnnotation,which='method')
+    getNetmethod <- function(networkname){
+      temp_names <- strsplit(strsplit(networkname,'Network.csv')[[1]][1],'_')[[1]]
+      temp_names <- unlist(temp_names[length(temp_names)])
+      return(temp_names)
+    }
+    networkMethods <- sapply(networkFiles,getNetmethod)
     cat('grabbed methods\n')
     #build rank consensus
     cat('updated methods\n')
