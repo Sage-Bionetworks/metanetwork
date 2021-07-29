@@ -45,6 +45,7 @@ buildConsensus = function(outputpath,networkFolderId, fileName, pattern_id){
     dataSet <- reader(fileName, row.names=1)
     cat('turning data into data matrix\n')
     dataSet <- data.matrix(dataSet)
+    dataSet <- t(dataSet)
     cat('build bicNetworks\n')
     #bicNetworks <- lapply(networks,metanetwork::computeBICcurve,dataSet,maxEdges=1e5)
     bicNetworks <- metanetwork::computeBICcurve(networks$rankConsensus,dataSet,maxEdges=2e5)
