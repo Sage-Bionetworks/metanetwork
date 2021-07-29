@@ -3,7 +3,7 @@ computeBICcurve <- function(network,exprData,maxEdges=NULL,exact=NULL){
   if(is.null(maxEdges)){
     maxEdges <- round((nrow(exprData)*ncol(exprData))/20)
   }
-  maxEdges <- min(maxEdges,round((nrow(exprData)*ncol(exprData))/20))
+  maxEdges <- min(maxEdges,round((nrow(exprData)*ncol(exprData))/20)) 
   cat('maxEdges:',maxEdges,'\n')
   foo <- data.matrix(network)[which(upper.tri(data.matrix(network)))]
   cat('organize foo\n')
