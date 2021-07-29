@@ -10,4 +10,4 @@ findModules.megena <- function(adj, method="pearson", FDR = 0.05, module.pval = 
   cor.perm = 10; # number of permutations for calculating FDRs for all correlation pairs. 
   hub.perm = 100; # number of permutations for calculating connectivity significance p-value. 
   
-  
+}
