@@ -9,7 +9,7 @@ computeBICcurve <- function(network,exprData,maxEdges=NULL,exact=NULL){
   cat('organize foo\n')
   foo <- abs(foo)
   cat('set lower triangular to 0\n')
-  network[which(lower.tri(network))]<-0
+  network[(lower.tri(network))==TRUE]<-0
   cat('set diagonal to zero\n')
   diag(network) <- 0
  
