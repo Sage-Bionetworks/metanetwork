@@ -10,39 +10,49 @@ findModules.megena <- function(adj, method = "pearson", FDR.cutoff = 0.05, modul
   # Output
   #      geneModules = n x 3 dimensional data frame with column names as Gene.ID, moduleNumber, and moduleLabel
   library(MEGENA)
+  library(igraph)
   cor.perm = 10; # number of permutations for calculating FDRs for all correlation pairs. 
   hub.perm = 100; # number of permutations for calculating connectivity significance p-value. 
-  col_adj <- colnames(adj)
-  new_col_adj <- c()
-  for (i in col_adj){
-    temp <- as.character(i)
-    temp <- strsplit(temp,'[|]')[[1]][1]
-    new_col_adj <- c(new_col_adj,temp)
-  }
-  colnames(adj) <- new_col_adj
-  rownames(adj) <- new_col_adj
-  g  <- graph.adjacency(adj,weighted=TRUE)
-  g <- get.data.frame(g)
-  colnames(g) <- c('row','col','weight')
-  run.par = doPar & (getDoParWorkers() == 1) 
-  if (run.par){
-    cl <- parallel::makeCluster(n.cores)
-    registerDoParallel(cl)
-    # check how many workers are there
-    cat(paste("number of cores to use:",getDoParWorkers(),"\n",sep = ""))
-    }
-  el <- calculate.PFN(g,doPar = TRUE,num.cores = n.cores,
-                      keep.track = FALSE)
-
+  
+  g = igraph::graph.adjacency(adj, mode = 'undirected', weighted = T, diag = F)
+  
   MEGENA.output <- do.MEGENA(g,
                              mod.pval = module.pval,hub.pval = hub.pval,remove.unsig = FALSE,
-                             min.size = 10,max.size = vcount(g)/2,
+                             min.size = 30,max.size = vcount(g)/2,
                              doPar = TRUE,num.cores = nc,n.perm = hub.perm,
                              save.output = FALSE)
-  summary.output <- MEGENA.ModuleSummary(MEGENA.output,
-                                         mod.pvalue = module.pval,hub.pvalue = hub.pval,
-                                         min.size = 10,max.size = vcount(g)/2,
-                                         annot.table = annot.table,id.col = id.col,symbol.col = symbol.col,
-                                         output.sig = TRUE)
+
+  geneModules <- module_convert_to_table(MEGENA.output,mod.pval = 0.05,
+                          hub.pval = 0.05,min.size = 30,max.size=vcount(g)/2)
+  count_mtx <- table(geneModules['module.parent'])
+  colnames(count_mtx) <- c('moduleNumber','moduleSize')
+  colnames(geneModules) <- c('Gene.ID','moduleNumber','nodeDegree','nodeStrength','hub','module')
+  geneModules['moduleSize'] <- 0
+  for (i in 1:nrow(geneModules)){
+    temp = as.character(geneModules$moduleNumber[i])
+    geneModules$moduleSize = as.integer(count_mtx[temp])
+  }
+  
+  geneModules = geneModules %>%
+    group_by(Gene.ID) %>%
+    dplyr::top_n(1, moduleSize) %>%
+    dplyr::top_n(1, moduleNumber) %>%
+    dplyr::select(-moduleSize) %>%
+    dplyr::mutate(moduleNumber = factor(moduleNumber),
+                  moduleNumber = as.numeric(moduleNumber))
   
   
+  # Rename modules with size less than min module size to 0
+  filteredModules = geneModules %>% 
+    dplyr::group_by(moduleNumber) %>%
+    dplyr::summarise(counts = length(unique(Gene.ID))) %>%
+    dplyr::filter(counts >= 30)
+  geneModules$moduleNumber[!(geneModules$moduleNumber %in% filteredModules$moduleNumber)] = 0
+  
+  # Change cluster number to color labels
+  geneModules$moduleNumber = as.numeric(factor(geneModules$moduleNumber))
+  geneModules$moduleLabel = WGCNA::labels2colors(geneModules$moduleNumber)
+  mod = geneModules[c('Gene.ID','moduleNumber','moduleLabel')]
+
+  return(mod)
+}
