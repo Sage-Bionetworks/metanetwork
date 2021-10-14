@@ -16,11 +16,7 @@ findModules.megena <- function(adj, method = "pearson", FDR.cutoff = 0.05, modul
   
   g = igraph::graph.adjacency(adj, mode = 'undirected', weighted = T, diag = F)
   
-  MEGENA.output <- do.MEGENA(g,
-                             mod.pval = module.pval,hub.pval = hub.pval,remove.unsig = FALSE,
-                             min.size = 30,max.size = vcount(g)/2,
-                             doPar = TRUE,num.cores = nc,n.perm = hub.perm,
-                             save.output = FALSE)
+  MEGENA.output <- do.MEGENA(g)
 
   geneModules <- module_convert_to_table(MEGENA.output,mod.pval = 0.05,
                           hub.pval = 0.05,min.size = 30,max.size=vcount(g)/2)
