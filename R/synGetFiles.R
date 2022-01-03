@@ -12,6 +12,10 @@ synGetFiles <- function(project_id, pattern_id, downloadLocation = getwd()){
     temp <- synGet(child_list[[ent]]$id, downloadLocation =downloadLocation)
     out_list <- append(out_list, temp)
   }
+  if(is.na(out_list)){
+    print("Check your project ID and pattern for input")
+    } else{
   print("Downloaded all required network files")
+    }
   return(out_list)
 }
