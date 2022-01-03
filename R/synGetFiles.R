@@ -1,17 +1,22 @@
 synGetFiles <- function(project_id, pattern_id, downloadLocation = getwd()){
   
-  child_obj <- synapser::synGetChildren(project_id)              
-  child_list <- child_obj$asList()
+  child_obj <- synapser::synGetChildren(project_id, includeTypes = list('folder'))              
+  child_list <- as.list(child_obj)
   child_names <- lapply(child_list, `[[`, 1)
   child_names <- unlist(child_names)
-  child_names_ids <- grep(pattern_id, child_names)
-  out_list <- c()
-  # [1] "Filtered Spearman Correlation Table"
-  for( ent in child_names_ids){
-    message(child_list[[ent]]$name)
-    temp <- synGet(child_list[[ent]]$id, downloadLocation =downloadLocation)
+  out_list <- list()
+  for (ent in 1:length(child_names)){
+    temp_l = synGetChildren(child_list[[ent]]$id)
+    temp_list = temp_l$asList()
+    temp_names <- lapply(temp_list, `[[`, 1)
+    temp_names <- unlist(child_names)
+    temp_name_search = paste0(child_names[[ent]],pattern_id)
+    temp_names_ids <- grep(temp_name_search, child_names)
+    message(temp_list[[ent]]$name)
+    temp <- synGet(temp_list[[temp_names_ids]]$id, downloadLocation =downloadLocation)
     out_list <- append(out_list, temp)
   }
+  
   if(is.na(out_list)){
     print("Check your project ID and pattern for input")
     } else{
@@ -19,3 +24,5 @@ synGetFiles <- function(project_id, pattern_id, downloadLocation = getwd()){
     }
   return(out_list)
 }
+
+
