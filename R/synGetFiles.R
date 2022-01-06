@@ -9,14 +9,14 @@ synGetFiles <- function(project_id, pattern_id, downloadLocation = getwd()){
     temp_l = synGetChildren(child_list[[ent]]$id)
     temp_list = temp_l$asList()
     temp_names <- lapply(temp_list, `[[`, 1)
-    temp_names <- unlist(child_names)
+    temp_names <- unlist(temp_names)
     temp_name_search = paste0(child_names[[ent]],pattern_id)
-    temp_names_ids <- grep(temp_name_search, child_names)
-    message(temp_list[[ent]]$name)
+    temp_names_ids <- grep(temp_name_search, temp_names)
+    message(temp_list[[temp_names_ids]]$name)
     temp <- synGet(temp_list[[temp_names_ids]]$id, downloadLocation =downloadLocation)
     out_list <- append(out_list, temp)
   }
-  
+
   if(is.na(out_list)){
     print("Check your project ID and pattern for input")
     } else{
