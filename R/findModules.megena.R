@@ -11,18 +11,19 @@ findModules.megena <- function(data, method = "pearson", FDR.cutoff = 0.05, modu
   #      geneModules = n x 3 dimensional data frame with column names as Gene.ID, moduleNumber, and moduleLabel
   library(MEGENA)
   library(igraph)
-n.cores <- detectCores() - 1; # number of cores/threads to call for PCP
-    doPar <-TRUE; # do we want to parallelize?
+n.cores <- detectCores() - 1 # number of cores/threads to call for PCP
+    doPar <-TRUE # do we want to parallelize?
     method = method# method for correlation. either pearson or spearman. 
     FDR.cutoff = FDR.cutoff# FDR threshold to define significant correlations upon shuffling samples. 
     module.pval = module.pval # module significance p-value. Recommended is 0.05. 
     hub.pval = hub.pval # connectivity significance p-value based random tetrahedral networks
-    cor.perm = 10; # number of permutations for calculating FDRs for all correlation pairs. 
-    hub.perm = 100; # number of permutations for calculating connectivity significance p-value. 
+    cor.perm = 10 # number of permutations for calculating FDRs for all correlation pairs. 
+    hub.perm = 100 # number of permutations for calculating connectivity significance p-value. 
                                     
     ijw <- calculate.correlation(data,doPerm = cor.perm,output.corTable = FALSE,output.permFDR = FALSE)
 
     cat(paste("number of cores to use:",getDoParWorkers(),"\n",sep = "")
+        
     el <- calculate.PFN(ijw[,1:3],doPar = doPar,num.cores = n.cores,keep.track = FALSE)
     g <- graph.data.frame(el,directed = FALSE)
 
