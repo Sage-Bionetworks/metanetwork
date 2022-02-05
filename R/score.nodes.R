@@ -5,7 +5,7 @@ score.nodes <- function(g, G, h=3, mode = 'all'){
   #      g = an igraph object with n vertices
   #      G = a named vector of node scores
   #      h = neighborhood search distance (h nodes away from current node)
-  #      mode = one of c("all", "out", "in", "total"). Character string, “out” for out-degree, “in” for in-degree or “all” for the sum of the two. For undirected graphs this argument is ignored.
+  #      mode = one of c("all", "out", "in", "total"). Character string, "out" for out-degree, "in" for in-degree or "all" for the sum of the two. For undirected graphs this argument is ignored.
   
   # Output
   #      node.scores = n x 1 dimensional vector of node scores based on its neighborhood
