@@ -33,7 +33,11 @@ synGetFiles <- function(project_id, pattern_id, downloadLocation = getwd()){
     temp_names_ids <- grep(temp_name_search, temp_names)
     message(temp_names[temp_names_ids])
     id_t = temp_ids[temp_names_ids]
-    temp <- synGet(id_t, downloadLocation = downloadLocation)
+    if(is.na(id_t)){
+      message(paste0('No match for ',temp_name_search))
+    }else {
+      temp <- synGet(id_t, downloadLocation = downloadLocation)
+    }
     out_list <- append(out_list, temp)
   }
   
