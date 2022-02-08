@@ -22,9 +22,10 @@ synGetFiles <- function(project_id, pattern_id, downloadLocation = getwd()){
       temp_name = temp_list[k]
       temp_name = unlist(temp_name)
       nn = temp_name['name']
-      temp_ids = as.character(temp_name['id'])
       nn = as.character(nn)
       temp_names = c(temp_names,nn)
+      nn = as.character(temp_name['id'])
+      temp_ids = c(temp_ids,nn)
     }
     # temp_names <- lapply(temp_list, `[[`, 1)
     # temp_names <- unlist(temp_names)
@@ -32,7 +33,7 @@ synGetFiles <- function(project_id, pattern_id, downloadLocation = getwd()){
     temp_names_ids <- grep(temp_name_search, temp_names)
     message(temp_names[temp_names_ids])
     id_t = temp_ids[temp_names_ids]
-    temp <- synGet(id_t, downloadLocation =downloadLocation)
+    temp <- synGet(id_t, downloadLocation = downloadLocation)
     out_list <- append(out_list, temp)
   }
   
