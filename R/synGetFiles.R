@@ -28,10 +28,11 @@ synGetFiles <- function(project_id, pattern_id, downloadLocation = getwd()){
     }
     # temp_names <- lapply(temp_list, `[[`, 1)
     # temp_names <- unlist(temp_names)
-    temp_name_search = paste0(child_names[ent],pattern_id)
+    temp_name_search = paste0(child_names[[ent]],pattern_id)
     temp_names_ids <- grep(temp_name_search, temp_names)
     message(temp_names[temp_names_ids])
-    temp <- synGet(temp_ids[temp_names_ids], downloadLocation =downloadLocation)
+    id_t = temp_ids[temp_names_ids]
+    temp <- synGet(id_t, downloadLocation =downloadLocation)
     out_list <- append(out_list, temp)
   }
   
