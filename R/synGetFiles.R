@@ -48,4 +48,3 @@ synGetFiles <- function(project_id, pattern_id, downloadLocation = getwd()){
   }
   return(out_list)
 }
-
