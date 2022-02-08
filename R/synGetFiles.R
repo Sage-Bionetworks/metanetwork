@@ -31,17 +31,18 @@ synGetFiles <- function(project_id, pattern_id, downloadLocation = getwd()){
     # temp_names <- unlist(temp_names)
     temp_name_search = paste0(child_names[[ent]],pattern_id)
     temp_names_ids <- grep(temp_name_search, temp_names)
-    message(temp_names[temp_names_ids])
+    cat(paste0(temp_names[temp_names_ids],' \n'))
     id_t = temp_ids[temp_names_ids]
     if(length(id_t) == 0){
-      message(paste0('No match for ',temp_name_search))
-    }else {
+      cat(paste0('No match for ',temp_name_search,' \n'))
+    }else{
+      #cat(paste0(id_t,' \n'))
       temp <- synGet(id_t, downloadLocation = downloadLocation)
       out_list <- append(out_list, temp)
     }
   }
   
-  if(is.na(out_list)){
+  if(length(out_list== 0)){
     print("Check your project ID and pattern for input")
   } else{
     print("Downloaded all required network files")
