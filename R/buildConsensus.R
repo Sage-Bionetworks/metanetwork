@@ -1,8 +1,8 @@
 
-buildConsensus = function(outputpath,networkFolderId, fileName, pattern_id){
+buildConsensus = function(outputpath,networkFolderId, fileName, pattern_id,bar){
   
   #get all networks from Synapse
-  bar <- synGetFiles(networkFolderId, downloadLocation = outputpath, pattern_id = pattern_id)
+  #bar <- synGetFiles(networkFolderId, downloadLocation = outputpath, pattern_id = pattern_id)
   
   loadNetwork <- function(file){
     sparrowNetwork <- data.table::fread(file,stringsAsFactors=FALSE,data.table=F)
