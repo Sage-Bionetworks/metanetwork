@@ -2,11 +2,28 @@ Package: metanetwork
 Type: Package
 Title: Network meta analysis
 Version: 0.1.1
-Authors@R: person("Logsdon", "Benjamin", email="ben.logsdon@sagebase.org", role = c("aut", "cre"))
+Authors@R:
+  c(person(given = "Pradeep",
+    family = "Pugalenthi",
+    role = c("aut", "cre"),
+    email = "pradeep.pugalenthi@sagebase.org"),
+  person(given = "Jake",
+    family = "Gockley",
+    role = c("ctb"),
+    email = "jake.gockley@sagebase.org",
+    comment = c( ORCID = "0000-0001-7993-5308")),
+  person(given = "Benjamin",
+    family = "Logsdon",
+    email = "ben.logsdon@sagebase.org", 
+    role = c("aut"),
+    comment = c(ORCID = "0000-0002-0572-2569"))
+  )
 Description: Package to infer multiple types of coexpression network representations of high dimensional gene expression data.  Builds network ensembles, extract network statistics, and run enrichments on network features.
 Depends: R (>= 3.1.0)
 License: GPLv3
 LazyData: true
+URL: hhttps://sage-bionetworks.github.io/metanetwork,
+    https://github.com/Sage-Bionetworks/metanetwork
 Imports:
   dplyr (>= 0.4.1),
   vbsr (>= 0.0.5),
@@ -15,3 +32,4 @@ Imports:
   lars (>= 1.2),
   WGCNA (>= 1.46),
   Hmisc (>= 3.15)
+RoxygenNote: 7.1.2
