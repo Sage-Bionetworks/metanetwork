@@ -1,5 +1,15 @@
+#' This function applies ARACNE on the data
+#' 
+#' This function installs the ARACNE system Function
+#' 
+#' @param path Optional. Path is currently not a functional argument. This function
+#' automatically installs ARACNe from `inst/tools`. Default = NULL.
+#' 
+#' @export
+#' @return NULL
+#' 
 installAracne <- function(path=NULL){
-  arc_path = system.file("tools", "ARACNE.src.tar.gz", package = "metanetwork")
+  arc_path = system.file("inst/tools", "ARACNE.src.tar.gz", package = "metanetwork")
   system(paste('tar -xzvf ',arc_path,sep=''))
   #str1 <- aracne@filePath;
   #str2 <- strsplit(str1,'ARACNE.src.tar.gz')[[1]]

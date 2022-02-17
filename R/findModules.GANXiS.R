@@ -1,15 +1,16 @@
-# Function to get modules from network adjacency matrix using GANXiS community detection algorithm v3.0.2
+#' Find Modules with GANXiS
+#' 
+#' This function to get modules from network adjacency matrix using GANXiS 
+#' community detection algorithm v3.0.2.
+#' 
+#' @inheritParams findModules.CFinder
+#' 
+#' @return  GeneModules = n x 3 dimensional data frame with column names as Gene.ID,
+#' moduleNumber, and moduleLabel.
+#' 
+#' @importFrom magrittr %>%
+#' @export
 findModules.GANXiS <- function(adj, path, nperm = 10, min.module.size = 30){
-  
-  # Note: For this function to work get the source software from syn7806859, unzip and supply the path for GANXiSw.jar
-  
-  # Input
-  #      adj = n x n upper triangular adjacency in the matrix class format
-  #      nperm = number of permutation on the gene ordering 
-  #      min.module.size = integer between 1 and n genes 
-  
-  # Output
-  #      geneModules = n x 3 dimensional data frame with column names as Gene.ID, moduleNumber, and moduleLabel
   
   # Error functions
   if(class(adj) != "matrix")

@@ -1,3 +1,17 @@
+#' Covariance based on Neighborhood Selection
+#' 
+#' This function defines the covariance neighborhood between gene-gene edges
+#' in an expression matrix.
+#' 
+#' @param X Required. An expression matrix
+#' @param rankedEdges Required. An edge list in the form of a matrix where column
+#' one is gene one and column 2 is gene two
+#' @param numberObservations Required. The number of samples comprising the network (?)
+#' @param startI Optional. Start at the first edge in `rankedEdges` (Default = 1)
+#' 
+#' @return A list object of containing the BIC estimate, bicNeighborhood (?) , neighborhoods (?), flag (?)
+#' @importFrom magrittr %>%
+#' @export
 covarianceSelectionMBPath = function(X,rankedEdges,numberObservations,startI=1){
   #rankedEdges: list of ranked edges
   nedges <- nrow(rankedEdges)
@@ -21,10 +35,9 @@ covarianceSelectionMBPath = function(X,rankedEdges,numberObservations,startI=1){
     neighborhoods[[gene1]] <- c(neighborhoods[[gene1]],gene2)
     neighborhoods[[gene2]] <- c(neighborhoods[[gene2]],gene1)
     
-    
     if(count==startI){
       for(i in 1:ncol(X)){
-        library(dplyr)
+        #library(dplyr)
         bicNeighborhood[i] <- fastlmbic(X[,i],X[,neighborhoods[[i]]],correction=ncol(X))
         #print(i)
       }

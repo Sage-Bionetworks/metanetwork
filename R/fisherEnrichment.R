@@ -1,4 +1,18 @@
-# Function to perform Fishers enrichment analysis
+#' Fishers Enrichment Analysis
+#'
+#'  This function to perform Fishers enrichment analysis. Tests the enrichment of
+#'  `genesInGeneSet` in `genesInModule` considering a bacckground gene set of 
+#'  `genesInBackground`.
+#'
+#' @param genesInModule Required. A character vector of differentially expressed genes or genes in a given module to test
+#' @param genesInGeneSet Required. A character vector of genes in a gene set like GO annotations, pathways etc.
+#' @param genesInBackground Required. A character vector of background genes
+#' 
+#' @return A dataframe consisting of column value of fisher test P-Value. number 
+#' of genes in the test set, enrichment set, the overlap, odds ratio and the genes
+#' from the test set which are present in the enrichment set.
+#'
+#' @export
 fisherEnrichment <- function(genesInModule, # A character vector of differentially expressed genes or genes in a given module to test
                              genesInGeneSet, # A character vector of genes in a gene set like GO annotations, pathways etc...
                              genesInBackground # Background genes
@@ -17,7 +31,7 @@ fisherEnrichment <- function(genesInModule, # A character vector of differential
                               length(intersect(genesOutGeneSet, genesInNonSignificantSet))),
                             nrow=2, ncol=2)
   
-  pval = fisher.test(confusion.matrix, alternative="greater")
+  pval = stats::fisher.test(confusion.matrix, alternative="greater")
   OR = (confusion.matrix[1,1] * confusion.matrix[2,2])/
     (confusion.matrix[1,2] * confusion.matrix[2,1])
   

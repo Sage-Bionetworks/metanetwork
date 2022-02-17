@@ -1,18 +1,18 @@
-# Function to get modules from network adjacency matrix using CFinder algorithm
+#' Find Modules with CFinder
+#' 
+#' Function to get modules from network adjacency matrix using CFinder algorithm
+#' 
+#' @param adj A n x n upper triangular adjacency in the matrix class format.
+#' @param path File path location of CFinder.
+#' @param nperm Optional. Number of permutation on the gene ordering. (Default = 10)
+#' @param min.module.size Optional. Integer between 1 and n genes. (Default = 30)
+#' 
+#' @return  eneModules = n x 3 dimensional data frame with column names as Gene.ID,
+#' moduleNumber, and moduleLabel.
+#' 
+#' @importFrom magrittr %>%
+#' @export
 findModules.CFinder <- function(adj, path, nperm = 10, min.module.size = 30){
-  
-  # Note: For this function to work get the source software from syn7806853,
-  # unzip and supply the path for CFinder executable
-  
-  # Input
-  #      adj = n x n upper triangular adjacency in the matrix class format
-  #      path = location of CFinder
-  #      nperm = number of permutation on the gene ordering 
-  #      min.module.size = integer between 1 and n genes 
-  
-  # Output
-  #      geneModules = n x 3 dimensional data frame with column names as Gene.ID, moduleNumber, and moduleLabel
-  
   # Error functions
   if(class(adj) != "matrix")
     stop('Adjacency matrix should be of class matrix')

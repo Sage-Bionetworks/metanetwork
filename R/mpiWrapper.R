@@ -1,3 +1,24 @@
+#' Runs Sparrow Regression 
+#' 
+#' This function Sparrow Regression wrapped with the Rmpi::mpi parralel implementation.
+#' User specifies between sparrowZ, sparrow2Z, or sparrow2ZFDR implementation.
+#' 
+#' 
+#' @param data Required. Expression matrix to be used for network construction.
+#' @param nodes Required. The number of nodes to run the process over.
+#' @param pathv Required.
+#' @param regressionFunction Required. Character vector specifying the specific 
+#' sparrow regression function to deploy. Options are one of c("sparrowZ", 
+#' "sparrow2Z", "sparrow2ZFDR")
+#' @param outputpath Required. The output path to save the resulting coexpression
+#' network
+#' @param eigen Optional. (Default = NULL) 
+#' @param regulatorIndex Optional. (Default = NULL)
+#' @param hosts Optional. (Default = NULL)
+#'  
+#' @return NULL. Saves a sparrow network object to paste0(`outputpath`,
+#' `regressionFunction`,'Network.csv')
+#' @export
 mpiWrapper = function(data,nodes,pathv,regressionFunction,outputpath,eigen=NULL,regulatorIndex=NULL,hosts=NULL){
   #initialize MPI
   #load sparrow library
@@ -6,17 +27,17 @@ mpiWrapper = function(data,nodes,pathv,regressionFunction,outputpath,eigen=NULL,
   #nslaves/nodes: cluster size
   #if cluster has fewer than 2 nodes, quit
 
-  if (mpi.comm.size() <2){
+  if (Rmpi::mpi.comm.size() <2){
     cat('More slave processes required.\n');
-    mpi.quit();
+    Rmpi::mpi.quit();
   }
 
   #clean up function
   .Last <- function(){
     if (is.loaded("mpi_initialize")){
-      if (mpi.comm.size(1) > 0){
+      if (Rmpi::mpi.comm.size(1) > 0){
         cat("Please use mpi.close.Rslaves() to close slaves.\n")
-        mpi.close.Rslaves()
+        Rmpi::mpi.close.Rslaves()
       }
       cat("Please use mpi.quit() to quit R\n")
       .Call("mpi_finalize")
@@ -27,8 +48,8 @@ mpiWrapper = function(data,nodes,pathv,regressionFunction,outputpath,eigen=NULL,
     # Get a task
     require("metanetwork")
     require("utilityFunctions")
-    task <- mpi.recv.Robj(mpi.any.source(),mpi.any.tag())
-    task_info <- mpi.get.sourcetag()
+    task <- Rmpi::mpi.recv.Robj(Rmpi::mpi.any.source(),Rmpi::mpi.any.tag())
+    task_info <- Rmpi::mpi.get.sourcetag()
     tag <- task_info[2]
     # While task is not a "done" message. Note the use of the tag to indicate
     # the type of message
@@ -107,16 +128,16 @@ mpiWrapper = function(data,nodes,pathv,regressionFunction,outputpath,eigen=NULL,
 
       # Construct and send message back to master
       result <- list(result=temp_res,foldNumber=foldNumber)
-      mpi.send.Robj(result,0,1)
+      Rmpi::mpi.send.Robj(result,0,1)
 
       # Get a task
-      task <- mpi.recv.Robj(mpi.any.source(),mpi.any.tag())
-      task_info <- mpi.get.sourcetag()
+      task <- Rmpi::mpi.recv.Robj(Rmpi::mpi.any.source(),Rmpi::mpi.any.tag())
+      task_info <- Rmpi::mpi.get.sourcetag()
       tag <- task_info[2]
     }
 
     junk <- 0
-    mpi.send.Robj(junk,0,2)
+    Rmpi::mpi.send.Robj(junk,0,2)
   }
 
 
@@ -125,19 +146,19 @@ mpiWrapper = function(data,nodes,pathv,regressionFunction,outputpath,eigen=NULL,
   if(regressionFunction=='ridgeAIC'|regressionFunction=='ridgeBIC'){
     eigen <- svd(data)$d^2
   }
-  mpi.bcast.Robj2slave(eigen);
-  mpi.bcast.Robj2slave(pathv);
-  mpi.bcast.Robj2slave(data);
-  mpi.bcast.Robj2slave(p);
-  mpi.bcast.Robj2slave(n);
-  mpi.bcast.Robj2slave(regulatorIndex);
-  mpi.bcast.Robj2slave(regressionFunction);
+  Rmpi::mpi.bcast.Robj2slave(eigen);
+  Rmpi::mpi.bcast.Robj2slave(pathv);
+  Rmpi::mpi.bcast.Robj2slave(data);
+  Rmpi::mpi.bcast.Robj2slave(p);
+  Rmpi::mpi.bcast.Robj2slave(n);
+  Rmpi::mpi.bcast.Robj2slave(regulatorIndex);
+  Rmpi::mpi.bcast.Robj2slave(regressionFunction);
 
   # Send the function to the slaves
-  mpi.bcast.Robj2slave(foldslave)
+  Rmpi::mpi.bcast.Robj2slave(foldslave)
   # Call the function in all the slaves to get them ready to
   # undertake tasks
-  mpi.bcast.cmd(foldslave())
+  Rmpi::mpi.bcast.cmd(foldslave())
   # Create task list
   tasks <- vector('list')
   for (i in 1:p) {
@@ -145,14 +166,14 @@ mpiWrapper = function(data,nodes,pathv,regressionFunction,outputpath,eigen=NULL,
   }
 
   # Make the round-robin list for slaves
-  n_slaves <- mpi.comm.size()-1
+  n_slaves <- Rmpi::mpi.comm.size()-1
   slave_ids <- rep(1:n_slaves, length=length(tasks))
 
   # Send tasks
   for (i in 1:length(tasks)) {
     slave_id <- slave_ids[i]
     #print(slave_id);
-    mpi.send.Robj(tasks[[i]],slave_id,1)
+    Rmpi::mpi.send.Robj(tasks[[i]],slave_id,1)
   }
 
   # Collect results
@@ -160,7 +181,7 @@ mpiWrapper = function(data,nodes,pathv,regressionFunction,outputpath,eigen=NULL,
   #rssresult <- matrix(0,p,10)
   fold_vec <- 1:p;
   for (i in 1:length(tasks)) {
-    message <- mpi.recv.Robj(mpi.any.source(),mpi.any.tag())
+    message <- Rmpi::mpi.recv.Robj(Rmpi::mpi.any.source(),Rmpi::mpi.any.tag())
     foldNumber <- message$foldNumber
     vv <- which(fold_vec==foldNumber);
     if(length(vv)>0){
@@ -176,14 +197,14 @@ mpiWrapper = function(data,nodes,pathv,regressionFunction,outputpath,eigen=NULL,
   # Perform closing handshake
   for (i in 1:n_slaves) {
     junk <- 0
-    mpi.send.Robj(junk,i,2)
+    Rmpi::mpi.send.Robj(junk,i,2)
   }
 
   for (i in 1:n_slaves) {
-    mpi.recv.Robj(mpi.any.source(),2)
+    Rmpi::mpi.recv.Robj(Rmpi::mpi.any.source(),2)
   }
-  mpi.bcast.cmd(rm(list=ls()));
-  mpi.bcast.cmd(gc())
+  Rmpi::mpi.bcast.cmd(rm(list=ls()));
+  Rmpi::mpi.bcast.cmd(gc())
   # save list to file
   network <- simplify2array(res_list);
   rm(res_list)
@@ -204,7 +225,4 @@ mpiWrapper = function(data,nodes,pathv,regressionFunction,outputpath,eigen=NULL,
   gc()
   #save(network,file=paste(outputpath,'result_',regressionFunction,'.rda',sep=''));
   write.csv(network,file=paste0(outputpath,regressionFunction,'Network.csv'),quote=F)
-
-
-
 }

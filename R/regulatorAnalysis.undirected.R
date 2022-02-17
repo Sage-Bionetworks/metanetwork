@@ -1,3 +1,20 @@
+#' Function to Identify Network Regulators from Undirected Networks
+#' 
+#' Identifies network un-weighted regulators from Undirected networks
+#' 
+#' @param adj Required. An n x n weighted upper triangular adjacency in the matrix 
+#' class format.
+#' @param G Required. A named vector of node scores.
+#' @param h Optional. Neighborhood search distance (h nodes away from current node) 
+#' (Default = 3)
+#' @param FDR Optional. Adjusted pvalue cutoff for regulator selection.
+#' (Default = 0.05)
+#' 
+#' @return scores = n x 3 dimensional list with columns giving neighborhood
+#'based score, adjusted pvalue, whether a gene is regulator/global regulator.
+#'
+#' @importFrom foreach %dopar%
+#' @export
 regulatorAnalysis.undirected <- function(adj, G, h=3, FDR = 0.05){
   
   # Convert adjacency to igraph object

@@ -1,9 +1,29 @@
-###Function to run aracne on the data
+#' This function applies ARACNE on the data
+#' 
+#' This function takes in a gene expression matrix of gene expression and applies
+#' the ARACNE gene co-expression network analysis frame work to find coexpressed
+#' gene pairs in the matrix. The ARACNE framework is also installed from within
+#' the package located in the `inst/tools/` direcctory. For more information on the 
+#' ARACNE framework see: <https://bmcbioinformatics.biomedcentral.com/articles/10.1186/1471-2105-7-S1-S7>
+#' 
+#' @param data Required. The gene expression matrix with rows as sample IDs and
+#' columns as Gene or feature IDs 
+#' @param path Optional. String containing the path to the aracne compiled 
+#' executable. (Default = NULL)
+#' @param pval Optional. Cutoff p-value to determine a coexpressed edge. (Default = 0.05)
+#' @param outputpath Required. The path the resulting network should be saved to.
+#' @param na_fill Optional. Value to replace `NA` values with ideally, a large 
+#' negative number or use min(data). (Default = NULL)
+#' 
+#' @return A Co-Expression Network saved to the path `outputpath` and titled
+#'  `aracneThresholdNetwork.csv` (if `pval` < 1) or as `aracneNetwork.csv` if 
+#'  `pval` is set to 1. 
+#' @export
 aracne <- function(data,path=NULL,pval=NULL,outputpath,na_fill = NULL){
   #path is the a string of the path to th aracne compiled executable
   #data is a matrix of the gene expression data of interest
   installAracne()
-  library(caroline)
+  #library(caroline)
   if(is.null(pval)){
     pval <- 0.05/choose(nrow(data),2)
   }
@@ -14,7 +34,6 @@ aracne <- function(data,path=NULL,pval=NULL,outputpath,na_fill = NULL){
   }
   temp_path = paste0(config$input_profile$temp_storage_loc,"/ARACNE")
   setwd(temp_path)
-
   
   dataMatrix <- cbind(rownames(data),rownames(data),data)
   colnames(dataMatrix) <- c('name1','name2',colnames(data))

@@ -1,5 +1,19 @@
-
-buildConsensus = function(outputpath,networkFolderId, fileName, pattern_id){
+#' This function builds the Consensus Network from the component network
+#' 
+#' This function builds a consensus co-expression network.
+#' 
+#' @param outputpath Required. Local directory to load files from and save files to. 
+#' @param networkFolderId Required. The Synapse parent ID of the folder containing
+#' the folders with the individual networks.
+#' @param fileName Required. The input file path.
+#'  
+#' @inheritParams synGetFiles
+#' 
+#' @export 
+#' @return Saves a rankc consensus network to `outputpath` and saves the BICNetwork
+#'  object to `outputpath` if `fileName` is specified
+#' 
+buildConsensus = function(outputpath,networkFolderId, fileName=NULL, pattern_id){
   
   #get all networks from Synapse
   bar <- synGetFiles(networkFolderId, downloadLocation = outputpath, pattern_id = pattern_id)
@@ -29,9 +43,9 @@ buildConsensus = function(outputpath,networkFolderId, fileName, pattern_id){
   cat('write rank consensus\n')
   write.csv(networks$rankConsensus,file=paste0(outputpath,'rankConsensusNetwork.csv'),quote=F)
   if(!is.null(fileName)){
-    library(Matrix)
+    #library(Matrix)
     getNetmethod <- function(networkname){
-      temp_names <- strsplit(strsplit(networkname,'Network.csv')[[1]][1],'_')[[1]]
+      temp_names <- data.table::strsplit(data.table::strsplit(networkname,'Network.csv')[[1]][1],'_')[[1]]
       temp_names <- unlist(temp_names[length(temp_names)])
       return(temp_names)
     }
@@ -42,7 +56,7 @@ buildConsensus = function(outputpath,networkFolderId, fileName, pattern_id){
     networkMethods <- c(networkMethods,'rankConsensus')
     cat('reading in data\n')
     options(stringsAsFactors = F)
-    dataSet <- reader(fileName, row.names=1)
+    dataSet <- readr::reader(fileName, row.names=1)
     cat('turning data into data matrix\n')
     dataSet <- data.matrix(dataSet)
     dataSet <- t(dataSet)

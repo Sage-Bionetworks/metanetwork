@@ -1,14 +1,22 @@
 # Function to score network nodes based on its neighborhood scores
+#' Scores Nodes From Regulator Discovery
+#' 
+#' Function to scores results of regulator scoring analysis.
+#' 
+#' @param g Required. An igraph object with n vertices
+#' @param G Required. A named vector of node scores.
+#' @param h Optional. Neighborhood search distance (h nodes away from current node)
+#' (Default = 3) 
+#' @param mode Optional. One of c("all", "out", "in", "total"). Character string, 
+#' "out" for out-degree, "in" for in-degree or "all" for the sum of the two. 
+#' For undirected graphs this argument is ignored. (Default = 'all') 
+#' 
+#' @return  node.scores = n x 1 dimensional vector of node scores based on its
+#' neighborhood
+#' 
+#' @importFrom magrittr %>%
+#' @export
 score.nodes <- function(g, G, h=3, mode = 'all'){
-  
-  # Input
-  #      g = an igraph object with n vertices
-  #      G = a named vector of node scores
-  #      h = neighborhood search distance (h nodes away from current node)
-  #      mode = one of c("all", "out", "in", "total"). Character string, “out” for out-degree, “in” for in-degree or “all” for the sum of the two. For undirected graphs this argument is ignored.
-  
-  # Output
-  #      node.scores = n x 1 dimensional vector of node scores based on its neighborhood
   
   # Error checking
   if(!igraph::is.igraph(g))

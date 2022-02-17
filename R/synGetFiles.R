@@ -1,3 +1,22 @@
+#' This function pulls files from a synapse project
+#' 
+#' This function downloads all of the network files in a synapse parent folder using
+#' the synID of the folder containing folders of specific network types. It uses
+#' the name of the folder plus a pattern id eg. 'Network' to find network files. 
+#' for example the `ridgeAIC/` folder in `project_id` will need to contain the
+#' `ridgeAICNetwork` file if pattern_id = 'Network' and `project_id` is set to 
+#' the parent folder containing `ridgeAIC/`. The files will be downloaded to the
+#' path specified in `downloadLocation`.
+#' 
+#' @param project_id Required. A character vector of a synapse ID of a synapse project.
+#' @param pattern_id Required. A character vector too match in the file names of 
+#' the children entities in `project_id`.
+#' @param downloadLocation Optional. Local directory to download the files to. 
+#' Default = `getwd()`
+#' 
+#' @export 
+#' @return A character vector of file paths
+#' 
 synGetFiles <- function(project_id, pattern_id, downloadLocation = getwd()){
   
   child_obj <- synapser::synGetChildren(project_id, includeTypes = list('folder'))              
@@ -14,7 +33,7 @@ synGetFiles <- function(project_id, pattern_id, downloadLocation = getwd()){
   #child_names <- unlist(child_names)
   out_list <- list()
   for (ent in 1:length(child_names)){
-    temp_l = synGetChildren(child_list[[ent]]$id)
+    temp_l = synapser::synGetChildren(child_list[[ent]]$id)
     temp_list = temp_l$asList()
     temp_names = c()
     temp_ids = c()

@@ -1,9 +1,20 @@
+#' Ranks Consensus networks 
+#' 
+#' This function ranks a list of consensus network objects and returns the best 
+#' rank network. 
+#' 
+#' @param networks Required. A list object containing an individual network as 
+#' a list entry.
+#'
+#' @return The best rank consensus network.
+#' @importFrom magrittr %>%
+#' @export
 rankConsensus <- function(networks){
-  library(bit64)
-  library(dplyr)
+  #library(bit64)
+  #library(dplyr)
   aggregateRankFunction <- function(network,upperTriIndices,aggregateRank){
     collapsedEdgeSet <- network[upperTriIndices]
-    foo <- rank(-abs(collapsedEdgeSet),ties.method='min') %>% as.integer64
+    foo <- rank(-abs(collapsedEdgeSet),ties.method='min') %>% bit64::as.integer64
     #foo <- rank(-abs(collapsedEdgeSet),ties.method='min') %>% as.integer
     aggregateRank <- aggregateRank + foo
     return(aggregateRank)
@@ -26,14 +37,14 @@ rankConsensus <- function(networks){
   #load('/shared/CRANIO/aggregateRank.rda')
   cat('building final rank\n')
   print(aggregateRank[1:10])
-  library(bit64)
+  #library(bit64)
   print(aggregateRank[1:10])
   cat('make negative\n')
   aggregateRank <- -aggregateRank
   print(aggregateRank[1:10])
   #sessionInfo()
   cat('newway\n')
-  finalRank <- rank.integer64(aggregateRank)
+  finalRank <- bit64::rank.integer64(aggregateRank)
   cat('oldway\n')
   #finalRank <- rank(aggregateRank,ties.method = 'min')
   cat('renormalizing final rank\n')

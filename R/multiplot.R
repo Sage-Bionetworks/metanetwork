@@ -1,15 +1,22 @@
-# Multiple plot function
-#
-# ggplot objects can be passed in ..., or to plotlist (as a list of ggplot objects)
-# - cols:   Number of columns in layout
-# - layout: A matrix specifying the layout. If present, 'cols' is ignored.
-#
-# If the layout is something like matrix(c(1,2,3,3), nrow=2, byrow=TRUE),
-# then plot 1 will go in the upper left, 2 will go in the upper right, and
-# 3 will go all the way across the bottom.
-#
-multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
-  library(grid)
+#' Multiple plot function
+#'
+#' This function plots multiple ggplot objects passed in as either ..., or to plotlist
+#' (as a list of ggplot objects). 
+#' 
+#' @param plotlist Optional. A list of ggplot objects. (Default = NULL)
+#' @param file Optional. A file name to save the plot as, currently non-functional.
+#' (Default=NULL)
+#' @param cols Optional. (Default = 1)
+#' @param layout Optional. The plot layout as a matrix. eg. if 
+#' `layout = matrix(c(1,2,3,3), nrow=2, byrow=TRUE)`, then plot 1 will go in the 
+#' upper left, 2 will go in the upper right, and 3 will go all the way across 
+#' the bottom. 
+#'
+#' @return A ggplot image
+#' 
+#' @export
+multiplot <- function(..., plotlist=NULL, file = NULL, cols=1, layout=NULL) {
+  #library(grid)
   
   # Make a list from the ... arguments and plotlist
   plots <- c(list(...), plotlist)
@@ -30,15 +37,15 @@ multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
     
   } else {
     # Set up the page
-    grid.newpage()
-    pushViewport(viewport(layout = grid.layout(nrow(layout), ncol(layout))))
+    grid::grid.newpage()
+    grid::pushViewport(grid::viewport(layout = grid::grid.layout(nrow(layout), ncol(layout))))
     
     # Make each plot, in the correct location
     for (i in 1:numPlots) {
       # Get the i,j matrix positions of the regions that contain this subplot
       matchidx <- as.data.frame(which(layout == i, arr.ind = TRUE))
       
-      print(plots[[i]], vp = viewport(layout.pos.row = matchidx$row,
+      print(plots[[i]], vp = grid::viewport(layout.pos.row = matchidx$row,
                                       layout.pos.col = matchidx$col))
     }
   }

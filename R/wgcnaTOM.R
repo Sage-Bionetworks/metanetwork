@@ -1,5 +1,15 @@
+#' Runs WGCNA TOMsimilarity
+#' 
+#' Runs WGCNA::TOMsimilarity over a gene expression matrix.
+#' 
+#' @inheritParams wgcnaSoftThreshold
+#' 
+#' @return NULL. Writes coexpression network named wgcnaTopologicalOverlapMatrixNetwork.csv
+#' to `outputpath`
+#' 
+#' @export
 wgcnaTOM <- function(data,path=NULL,pval=1,outputpath,RsquaredCut=.80,defaultNaPower=6){
-  library(WGCNA)
+  #library(WGCNA)
   res <- WGCNA::pickSoftThreshold(data,RsquaredCut=RsquaredCut)
   if(is.na(res$powerEstimate)){
     res$powerEstimate<-defaultNaPower
@@ -11,7 +21,7 @@ wgcnaTOM <- function(data,path=NULL,pval=1,outputpath,RsquaredCut=.80,defaultNaP
   #save(network,file='result_wgcnaSoftThreshold.rda')
   print(res$powerEstimate)
   cn <- colnames(network)
-  network <- TOMsimilarity(network)
+  network <- WGCNA::TOMsimilarity(network)
   colnames(network) <- cn
   rownames(network) <- cn
   #save(network,file=paste0(outputpath,'result_wgcnaTOM.rda'))

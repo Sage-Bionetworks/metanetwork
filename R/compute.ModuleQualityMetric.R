@@ -1,12 +1,13 @@
-# Function to find qulaity metrics of all modules
+#' Find  Modularity Quality
+#' 
+#' This function finds qulaity metrics of all modules
+#'
+#' @inheritParams compute.LocalModularity
+#'  
+#' @return metrics = data frame of module quality metrics.
+#' 
+#' @export
 compute.ModuleQualityMetric <- function(adj, mod){
-  
-  # Input
-  #      adj = n x n upper triangular adjacency in the matrix class format
-  #      mod = n x 3 dimensional data frame with column names as Gene.ID, moduleNumber, and moduleLabel
-  
-  # Output (list of following elements)
-  #      metrics = data frame of module quality metrics
   
   # Error functions
   if(class(adj) != "matrix")
@@ -24,7 +25,7 @@ compute.ModuleQualityMetric <- function(adj, mod){
   # Convert lsparseNetwork upper adj matrix to graph
   g = igraph::graph.adjacency(adj, mode = 'upper', weighted = TRUE, diag = F)
   rownames(mod) = mod$Gene.ID
-  igraph::V(g)$moduleNumber = paste0('mod.',mod[V(g)$name, 'moduleNumber'])
+  igraph::V(g)$moduleNumber = paste0('mod.',mod[igraph::V(g)$name, 'moduleNumber'])
   
   rm(list = c('adj', 'mod'))
   gc()
@@ -55,8 +56,7 @@ compute.ModuleQualityMetric <- function(adj, mod){
   gc()
   
   # Intra edges
-  IE = data.frame(moduleNumber = rownames(edge.comm),
-                  IE = diag(edge.comm))
+  IE = data.frame(moduleNumber = rownames(edge.comm), IE = diag(edge.comm))
   
   # Intra density
   ID = data.frame(moduleNumber = rownames(edge.comm),
