@@ -57,7 +57,6 @@ Imports:
   randomForest (>= 4.6),
   readr,
   rlang,
-  Rmpi,
   parallel,
   parmigene,
   plyr,
@@ -67,6 +66,8 @@ Imports:
   synapser,
   utils,
   vbsr (>= 0.0.5)
+Suggests:
+  Rmpi
 Additional_repositories:
     http://ran.synapse.org
 Remotes:
