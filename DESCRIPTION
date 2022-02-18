@@ -25,6 +25,8 @@ LazyData: true
 URL: hhttps://sage-bionetworks.github.io/metanetwork,
     https://github.com/Sage-Bionetworks/metanetwork
 Encoding: UTF-8
+Suggests:
+  Rmpi
 biocViews:
 Imports:
   bit64,
@@ -66,13 +68,11 @@ Imports:
   synapser,
   utils,
   vbsr (>= 0.0.5)
-Suggests:
-  Rmpi
 Additional_repositories:
-    http://ran.synapse.org
+  http://ran.synapse.org
 Remotes:
-    blogsdon/vbsr/vbsr,
-    brian-bot/githubr
+  blogsdon/vbsr/vbsr,
+  brian-bot/githubr
 VignetteBuilder:
-    knitr
+  knitr
 RoxygenNote: 7.1.2
