@@ -25,8 +25,6 @@ LazyData: true
 URL: hhttps://sage-bionetworks.github.io/metanetwork,
     https://github.com/Sage-Bionetworks/metanetwork
 Encoding: UTF-8
-Suggests:
-  Rmpi
 biocViews:
 Imports:
   bit64,
@@ -59,6 +57,7 @@ Imports:
   randomForest (>= 4.6),
   readr,
   rlang,
+  Rmpi,
   parallel,
   parmigene,
   plyr,
