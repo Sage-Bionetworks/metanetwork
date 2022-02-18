@@ -9,6 +9,7 @@
 #' moduleNumber, and moduleLabel.
 #' 
 #' @importFrom magrittr %>%
+#' @importFrom rlang .data
 #' @export
 findModules.spinglass.once <- function(adj, min.module.size){
   # Convert lsparseNetwork to igraph graph object
@@ -36,13 +37,13 @@ findModules.spinglass.once <- function(adj, min.module.size){
     x$moduleNumber = x$moduleNumber + y
     return(x)
   }, mod, mod.sz, SIMPLIFY = F) %>%
-    rbindlist(use.names = T, fill = T)
+    data.table::rbindlist(use.names = T, fill = T)
   
   # Rename modules with size less than min module size to 0
   filteredModules = geneModules %>% 
-    dplyr::group_by(moduleNumber) %>%
-    dplyr::summarise(counts = length(unique(Gene.ID))) %>%
-    dplyr::filter(counts >= min.module.size)
+    dplyr::group_by(.data$moduleNumber) %>%
+    dplyr::summarise(counts = length(unique(.data$Gene.ID))) %>%
+    dplyr::filter(.data$counts >= min.module.size)
   geneModules$moduleNumber[!(geneModules$moduleNumber %in% filteredModules$moduleNumber)] = 0
   
   # Change cluster number to color labels

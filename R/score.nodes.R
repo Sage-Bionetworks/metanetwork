@@ -40,7 +40,7 @@ score.nodes <- function(g, G, h=3, mode = 'all'){
   # Calculate node degree for identifying global drivers
   node.degree = igraph::strength(g, mode = mode, loops = FALSE)
   mean.node.degree = mean(node.degree, na.rm = T)
-  stddev.node.degree = sd(node.degree, na.rm = T)
+  stddev.node.degree = stats::sd(node.degree, na.rm = T)
   
   # Find H-Layer neighborhood
   neighbor.nodes = lapply(1:h, function(hi,sg){

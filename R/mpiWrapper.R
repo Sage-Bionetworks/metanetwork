@@ -224,5 +224,5 @@ mpiWrapper = function(data,nodes,pathv,regressionFunction,outputpath,eigen=NULL,
   network <- network*upper.tri(network)
   gc()
   #save(network,file=paste(outputpath,'result_',regressionFunction,'.rda',sep=''));
-  write.csv(network,file=paste0(outputpath,regressionFunction,'Network.csv'),quote=F)
+  utils::write.csv(network,file=paste0(outputpath,regressionFunction,'Network.csv'),quote=F)
 }

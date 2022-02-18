@@ -10,7 +10,7 @@
 #' 
 #' @importFrom magrittr %>%
 #' @export
-findModules.linkcommunities <- function(adj, nperm = 10, min.module.size = 30){
+findModules.linkcommunities <- function(adj, nperm = 10, path, min.module.size = 30){
   
   # Note: For this function to work get the package linkcomm from CRAN
   

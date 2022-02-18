@@ -27,7 +27,7 @@
 #' sampling features. (Default = NULL)
 #' @param verbose Optional. A boolean when set to TRUE, prints messages to the 
 #' screen to indicate progress. This is useful for large datasets.(Default = FALSE)
-#' @changeCDFArea Optional. Minimum spline distance for seq(2,`maxK`,
+#' @param changeCDFArea Optional. Minimum spline distance for seq(2,`maxK`,
 #' length.out = `nbreaks`) (Default = 0.001)
 #' @param corUse Optional. Use all cores avaiable. (Default = "Everything")
 #' @param nbreaks Optional. Number of breaks to use in 
@@ -98,7 +98,7 @@ findModules.consensusCluster <- function(d = NULL,
   
   # If d is a expression set
   if ( inherits( d,"ExpressionSet" ) )
-    d <- exprs(d)
+    d <- Biobase::exprs(d)
   
   # Run consensus clustering
   kGrid = seq(2,maxK,length.out = nbreaks) %>%
@@ -118,7 +118,7 @@ findModules.consensusCluster <- function(d = NULL,
                                     corUse=corUse )
     
   # Check if ends are maximum 
-  fn = splinefun(names(results$areaUnderCDF), results$areaUnderCDF)
+  fn = stats::splinefun(names(results$areaUnderCDF), results$areaUnderCDF)
   ind = which(diff(fn(2:maxK)) >= changeCDFArea)
   k.final = ind[length(ind)] + 1
   
@@ -138,7 +138,7 @@ findModules.consensusCluster <- function(d = NULL,
                                           corUse=corUse )
   
   # Compute the final clusters
-  cluster.final = kmeans(1 - results.final$consensus.matrix, k.final, algorithm = "Hartigan-Wong", trace = TRUE)$cluster
+  cluster.final = stats::kmeans(1 - results.final$consensus.matrix, k.final, algorithm = "Hartigan-Wong", trace = TRUE)$cluster
   mod = data.frame(Gene.ID = colnames(d),
                    moduleNumber = cluster.final)
   

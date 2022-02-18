@@ -33,7 +33,7 @@ regulatorAnalysis.undirected_weighted <- function(adj, G, h = 3, n = 100, FDR = 
   
   # Perform one sample t-test to estimate significance
   pval = foreach::foreach(i = 1:n, .combine = rbind) %dopar% {
-    tmp = t.test(perm.node.scores[i,], mu = node.scores[i], alternative = 'less')
+    tmp = stats::t.test(perm.node.scores[i,], mu = node.scores[i], alternative = 'less')
     data.frame(pval = tmp$p.value, t = tmp$statistic, t.low = tmp$conf.int[1], t.high = tmp$conf.int[2])
   }
   fdr = stats::p.adjust(pval$pval, method = 'fdr')
@@ -42,7 +42,7 @@ regulatorAnalysis.undirected_weighted <- function(adj, G, h = 3, n = 100, FDR = 
   # Calculate node degree for identifying global regulators
   node.degree = igraph::degree(g)
   mean.node.degree = mean(node.degree, na.rm = T)
-  stddev.node.degree = sd(node.degree, na.rm = T)
+  stddev.node.degree = stats::sd(node.degree, na.rm = T)
   
   # Promote high degree nodes as global regulators 
   key.regulators = list()

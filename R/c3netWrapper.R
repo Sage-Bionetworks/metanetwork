@@ -21,5 +21,5 @@ c3netWrapper  = function(data,path=NULL,pval=1,outputpath){
   network <- c3net::c3net(t(data))
   #save(network,file=paste0(outputpath,'result_c3net.rda'))
   network <- network*upper.tri(network)
-  write.csv(network,file=paste0(outputpath,'c3netNetwork.csv'),quote=F)
+  utils::write.csv(network,file=paste0(outputpath,'c3netNetwork.csv'),quote=F)
 }

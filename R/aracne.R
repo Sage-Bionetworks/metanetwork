@@ -28,7 +28,7 @@ aracne <- function(data,path=NULL,pval=NULL,outputpath,na_fill = NULL){
     pval <- 0.05/choose(nrow(data),2)
   }
   if(is.null(na_fill)){
-    data <- na.omit(data)
+    data <- stats::na.omit(data)
   }else{
     data[is.na(data)] <- na_fill # Ideally, user could insert a large negative number or use min(data)
   }
@@ -69,7 +69,7 @@ aracne <- function(data,path=NULL,pval=NULL,outputpath,na_fill = NULL){
   }
   #save(network,file=fileName)
   network <- network*upper.tri(network)
-  write.csv(network,file=fileName,quote=F)
+  utils::write.csv(network,file=fileName,quote=F)
 }
 
 

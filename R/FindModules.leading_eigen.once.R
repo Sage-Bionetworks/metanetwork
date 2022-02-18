@@ -10,6 +10,7 @@
 #' moduleNumber, and moduleLabel.
 #' 
 #' @importFrom magrittr %>%
+#' @importFrom rlang .data
 #' @export
 findModules.leading_eigen.once <- function(adj, min.module.size){
   # Convert lsparseNetwork to igraph graph object
@@ -21,7 +22,7 @@ findModules.leading_eigen.once <- function(adj, min.module.size){
                                  moduleNumber = 0)
   
   # Get modules using leading_eigen algorithm (MEJ Newman: Finding community structure using the eigenvectors of matrices, Physical Review E 74 036104, 2006)
-  sg = induced_subgraph(g, which(node.degree != 0))
+  sg = igraph::induced_subgraph(g, which(node.degree != 0))
   mod = igraph::cluster_leading_eigen(sg)
   
   # Get individual clusters from the igraph community object
@@ -36,9 +37,9 @@ findModules.leading_eigen.once <- function(adj, min.module.size){
   
   # Rename modules with size less than min module size to 0
   filteredModules = geneModules %>% 
-    dplyr::group_by(moduleNumber) %>%
-    dplyr::summarise(counts = length(unique(Gene.ID))) %>%
-    dplyr::filter(counts >= min.module.size)
+    dplyr::group_by(.data$moduleNumber) %>%
+    dplyr::summarise(counts = length(unique(.data$Gene.ID))) %>%
+    dplyr::filter(.data$counts >= min.module.size)
   geneModules$moduleNumber[!(geneModules$moduleNumber %in% filteredModules$moduleNumber)] = 0
   
   # Change cluster number to color labels

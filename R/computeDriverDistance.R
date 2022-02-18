@@ -20,7 +20,7 @@ computeDriverDistance  = function(geneSet,graph){
   compLabel <- igraph::components(graph)
   maxComp <- which.max(compLabel$csize)
   cat('largest component size: ',max(compLabel$csize),'\n')
-  graph <- subgraph(graph, which(compLabel$membership==maxComp))
+  graph <- igraph::subgraph(graph, which(compLabel$membership==maxComp))
   
   geneSetIdx <- which(geneSet %in% names(igraph::V(graph)))
   if(length(geneSetIdx)<4){

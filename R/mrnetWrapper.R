@@ -38,5 +38,5 @@ mrnetWrapper = function(data,path=NULL,pval=1,outputpath){
   network <- parmigene::mrnet(data.matrix(network))
   #save(network,file=paste0(outputpath,'result_mrnet.rda'))
   network <- network*upper.tri(network)
-  write.csv(network,file=paste0(outputpath,'mrnetNetwork.csv'),quote=F)
+  utils::write.csv(network,file=paste0(outputpath,'mrnetNetwork.csv'),quote=F)
 }

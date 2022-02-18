@@ -8,6 +8,7 @@
 #' @return  GeneModules = n x 3 dimensional data frame with column names as Gene.ID,
 #' moduleNumber, and moduleLabel.
 #' 
+#' @importFrom rlang .data
 #' @importFrom magrittr %>%
 #' @export
 findModules.edge_betweenness.once <- function(adj, min.module.size){
@@ -28,9 +29,9 @@ findModules.edge_betweenness.once <- function(adj, min.module.size){
   
   # Rename modules with size less than min module size to 0
   filteredModules = geneModules %>% 
-    dplyr::group_by(moduleNumber) %>%
-    dplyr::summarise(counts = length(unique(Gene.ID))) %>%
-    dplyr::filter(counts >= min.module.size)
+    dplyr::group_by(.data$moduleNumber) %>%
+    dplyr::summarise(counts = length(unique(.data$Gene.ID))) %>%
+    dplyr::filter(.data$counts >= min.module.size)
   geneModules$moduleNumber[!(geneModules$moduleNumber %in% filteredModules$moduleNumber)] = 0
   
   # Change cluster number to color labels

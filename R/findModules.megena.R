@@ -25,6 +25,7 @@
 #' moduleNumber, and moduleLabel.
 #' 
 #' @importFrom magrittr %>%
+#' @importFrom rlang .data
 #' @export
 findModules.megena <- function(data, method = "pearson", FDR.cutoff = 0.05, 
                                module.pval = 0.05, hub.pval = 0.05, doPar = TRUE,
@@ -58,9 +59,12 @@ findModules.megena <- function(data, method = "pearson", FDR.cutoff = 0.05,
   summary.output <- MEGENA::MEGENA.ModuleSummary(MEGENA.output,
   mod.pvalue = module.pval,hub.pvalue = hub.pval,
   min.size = 10,max.size = igraph::vcount(g)/2,
-  annot.table = annot.table,id.col = id.col,symbol.col = symbol.col,output.sig = TRUE)
+  annot.table = annot.table,
+  id.col = id.col,
+  symbol.col = symbol.col,
+  output.sig = TRUE)
 
-  megena_Res = megena_Res %>% filter(module.size > min_module - 1)
+  megena_Res = megena_Res %>% dplyr::filter(.data$module.size > .data$min_module - 1)
   gene_modules = data.frame('Gene.ID'= character(),'moduleNumber'=numeric(),'moduleSize'=numeric())
 
   for (i in 1:nrow(megena_Res)){
@@ -74,7 +78,8 @@ findModules.megena <- function(data, method = "pearson", FDR.cutoff = 0.05,
                                         'moduleSize'= megena_Res$module.size[i]))
   }
 
-  gene_modules = gene_modules %>% group_by(Gene.ID) %>%
+  gene_modules = gene_modules %>% 
+    dplyr::group_by(.data$Gene.ID) %>%
     dplyr::top_n(1, moduleSize) %>%
     dplyr::top_n(1, moduleNumber) %>%
     dplyr::select(-moduleSize) %>%
@@ -82,9 +87,9 @@ findModules.megena <- function(data, method = "pearson", FDR.cutoff = 0.05,
                     moduleNumber = as.numeric(moduleNumber))
 
   filteredModules = gene_modules %>%  
-    dplyr::group_by(moduleNumber) %>% 
-    dplyr::summarise(counts = length(unique(Gene.ID))) %>% 
-    dplyr::filter(counts >= 30)
+    dplyr::group_by(.data$moduleNumber) %>% 
+    dplyr::summarise(counts = length(unique(.data$Gene.ID))) %>% 
+    dplyr::filter(.data$counts >= 30)
   
   gene_modules$moduleNumber[!(gene_modules$moduleNumber %in% filteredModules$moduleNumber)] = 0
 

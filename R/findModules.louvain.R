@@ -10,7 +10,7 @@
 #' 
 #' @importFrom magrittr %>%
 #' @export
-findModules.louvain <- function(adj, nperm = 10, min.module.size = 30){
+findModules.louvain <- function(adj, nperm = 10, path, min.module.size = 30){
   # Input
   #      adj = n x n upper triangular adjacency in the matrix class format
   #      nperm = number of permutation on the gene ordering 

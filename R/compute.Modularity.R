@@ -10,7 +10,9 @@
 #'  
 #' @return Q = modularity index.
 #' 
-#' @export
+#' @importFrom rlang .data
+#' 
+#' @export compute.Modularity
 compute.Modularity <- function(adj, mod, method = 'Newman1'){
   # Error functions
   if(class(adj) != "matrix")

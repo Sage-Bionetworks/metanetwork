@@ -17,7 +17,7 @@
 calcHyperPval <- function(geneSetToTest, moduleGenes, backgroundGenes){
   q = length(intersect(geneSetToTest,moduleGenes))
   m = length(geneSetToTest)
-  n = length(backgroundGeneSet) - length(geneSetToTest)
+  n = length(backgroundGenes) - length(geneSetToTest)
   k = length(moduleGenes)  
   p.val = stats::phyper(q,m,n,k,lower.tail = T)
   

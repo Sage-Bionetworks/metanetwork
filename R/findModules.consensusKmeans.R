@@ -14,6 +14,7 @@
 #' @return A dataframe of Gene Modules
 #' 
 #' @importFrom magrittr %>%
+#' @importFrom rlang .data
 #' @export
 findModules.consensusKmeans <- function(partition.adj, min.module.size = 20, usepam = FALSE){
   # Input
@@ -36,9 +37,9 @@ findModules.consensusKmeans <- function(partition.adj, min.module.size = 20, use
   
   # Rename modules with size less than min module size to 0
   filteredModules = geneModules %>% 
-    dplyr::group_by(moduleNumber) %>%
-    dplyr::summarise(counts = length(unique(Gene.ID))) %>%
-    dplyr::filter(counts >= min.module.size)
+    dplyr::group_by(.data$moduleNumber) %>%
+    dplyr::summarise(counts = length(unique(.data$Gene.ID))) %>%
+    dplyr::filter(.data$counts >= min.module.size)
   geneModules$moduleNumber[!(geneModules$moduleNumber %in% filteredModules$moduleNumber)] = 0
   
   # Change cluster number to color labels

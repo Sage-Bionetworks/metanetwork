@@ -6,7 +6,7 @@
 #'  
 #' @return Qds = module density.
 #' 
-#' @export
+#' @export compute.ModularityDensity
 compute.ModularityDensity <- function(adj, mod){
   # Error functions
   if(class(adj) != "matrix")

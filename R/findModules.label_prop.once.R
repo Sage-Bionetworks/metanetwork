@@ -8,6 +8,7 @@
 #' moduleNumber, and moduleLabel.
 #' 
 #' @importFrom magrittr %>%
+#' @importFrom rlang .data
 #' @export
 findModules.label_prop.once <- function(adj, min.module.size){
   # Convert lsparseNetwork to igraph graph object
@@ -27,9 +28,9 @@ findModules.label_prop.once <- function(adj, min.module.size){
   
   # Rename modules with size less than min module size to 0
   filteredModules = geneModules %>% 
-    dplyr::group_by(moduleNumber) %>%
-    dplyr::summarise(counts = length(unique(Gene.ID))) %>%
-    dplyr::filter(counts >= min.module.size)
+    dplyr::group_by(.data$moduleNumber) %>%
+    dplyr::summarise(counts = length(unique(.data$Gene.ID))) %>%
+    dplyr::filter(.data$counts >= min.module.size)
   geneModules$moduleNumber[!(geneModules$moduleNumber %in% filteredModules$moduleNumber)] = 0
   
   # Change cluster number to color labels

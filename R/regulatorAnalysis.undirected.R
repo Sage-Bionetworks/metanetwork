@@ -27,7 +27,7 @@ regulatorAnalysis.undirected <- function(adj, G, h=3, FDR = 0.05){
   },g)
   
   # Perform enrichment analysis for every gene in every layer and pick the minimum p-value
-  p.val = foreach (x = 1:length(neighbor.nodes)) %dopar% {
+  p.val = foreach::foreach (x = 1:length(neighbor.nodes)) %dopar% {
     p.val = sapply(neighbor.nodes[[x]], function(y, G, backgroundGenes){
       metanetwork::fisherEnrichment(names(y), G, backgroundGenes)$pval
     }, G, background.genes)
@@ -40,7 +40,7 @@ regulatorAnalysis.undirected <- function(adj, G, h=3, FDR = 0.05){
   # Calculate node degree for identifying global regulators
   node.degree = igraph::degree(g)
   mean.node.degree = mean(node.degree, na.rm = T)
-  stddev.node.degree = sd(node.degree, na.rm = T)
+  stddev.node.degree = stats::sd(node.degree, na.rm = T)
   
   # Coallate results
   key.regulators = list()

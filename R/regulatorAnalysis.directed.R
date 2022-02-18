@@ -41,7 +41,7 @@ regulatorAnalysis.directed <- function(adj, G, h=3, FDR = 0.05){
   # Calculate node degree for identifying global regulators
   node.degree = igraph::degree(g)
   mean.node.degree = mean(node.degree, na.rm = T)
-  stddev.node.degree = sd(node.degree, na.rm = T)
+  stddev.node.degree = stats::sd(node.degree, na.rm = T)
   
   # Find leaf nodes to identify global regulators
   node.in.degree = igraph::degree(g, mode = 'in')

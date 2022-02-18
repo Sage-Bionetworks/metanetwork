@@ -24,9 +24,9 @@ wgcnaSoftThreshold <- function(data,path=NULL,pval=1,outputpath,RsquaredCut=.80,
     res$powerEstimate<-defaultNaPower
   }
   
-  network <- abs(cor(data))^res$powerEstimate
+  network <- abs(stats::cor(data))^res$powerEstimate
 
   #save(network,file=paste0(outputpath,'result_wgcnaST.rda'))
   network <- network*upper.tri(network)
-  write.csv(network,file=paste0(outputpath,'wgcnaSoftThresholdNetwork.csv'),quote=F)
+  utils::write.csv(network,file=paste0(outputpath,'wgcnaSoftThresholdNetwork.csv'),quote=F)
 }

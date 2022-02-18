@@ -10,7 +10,7 @@
 #' @return A coexpression value
 #' @export
 sparrowZ <- function(y,x,...){
-  require(vbsr)
-  result <- vbsr(y=y,X=x,...)$z
+  #require(vbsr)
+  result <- vbsr::vbsr(y=y,X=x,...)$z
   return(result)
 }

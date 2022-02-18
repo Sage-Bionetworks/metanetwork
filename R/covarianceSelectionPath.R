@@ -8,14 +8,14 @@
 #' @param numberObservations Required. The number of samples comprising the network (?)
 #' @param n Optional. Start at the first edge in `rankedEdges` (Default = 1)
 #' 
-#' @return A list object of containing the BIC estimate, bicNeighborhood (?) , neighborhoods (?), flag (?)
-#' @export A list containg
+#' @return  A list containg
 #' \itemize{
 #'     \item{`bic` Estimated BIC.}
 #'    \item{`bicmin` Lowest Estimated BIC.}
 #'    \item{`w`	The covariance matrix.}
 #'    \item{`wi` The inverse covariance matrix.}
 #' }
+#' @export
 covarianceSelectionPath = function(S,rankedEdges,numberObservations,n){
   #rankedEdges: list of ranked edges
   #library(glasso)

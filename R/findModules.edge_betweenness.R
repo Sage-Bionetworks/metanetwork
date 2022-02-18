@@ -9,7 +9,7 @@
 #' 
 #' @importFrom magrittr %>%
 #' @export
-findModules.edge_betweenness <- function(adj, nperm = 10, min.module.size = 30){
+findModules.edge_betweenness <- function(adj, nperm = 10, path, min.module.size = 30){
   # Error functions
   if(class(adj) != "matrix")
     stop('Adjacency matrix should be of class matrix')

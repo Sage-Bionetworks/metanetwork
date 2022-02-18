@@ -75,11 +75,11 @@ run.consensus.cluster <- function( d,
         if ( ! distance %in%  acceptable.distance  &  ( class(try(get(distance),silent=T))!="function") ) 
           stop("unsupported distance.")
         if(distance=="pearson" | distance=="spearman"){
-          main.dist.obj <- as.dist( 1-cor(d,method=distance,use=corUse ))
+          main.dist.obj <- stats::as.dist( 1-stats::cor(d,method=distance,use=corUse ))
         } else if( class(try(get(distance),silent=T))=="function"){
           main.dist.obj <- get(distance)( t( d )   )
         } else {
-          main.dist.obj <- dist( t(d), method=distance )
+          main.dist.obj <- stats::dist( t(d), method=distance )
         }
         attr( main.dist.obj, "method" ) <- distance  
       } else {
@@ -141,7 +141,7 @@ run.consensus.cluster <- function( d,
                       if ( ! is.null( main.dist.obj ) ) {
                         boot.cols <- sample_x$subcols
                         this_dist <- as.matrix( main.dist.obj )[ boot.cols, boot.cols ]
-                        this_dist <- as.dist( this_dist )
+                        this_dist <- stats::as.dist( this_dist )
                       } else {
                         # If main.dist.obj is NULL, then d is a data matrix, and either:
                         #   1) clusterAlg is 'kmeans'
@@ -159,9 +159,9 @@ run.consensus.cluster <- function( d,
                             this_dist <- get(distance)( t( sample_x$submat ) )
                           } else {
                             if( distance == "pearson" | distance == "spearman"){
-                              this_dist <- as.dist( 1-cor(sample_x$submat, use=corUse, method=distance) )
+                              this_dist <- stats::as.dist( 1-stats::cor(sample_x$submat, use=corUse, method=distance) )
                             } else {
-                              this_dist <- dist( t( sample_x$submat ), method= distance  )
+                              this_dist <- stats::dist( t( sample_x$submat ), method= distance  )
                             }
                           }
                           attr( this_dist, "method" ) <- distance  
@@ -193,9 +193,9 @@ run.consensus.cluster <- function( d,
                         this_assignment=NA
                         if(clusterAlg == "hc"){
                           # Prune to k for hc
-                          this_assignment = cutree(this_cluster,k)
+                          this_assignment = stats::cutree(this_cluster,k)
                         } else if(clusterAlg=="kmeans"){
-                          this_assignment = kmeans(t(this_dist), k, iter.max = 100, nstart = 1, algorithm = c("Hartigan-Wong") )$cluster
+                          this_assignment = stats::kmeans(t(this_dist), k, iter.max = 100, nstart = 1, algorithm = c("Hartigan-Wong") )$cluster
                         } else if ( clusterAlg == "pam" ) {
                           this_assignment <- cluster::pam(this_dist, k, diss=TRUE, cluster.only=TRUE)
                         } else {
@@ -237,7 +237,7 @@ run.consensus.cluster <- function( d,
     cns.mtrx = cns.mtrx / repCount
     
     # Empirical CDF distribution. default number of breaks is 100    
-    h = hist(cns.mtrx, plot=FALSE, breaks = seq(0,1,by=1/100))
+    h = graphics::hist(cns.mtrx, plot=FALSE, breaks = seq(0,1,by=1/100))
     h$counts = cumsum(h$counts)/sum(h$counts)
     
     # Calculate area under CDF curve, by histogram method.

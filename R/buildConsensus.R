@@ -41,7 +41,7 @@ buildConsensus = function(outputpath,networkFolderId, fileName=NULL, pattern_id)
   networks$rankConsensus <- metanetwork::rankConsensus(networks)
   cat('built rank consensus\n')
   cat('write rank consensus\n')
-  write.csv(networks$rankConsensus,file=paste0(outputpath,'rankConsensusNetwork.csv'),quote=F)
+  utils::write.csv(networks$rankConsensus,file=paste0(outputpath,'rankConsensusNetwork.csv'),quote=F)
   if(!is.null(fileName)){
     #library(Matrix)
     getNetmethod <- function(networkname){

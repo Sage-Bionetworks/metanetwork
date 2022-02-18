@@ -16,8 +16,8 @@
 #' @export
 #' 
 correlation <- function(data,path=NULL,method='pearson',outputpath){
-  network <- cor(data,method=method)
+  network <- stats::cor(data,method=method)
   #save(network,file=paste0(outputpath,'result_correlation.rda'))
   network <- network*upper.tri(network)
-  write.csv(network,file=paste0(outputpath,'correlationNetwork.csv'),quote=F)
+  utils::write.csv(network,file=paste0(outputpath,'correlationNetwork.csv'),quote=F)
 }

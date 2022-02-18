@@ -6,7 +6,7 @@
 #'  
 #' @return metrics = data frame of module quality metrics.
 #' 
-#' @export
+#' @export compute.ModuleQualityMetric
 compute.ModuleQualityMetric <- function(adj, mod){
   
   # Error functions

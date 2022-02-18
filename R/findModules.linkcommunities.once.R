@@ -9,6 +9,7 @@
 #' moduleNumber, and moduleLabel.
 #' 
 #' @importFrom magrittr %>%
+#' @importFrom rlang .data
 #' @export
 findModules.linkcommunities.once <- function(adj, min.module.size){
   # Convert lsparseNetwork to igraph graph object
@@ -21,7 +22,7 @@ findModules.linkcommunities.once <- function(adj, min.module.size){
   comm = linkcomm::getLinkCommunities(elist)
   
   ## Get edge clusters
-  eclust = cutree(comm$hclust, h = comm$pdmax)
+  eclust = stats::cutree(comm$hclust, h = comm$pdmax)
   names(eclust) = igraph::E(comm$igraph)
   
   ## Filter communities less than min.module.size
@@ -32,7 +33,7 @@ findModules.linkcommunities.once <- function(adj, min.module.size){
     tmp.g = igraph::subgraph.edges(comm$igraph, eids = which(eclust == x), delete.vertices = T)
     data.frame(Gene.ID = igraph::V(tmp.g)$name) %>%
       dplyr::mutate(moduleNumber = x,
-                    moduleSize = length(unique(Gene.ID)))
+                    moduleSize = length(unique(.data$Gene.ID)))
   }, eclust, comm) %>%
     data.table::rbindlist(use.names = T, fill = T)
   
@@ -56,9 +57,9 @@ findModules.linkcommunities.once <- function(adj, min.module.size){
   
   # Rename modules with size less than min module size to 0
   filteredModules = geneModules %>% 
-    dplyr::group_by(moduleNumber) %>%
-    dplyr::summarise(counts = length(unique(Gene.ID))) %>%
-    dplyr::filter(counts >= min.module.size)
+    dplyr::group_by(.data$moduleNumber) %>%
+    dplyr::summarise(counts = length(unique(.data$Gene.ID))) %>%
+    dplyr::filter(.data$counts >= min.module.size)
   geneModules$moduleNumber[!(geneModules$moduleNumber %in% filteredModules$moduleNumber)] = 0
   
   # Change cluster number to color labels

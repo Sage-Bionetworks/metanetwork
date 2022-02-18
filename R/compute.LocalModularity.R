@@ -9,7 +9,8 @@
 #'  
 #' @return NQ = local modularity index.
 #' 
-#' @export
+#' @export compute.LocalModularity
+#' 
 compute.LocalModularity <- function(adj, mod){
   # Error functions
   if(class(adj) != "matrix")
@@ -33,11 +34,11 @@ compute.LocalModularity <- function(adj, mod){
   gc()
   
   # Get number of edges between communities
-  edge.comm = foreach::foreach(ci = unique(igraph::V(g)$moduleNumber), 
+  edge.comm = foreach::foreach(ci=unique(igraph::V(g)$moduleNumber), 
                                .packages = c('foreach', 'doParallel'), 
                                .combine = cbind, 
                                .export = c('g')) %dopar% {
-                                 foreach::foreach(cj = unique(igraph::V(g)$moduleNumber), 
+                                 foreach::foreach(cj=unique(igraph::V(g)$moduleNumber), 
                                                   .combine = c,
                                                   .packages = c('foreach', 'doParallel', 'dplyr'),
                                                   .export = c('g', 'ci')) %dopar% {
@@ -54,7 +55,7 @@ compute.LocalModularity <- function(adj, mod){
   gc()
   
   # Calculate local modularity
-  NQ = foreach::foreach(ci = rownames(edge.comm), 
+  NQ = foreach::foreach(ci=rownames(edge.comm), 
                         .combine = c,
                         .export = c('edge.comm')) %dopar% {
                           if(edge.comm[ci,ci] != 0){

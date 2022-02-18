@@ -15,6 +15,7 @@
 #' moduleNumber, and moduleLabel.
 #' 
 #' @importFrom magrittr %>%
+#' @importFrom rlang .data
 #' @export
 findModules.hclust <- function(adj, aggloMethod = 'ward', clustDistance = 'euclidean', minModuleSize = 30){
   # Input
@@ -53,9 +54,9 @@ findModules.hclust <- function(adj, aggloMethod = 'ward', clustDistance = 'eucli
   
   # Rename modules with size less than min module size to 0
   filteredModules = geneModules %>% 
-    dplyr::group_by(moduleNumber) %>%
-    dplyr::summarise(counts = length(unique(Gene.ID))) %>%
-    dplyr::filter(counts >= minModuleSize)
+    dplyr::group_by(.data$moduleNumber) %>%
+    dplyr::summarise(counts = length(unique(.data$Gene.ID))) %>%
+    dplyr::filter(.data$counts >= minModuleSize)
   geneModules$moduleNumber[!(geneModules$moduleNumber %in% filteredModules$moduleNumber)] = 0
 
   # Change cluster number to color labels

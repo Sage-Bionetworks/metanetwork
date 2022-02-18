@@ -16,7 +16,7 @@ applySparrowFDR <- function(network){
   #network1 <- pnorm(abs(network),lower.tail=F)*2
   network1 <- 2*(network %>% abs %>% stats::pnorm(lower.tail=F))
   network1vec <- network1[network1 %>% upper.tri %>% which] %>% c
-  thres <- network1vec %>% fdrThres
+  thres <- network1vec %>% utilityFunctions::fdrThres
   network <- network1<thres
   return(network)
 }
