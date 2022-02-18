@@ -29,7 +29,7 @@
 #'
 #' @return Clustered consensus matrix. areaUnderCDF = areaK, 
 #' consensus.matrix = cns.mtrx
-#' 
+#' @param repCount Optional. Replicate count. (Default = NULL)
 #' @importFrom magrittr %>%
 #' @export
 run.consensus.cluster <- function( d,

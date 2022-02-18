@@ -4,11 +4,13 @@
 \alias{c3netWrapper}
 \title{This function wraps c3net implementation}
 \usage{
-c3netWrapper(data, path = NULL, pval = 1, outputpath)
+c3netWrapper(data, pval = 1, outputpath)
 }
 \arguments{
 \item{data}{Required. A Matrix containing gene expression values with subjects 
 as row values and gene features as column IDs.}
+
+\item{pval}{Optional. Currently not implemented. (Default = 1)}
 
 \item{outputpath}{Required. Path to save the resulting network}
 }

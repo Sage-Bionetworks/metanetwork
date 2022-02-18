@@ -7,6 +7,9 @@
 multiplot(..., plotlist = NULL, file = NULL, cols = 1, layout = NULL)
 }
 \arguments{
+\item{...}{Required. Multiple ggplot objects, or a plotlist as a list of 
+ggplot objects}
+
 \item{plotlist}{Optional. A list of ggplot objects. (Default = NULL)}
 
 \item{file}{Optional. A file name to save the plot as, currently non-functional.

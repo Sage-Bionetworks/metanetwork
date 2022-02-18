@@ -4,7 +4,8 @@
 #' BIC estimate.
 #' 
 #' @inheritParams lassoAIC 
-#' 
+#' @param eigen Required. Eigen cutoff value
+#'
 #' @return Lowest BIC value.
 #' 
 #' @export

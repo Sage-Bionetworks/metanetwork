@@ -39,6 +39,7 @@ regulatorAnalysis.directed_weighted <- function(adj, G, h = 3, n = 100, correcti
   node.scores = score.nodes(g, G, h, mode = 'out')
   
   # Permute node labels and calculate null distribution of scores
+  i <- NULL
   perm.node.scores = foreach::foreach(i = 1:n,
                                       .combine = cbind, 
                                       .packages = c('igraph', 'dplyr', 'parallel', 'doParallel', 'foreach'),
@@ -48,6 +49,7 @@ regulatorAnalysis.directed_weighted <- function(adj, G, h = 3, n = 100, correcti
                                       } 
   
   # Perform one sample t-test to estimate significance
+  i <- NULL
   pval = foreach::foreach(i = 1:length(background.genes), .combine = rbind) %dopar% {
     tmp = stats::t.test(perm.node.scores[i,], mu = node.scores[i], alternative = 'less')
     data.frame(pval = tmp$p.value, t = tmp$statistic, t.low = tmp$conf.int[1], t.high = tmp$conf.int[2])

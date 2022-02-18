@@ -9,7 +9,7 @@
 #' @param clustDistance Optional. The distance measure to be used. This must be 
 #' one of "euclidean", "maximum", "manhattan", "canberra", "binary" or "minkowski". 
 #' Any unambiguous substring can be given. (Default = "euclidean")
-#' @param min.module.size Optional. Integer between 1 and n genes. (Default = 30)
+#' @param minModuleSize Optional. Integer between 1 and n genes. (Default = 30)
 #'
 #' @return  GeneModules = n x 3 dimensional data frame with column names as Gene.ID,
 #' moduleNumber, and moduleLabel.

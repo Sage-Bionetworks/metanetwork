@@ -40,14 +40,14 @@ mpiWrapper = function(data,nodes,pathv,regressionFunction,outputpath,eigen=NULL,
         Rmpi::mpi.close.Rslaves()
       }
       cat("Please use mpi.quit() to quit R\n")
-      .Call("mpi_finalize")
+      .Call("Rmpi::mpi_finalize")
     }
   }
 
   foldslave <- function() {
     # Get a task
-    require("metanetwork")
-    require("utilityFunctions")
+    #require("metanetwork")
+    #require("utilityFunctions")
     task <- Rmpi::mpi.recv.Robj(Rmpi::mpi.any.source(),Rmpi::mpi.any.tag())
     task_info <- Rmpi::mpi.get.sourcetag()
     tag <- task_info[2]

@@ -27,6 +27,7 @@ regulatorAnalysis.directed <- function(adj, G, h=3, FDR = 0.05){
   }, g)
   
   # Perform enrichment analysis for every gene in every layer and pick the minimum p-value
+  i <- NULL
   fdr = sapply(1:length(neighbor.nodes), function(x, neighborNodes, G, backgroundGenes){
     foreach::foreach(i = 1:length(neighborNodes[[x]]), 
                      .combine = c, 

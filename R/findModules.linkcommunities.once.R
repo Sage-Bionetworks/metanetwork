@@ -41,11 +41,11 @@ findModules.linkcommunities.once <- function(adj, min.module.size){
   nodes$moduleNumber[nodes$moduleSize < min.module.size] = 0
   
   # Get individual clusters from the community object
-  geneModules = dplyr::filter(nodes, moduleNumber != 0) %>%
+  geneModules = dplyr::filter(nodes, .data$moduleNumber != 0) %>%
     dplyr::group_by(Gene.ID) %>%
-    dplyr::top_n(1, moduleSize) %>%
-    dplyr::top_n(1, moduleNumber) %>%
-    dplyr::select(-moduleSize) %>%
+    dplyr::top_n(1, .data$moduleSize) %>%
+    dplyr::top_n(1, .data$moduleNumber) %>%
+    dplyr::select(-.data$moduleSize) %>%
     dplyr::mutate(moduleNumber = factor(moduleNumber),
                   moduleNumber = as.numeric(moduleNumber))
   

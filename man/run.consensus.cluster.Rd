@@ -27,6 +27,8 @@ OR ExpressionSet object. (Default = NULL)}
 
 \item{kGrid}{Optional. (Default = NULL)}
 
+\item{repCount}{Optional. Replicate count. (Default = NULL)}
+
 \item{diss}{Optional. A distance matrix of d. (Default = inherits( d, "dist" ))}
 
 \item{pItem}{Optional. A numerical value. proportion of items to sample.

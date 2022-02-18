@@ -3,6 +3,8 @@
 #' This function plots multiple ggplot objects passed in as either ..., or to plotlist
 #' (as a list of ggplot objects). 
 #' 
+#' @param ... Required. Multiple ggplot objects, or a plotlist as a list of 
+#' ggplot objects
 #' @param plotlist Optional. A list of ggplot objects. (Default = NULL)
 #' @param file Optional. A file name to save the plot as, currently non-functional.
 #' (Default=NULL)

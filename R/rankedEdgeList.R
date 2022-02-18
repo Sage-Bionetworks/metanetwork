@@ -46,5 +46,5 @@ rankedEdgeList <- function(network,symmetric=FALSE,maxLength=1e7){
   cat('ordering data frame\n')
   rankedEdgeList <- rankedEdgeList[order((rankedEdgeList$value %>% abs),decreasing=T),]
   gc()
-  rankedEdgeList %>% return
+  rankedEdgeList %>% return()
 }

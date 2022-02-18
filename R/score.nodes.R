@@ -48,6 +48,7 @@ score.nodes <- function(g, G, h=3, mode = 'all'){
   }, g)
   
   # Find summed weight of current node based on h-layer neighbors
+  x <- NULL
   node.scores = foreach::foreach (x = 1:length(neighbor.nodes), .combine = cbind) %dopar% {
     score = sapply(neighbor.nodes[[x]], function(y, G){
       sum(G[names(y)] * (1/node.degree[names(y)]))

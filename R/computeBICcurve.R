@@ -50,7 +50,7 @@ computeBICcurve <- function(network, exprData, maxEdges=NULL, exact=NULL){
   colnames(edgeList) <- c('node1','node2','weight')
   rownames(edgeList) <- paste0('e',1:nrow(edgeList))
   edgeList <- data.frame(edgeList,stringsAsFactors=F)
-  edgeList <- dplyr::arrange(edgeList,dplyr::desc(weight))
+  edgeList <- dplyr::arrange(edgeList,dplyr::desc(.data$weight))
   print(edgeList[1:5,])
   bicPath <- metanetwork::covarianceSelectionMBPath(data.matrix(exprData), rankedEdges=edgeList[,1:2], start=1)
   bicPath2 <- NA;

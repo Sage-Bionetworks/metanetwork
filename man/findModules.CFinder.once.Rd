@@ -10,6 +10,8 @@ findModules.CFinder.once(adj, path, min.module.size, i)
 \arguments{
 \item{adj}{A n x n upper triangular adjacency in the matrix class format.}
 
+\item{path}{File path location of CFinder.}
+
 \item{min.module.size}{Optional. Integer between 1 and n genes. (Default = 30)}
 
 \item{i}{Required. Character name of temp file name to generate.}

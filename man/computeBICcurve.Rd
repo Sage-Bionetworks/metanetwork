@@ -9,7 +9,7 @@ computeBICcurve(network, exprData, maxEdges = NULL, exact = NULL)
 \arguments{
 \item{network}{A network object}
 
-\item{exprData}{}
+\item{exprData}{Expression data matrix}
 
 \item{maxEdges}{Optional. (Default = NULL)}
 

@@ -26,11 +26,12 @@ regulatorAnalysis.undirected_weighted <- function(adj, G, h = 3, n = 100, FDR = 
   node.scores = score.nodes(g, G, h)
   
   # Permute node labels and calculate null scores
+  i <- NULL
   perm.node.scores = foreach::foreach(i = 1:n, .combine = cbind, .packages = c('igraph', 'dplyr', 'parallel', 'doParallel', 'foreach')) %dopar% {
     pg = igraph::permute(g, sample(1:length(background.genes), length(background.genes)))
     perm.node.scores = score.nodes(pg, G, h)
   } 
-  
+  i <- NULL
   # Perform one sample t-test to estimate significance
   pval = foreach::foreach(i = 1:n, .combine = rbind) %dopar% {
     tmp = stats::t.test(perm.node.scores[i,], mu = node.scores[i], alternative = 'less')

@@ -7,6 +7,7 @@
 #' @param data Required. A Matrix containing gene expression values with subjects 
 #' as row values and gene features as column IDs.
 #' @param outputpath Required. Path to save the resulting network
+#' @param pval Optional. Currently not implemented. (Default = 1)
 #' 
 #' @export 
 #' @return Returns a symmetric mutual information matrix, which is obtained after
@@ -16,7 +17,7 @@
 #' 
 #' @references G. Altay, F. Emmert-Streib, "Inferring the conservative causal core of gene regulatory networks", BMC Systems Biology (2010) 4:132.
 #'
-c3netWrapper  = function(data,path=NULL,pval=1,outputpath){
+c3netWrapper  = function(data,pval=1,outputpath){
   #library(c3net)
   network <- c3net::c3net(t(data))
   #save(network,file=paste0(outputpath,'result_c3net.rda'))

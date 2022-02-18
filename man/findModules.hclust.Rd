@@ -22,7 +22,7 @@ findModules.hclust(
 one of "euclidean", "maximum", "manhattan", "canberra", "binary" or "minkowski". 
 Any unambiguous substring can be given. (Default = "euclidean")}
 
-\item{min.module.size}{Optional. Integer between 1 and n genes. (Default = 30)}
+\item{minModuleSize}{Optional. Integer between 1 and n genes. (Default = 30)}
 }
 \value{
 GeneModules = n x 3 dimensional data frame with column names as Gene.ID,

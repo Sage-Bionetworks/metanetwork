@@ -45,7 +45,7 @@ buildConsensus = function(outputpath,networkFolderId, fileName=NULL, pattern_id)
   if(!is.null(fileName)){
     #library(Matrix)
     getNetmethod <- function(networkname){
-      temp_names <- data.table::strsplit(data.table::strsplit(networkname,'Network.csv')[[1]][1],'_')[[1]]
+      temp_names <- strsplit(strsplit(networkname,'Network.csv')[[1]][1],'_')[[1]]
       temp_names <- unlist(temp_names[length(temp_names)])
       return(temp_names)
     }
@@ -56,7 +56,7 @@ buildConsensus = function(outputpath,networkFolderId, fileName=NULL, pattern_id)
     networkMethods <- c(networkMethods,'rankConsensus')
     cat('reading in data\n')
     options(stringsAsFactors = F)
-    dataSet <- readr::reader(fileName, row.names=1)
+    dataSet <- readr::read_csv(fileName, row.names=1)
     cat('turning data into data matrix\n')
     dataSet <- data.matrix(dataSet)
     dataSet <- t(dataSet)

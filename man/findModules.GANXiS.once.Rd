@@ -9,6 +9,8 @@ findModules.GANXiS.once(adj, path, min.module.size)
 \arguments{
 \item{adj}{A n x n upper triangular adjacency in the matrix class format.}
 
+\item{path}{Required. File path location of GANXiS}
+
 \item{min.module.size}{Optional. Integer between 1 and n genes. (Default = 30)}
 }
 \value{

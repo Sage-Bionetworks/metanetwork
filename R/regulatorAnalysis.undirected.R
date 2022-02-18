@@ -27,6 +27,7 @@ regulatorAnalysis.undirected <- function(adj, G, h=3, FDR = 0.05){
   },g)
   
   # Perform enrichment analysis for every gene in every layer and pick the minimum p-value
+  x <- NULL
   p.val = foreach::foreach (x = 1:length(neighbor.nodes)) %dopar% {
     p.val = sapply(neighbor.nodes[[x]], function(y, G, backgroundGenes){
       metanetwork::fisherEnrichment(names(y), G, backgroundGenes)$pval

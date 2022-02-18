@@ -3,11 +3,13 @@
 #' 
 #' @param i Required. Character name of temp file name to generate.
 #' @inheritParams findModules.edge_betweenness.once
+#' @param path File path location of CFinder.
 #' 
 #' @return  GeneModules = n x 3 dimensional data frame with column names as Gene.ID,
 #' moduleNumber, and moduleLabel.
 #' 
 #' @importFrom magrittr %>%
+#' @importFrom rlang .data
 #' @export
 findModules.CFinder.once <- function(adj, path, min.module.size, i){
   
@@ -34,7 +36,7 @@ findModules.CFinder.once <- function(adj, path, min.module.size, i){
   
   mod = utils::read.table(paste0(d[2],'/communities'), skip = 7, sep = '\n') 
   mod$moduleNumber = 1:dim(mod)[1]
-  geneModules = plyr::ddply(mod, .(moduleNumber), .fun = function(x){
+  geneModules = plyr::ddply(mod, .variables = moduleNumber, .fun = function(x){
     mod = data.frame(Gene.ID = stringr::str_split(x$V1, ':')[[1]][2] %>%
                        stringr::str_split(' ') %>% 
                        unlist %>%
@@ -48,10 +50,10 @@ findModules.CFinder.once <- function(adj, path, min.module.size, i){
   
   # Get individual cluster assignment for each gene from the community object
   geneModules = geneModules %>%
-    dplyr::group_by(Gene.ID) %>%
-    dplyr::top_n(1, moduleSize) %>%
-    dplyr::top_n(1, moduleNumber) %>%
-    dplyr::select(-moduleSize) %>%
+    dplyr::group_by(.data$Gene.ID) %>%
+    dplyr::top_n(1, .data$moduleSize) %>%
+    dplyr::top_n(1, .data$moduleNumber) %>%
+    dplyr::select(-.data$moduleSize) %>%
     dplyr::mutate(moduleNumber = factor(moduleNumber),
                   moduleNumber = as.numeric(moduleNumber))
   
@@ -63,9 +65,9 @@ findModules.CFinder.once <- function(adj, path, min.module.size, i){
   
   # Rename modules with size less than min module size to 0
   filteredModules = geneModules %>% 
-    dplyr::group_by(moduleNumber) %>%
-    dplyr::summarise(counts = length(unique(Gene.ID))) %>%
-    dplyr::filter(counts >= min.module.size)
+    dplyr::group_by(.data$moduleNumber) %>%
+    dplyr::summarise(counts = length(unique(.data$Gene.ID))) %>%
+    dplyr::filter(.data$counts >= min.module.size)
   geneModules$moduleNumber[!(geneModules$moduleNumber %in% filteredModules$moduleNumber)] = 0
   
   # Change cluster number to color labels

@@ -20,6 +20,8 @@ y is a matrix of quantitative responses.}
 
 \item{x}{Required. An input matrix, of dimension nobs x nvars; each row is an observation vector. 
 Can be in sparse matrix format (inherit from class "sparseMatrix" as in package Matrix)}
+
+\item{eigen}{Required. Eigen cutoff value}
 }
 \value{
 Lowest BIC value.

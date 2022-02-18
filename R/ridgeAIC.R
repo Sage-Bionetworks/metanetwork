@@ -4,6 +4,7 @@
 #' best AIC estimate.
 #' 
 #' @inheritParams lassoAIC
+#' @param eigen Required. Eigen cutoff value
 #' 
 #' @return Lowest AIC value.
 #' 
