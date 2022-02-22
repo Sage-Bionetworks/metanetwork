@@ -1,5 +1,19 @@
-computeBICcurve <- function(network,exprData,maxEdges=NULL,exact=NULL){
-  library(dplyr)
+#' This Function Computes a Network BIC Curve
+#' 
+#' (?)
+#' 
+#' @param network A network object 
+#' @param exprData Expression data matrix
+#' @param maxEdges Optional. (Default = NULL)
+#' @param exact Optional.  (Default = NULL)
+#' 
+#' @return  A list object containing values of a sparse network, the best fit
+#' minimum BIC, and 
+#' @importFrom magrittr %>%
+#' @export
+#' 
+computeBICcurve <- function(network, exprData, maxEdges=NULL, exact=NULL){
+  #library(dplyr)
   if(is.null(maxEdges)){
     maxEdges <- round((nrow(exprData)*ncol(exprData))/20)
   }
@@ -36,15 +50,15 @@ computeBICcurve <- function(network,exprData,maxEdges=NULL,exact=NULL){
   colnames(edgeList) <- c('node1','node2','weight')
   rownames(edgeList) <- paste0('e',1:nrow(edgeList))
   edgeList <- data.frame(edgeList,stringsAsFactors=F)
-  edgeList <- arrange(edgeList,desc(weight))
+  edgeList <- dplyr::arrange(edgeList,dplyr::desc(.data$weight))
   print(edgeList[1:5,])
-  bicPath <- metanetwork::covarianceSelectionMBPath(data.matrix(exprData),rankedEdges=edgeList[,1:2],start=1)
+  bicPath <- metanetwork::covarianceSelectionMBPath(data.matrix(exprData), rankedEdges=edgeList[,1:2], start=1)
   bicPath2 <- NA;
 
   #if(!is.null(exact)){
   #  bicPath2 <- metanetwork::covarianceSelectionPath(cor(exprData),edgeList[,1:2],nrow(exprData)*ncol(exprData),nrow(exprData))
   #}
-  library(Matrix)
+  #library(Matrix)
   network <- network>=edgeList$weight[which.min(bicPath$bic)]
-  return(list(network=Matrix(network,sparse=T),bicMin=min(bicPath$bic),bicPath=bicPath$bic))
+  return(list(network=Matrix::Matrix(network,sparse=T),bicMin=min(bicPath$bic),bicPath=bicPath$bic))
 }

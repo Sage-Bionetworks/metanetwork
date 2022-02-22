@@ -1,13 +1,19 @@
-# Function to find global modularity (Q)
+#' Find Global Modularity (Q)
+#' 
+#' This function finds Function to find global modularity (Q) of a upper triangular adjacency matrix.
+#'
+#' @param method Optional. If 'Newman1' is specified modularity is instituded in 
+#' as-per the Clauset, Newman model in the function igraph::graph.modularity()
+#' (Default = 'Newman1')
+#'  
+#' @inheritParams compute.LocalModularity
+#'  
+#' @return Q = modularity index.
+#' 
+#' @importFrom rlang .data
+#' 
+#' @export compute.Modularity
 compute.Modularity <- function(adj, mod, method = 'Newman1'){
-
-  # Input
-  #      adj = n x n upper triangular adjacency in the matrix class format
-  #      mod = n x 3 dimensional data frame with column names as Gene.ID, moduleNumber, and moduleLabel
-  
-  # Output (list of following elements)
-  #      Q = modularity index
-  
   # Error functions
   if(class(adj) != "matrix")
     stop('Adjacency matrix should be of class matrix')
@@ -28,13 +34,12 @@ compute.Modularity <- function(adj, mod, method = 'Newman1'){
   if (method == 'Newman1'){
     # Convert to igraph graph object
     g = igraph::graph.adjacency(adj, mode = 'upper', weighted = TRUE, diag = F)
-    
     Q = igraph::modularity(g, modules)
   } else {
     adj = adj + t(adj)
     
     # Get unique communities
-    comm = plyr::dlply(mod, .(moduleNumber), .fun = function(x){ unique(x$Gene.ID) }, .parallel = T)
+    comm = plyr::dlply(mod, .variables = "moduleNumber", .fun = function(x){ unique(x$Gene.ID) }, .parallel = T)
     
     # Get number of edges between communities
     edge.comm = foreach::foreach(ci = names(comm), .packages = c('foreach', 'doParallel'), .combine = cbind) %dopar% {

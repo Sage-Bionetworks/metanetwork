@@ -1,4 +1,22 @@
-# Function to get modules from network adjacency matrix
+#' Find Modules with Hierarchical Clustering
+#' 
+#' This function finds modules from Hierarchical Clustering `fastcluster::hclust.vector()`
+#' 
+#' @param adj Required. A n x n upper triangular adjacency in the matrix class format.
+#' @param aggloMethod Optional. The agglomeration method to be used. This must be 
+#' (an unambiguous abbreviation of) one of "single", "ward", "centroid" or "median".
+#' (Default = "ward")
+#' @param clustDistance Optional. The distance measure to be used. This must be 
+#' one of "euclidean", "maximum", "manhattan", "canberra", "binary" or "minkowski". 
+#' Any unambiguous substring can be given. (Default = "euclidean")
+#' @param minModuleSize Optional. Integer between 1 and n genes. (Default = 30)
+#'
+#' @return  GeneModules = n x 3 dimensional data frame with column names as Gene.ID,
+#' moduleNumber, and moduleLabel.
+#' 
+#' @importFrom magrittr %>%
+#' @importFrom rlang .data
+#' @export
 findModules.hclust <- function(adj, aggloMethod = 'ward', clustDistance = 'euclidean', minModuleSize = 30){
   # Input
   #      adj = n x n upper triangular adjacency in the matrix class format
@@ -26,11 +44,9 @@ findModules.hclust <- function(adj, aggloMethod = 'ward', clustDistance = 'eucli
   # Cut tree to form clusters
   mod = dynamicTreeCut::cutreeDynamic(dendro = geneTree, 
                                       minClusterSize = minModuleSize,
-                                      
                                       method = 'hybrid',
                                       distM = as.matrix(distAdj),
                                       deepSplit =FALSE,
-                                      
                                       pamRespectsDendro = FALSE)
   
   geneModules = data.frame(Gene.ID = rownames(adj),
@@ -38,9 +54,9 @@ findModules.hclust <- function(adj, aggloMethod = 'ward', clustDistance = 'eucli
   
   # Rename modules with size less than min module size to 0
   filteredModules = geneModules %>% 
-    dplyr::group_by(moduleNumber) %>%
-    dplyr::summarise(counts = length(unique(Gene.ID))) %>%
-    dplyr::filter(counts >= minModuleSize)
+    dplyr::group_by(.data$moduleNumber) %>%
+    dplyr::summarise(counts = length(unique(.data$Gene.ID))) %>%
+    dplyr::filter(.data$counts >= minModuleSize)
   geneModules$moduleNumber[!(geneModules$moduleNumber %in% filteredModules$moduleNumber)] = 0
 
   # Change cluster number to color labels

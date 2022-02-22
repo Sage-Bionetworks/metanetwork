@@ -1,6 +1,24 @@
+#' Covariance Selection with Path BIC Selection
+#'
+#' Selects an optimal covariance matrix through Path BIC Selection.
+#
+#' @param S Required. An expression matrix
+#' @param rankedEdges Required. An edge list in the form of a matrix where column
+#' one is gene one and column 2 is gene two
+#' @param numberObservations Required. The number of samples comprising the network (?)
+#' @param n Optional. Start at the first edge in `rankedEdges` (Default = 1)
+#' 
+#' @return  A list containg
+#' \itemize{
+#'     \item{`bic` Estimated BIC.}
+#'    \item{`bicmin` Lowest Estimated BIC.}
+#'    \item{`w`	The covariance matrix.}
+#'    \item{`wi` The inverse covariance matrix.}
+#' }
+#' @export
 covarianceSelectionPath = function(S,rankedEdges,numberObservations,n){
   #rankedEdges: list of ranked edges
-  library(glasso)
+  #library(glasso)
   zeros <- which(upper.tri(S)==TRUE,TRUE)
   count <- 1
   bic <- nrow(rankedEdges)
@@ -11,9 +29,9 @@ covarianceSelectionPath = function(S,rankedEdges,numberObservations,n){
     #cat(rowInd,'\n')
     zeros <- zeros[-rowInd,]
     if(count==1){
-      res <- glasso(S,rho=0,zero=zeros)
+      res <- glasso::glasso(S,rho=0,zero=zeros)
     }else{
-      res <- glasso(S,rho=0,zero=zeros,w.init = res$w, wi.init = res$wi,start = 'warm')
+      res <- glasso::glasso(S,rho=0,zero=zeros,w.init = res$w, wi.init = res$wi,start = 'warm')
     }
     print(res$w[1:5,1:5])
     print(res$wi[1:5,1:5])
@@ -35,7 +53,7 @@ covarianceSelectionPath = function(S,rankedEdges,numberObservations,n){
     zeros <- zeros[-rowInd,]
     count <- count+1
   }
-  res <- glasso(S,rho=0,zero=zeros,w.init = res$w, wi.init = res$wi,start = 'warm')
+  res <- glasso::glasso(S,rho=0,zero=zeros,w.init = res$w, wi.init = res$wi,start = 'warm')
   
   return(list(bic=bic,bicmin=bicmin,w=res$w,wi=res$wi))
 }

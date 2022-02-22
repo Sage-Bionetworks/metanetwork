@@ -1,15 +1,20 @@
-# Reference in  https://github.com/Sage-Bionetworks/AMP-AD_Network_Analysis/blob/22bc35fcdfc266fb650bb9b55e89ff70aa22e04c/makeDataForNetworkWG.R
+#' Winsorize a Gene Expression Matrix
+#' 
+#' Will winsorize a given gene expression matrix
+#' 
+#' @param x Gene expression matrix 
+#' 
+#' @return A winsorized expression matrix
+#' 
+#' @export
 winsorizeData <- function(x){
-  library(dplyr)
-
-    winsorize <- function(x,per=.99){
-    up <- quantile(x,per,na.rm=T)
-    low <- quantile(x,1-per,na.rm=T)
-    x[x>=up] <- up
-    x[x<=low] <- low
+  winsorize <- function(x,per=.99){
+    up <- stats::quantile(x,per,na.rm=T)
+    low <- stats::quantile(x,1-per,na.rm=T)
+    x[x >= up] <- up
+    x[x <= low] <- low
     return(x)
-    }
-
+  }
 
   replaceNaMean <- function(x){
     if(sum(is.na(x))>0){
