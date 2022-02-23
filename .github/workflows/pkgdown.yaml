@@ -16,6 +16,10 @@ jobs:
 
       - uses: r-lib/actions/setup-pandoc@master
 
+      - name: Install MPI in macOS
+	run: brew install openmpi
+	if: runner.os == 'macOS'
+
       - name: Query dependencies
         run: |
           install.packages('remotes')
