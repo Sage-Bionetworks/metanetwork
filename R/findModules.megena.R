@@ -59,9 +59,6 @@ findModules.megena <- function(data, method = "pearson", FDR.cutoff = 0.05,
   summary.output <- MEGENA::MEGENA.ModuleSummary(MEGENA.output,
   mod.pvalue = module.pval,hub.pvalue = hub.pval,
   min.size = 10,max.size = igraph::vcount(g)/2,
-  annot.table = annot.table,
-  id.col = id.col,
-  symbol.col = symbol.col,
   output.sig = TRUE)
 
   megena_Res = megena_Res %>% dplyr::filter(.data$module.size > .data$min_module - 1)
