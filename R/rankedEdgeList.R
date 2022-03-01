@@ -1,5 +1,20 @@
+#' Rank edges of a coexpression matrix
+#' 
+#' This functions produces a ranked edgelist of a coexpression matrix
+#' 
+#' @param network A network object as a matrix object
+#' @param symmetric Optional. A logical `TRUE` or `FALSE` to treat `network` as
+#' a symmetrical matrix. (Default = FALSE)
+#' @param maxLength Optional. The maximum length of an output ranked edgelist.
+#' (Default = 1e7)
+#' 
+#' @return A greatest to least ranked list of eddge strenge in the form of a 
+#' data.frame() object. 
+#' 
+#' @importFrom magrittr %>%
+#' @export
 rankedEdgeList <- function(network,symmetric=FALSE,maxLength=1e7){
-  require(dplyr)
+  #require(dplyr)
   #edgeMat <- matrix(paste0('e',1:(nrow(network)*ncol(network))),nrow(network),ncol(network))
   if(!symmetric){
     #need to fix this
@@ -31,5 +46,5 @@ rankedEdgeList <- function(network,symmetric=FALSE,maxLength=1e7){
   cat('ordering data frame\n')
   rankedEdgeList <- rankedEdgeList[order((rankedEdgeList$value %>% abs),decreasing=T),]
   gc()
-  rankedEdgeList %>% return
+  rankedEdgeList %>% return()
 }

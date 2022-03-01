@@ -1,14 +1,22 @@
 # Function to score network nodes based on its neighborhood scores
+#' Scores Nodes From Regulator Discovery
+#' 
+#' Function to scores results of regulator scoring analysis.
+#' 
+#' @param g Required. An igraph object with n vertices
+#' @param G Required. A named vector of node scores.
+#' @param h Optional. Neighborhood search distance (h nodes away from current node)
+#' (Default = 3) 
+#' @param mode Optional. One of c("all", "out", "in", "total"). Character string, 
+#' "out" for out-degree, "in" for in-degree or "all" for the sum of the two. 
+#' For undirected graphs this argument is ignored. (Default = 'all') 
+#' 
+#' @return  node.scores = n x 1 dimensional vector of node scores based on its
+#' neighborhood
+#' 
+#' @importFrom magrittr %>%
+#' @export
 score.nodes <- function(g, G, h=3, mode = 'all'){
-  
-  # Input
-  #      g = an igraph object with n vertices
-  #      G = a named vector of node scores
-  #      h = neighborhood search distance (h nodes away from current node)
-  #      mode = one of c("all", "out", "in", "total"). Character string, “out” for out-degree, “in” for in-degree or “all” for the sum of the two. For undirected graphs this argument is ignored.
-  
-  # Output
-  #      node.scores = n x 1 dimensional vector of node scores based on its neighborhood
   
   # Error checking
   if(!igraph::is.igraph(g))
@@ -32,7 +40,7 @@ score.nodes <- function(g, G, h=3, mode = 'all'){
   # Calculate node degree for identifying global drivers
   node.degree = igraph::strength(g, mode = mode, loops = FALSE)
   mean.node.degree = mean(node.degree, na.rm = T)
-  stddev.node.degree = sd(node.degree, na.rm = T)
+  stddev.node.degree = stats::sd(node.degree, na.rm = T)
   
   # Find H-Layer neighborhood
   neighbor.nodes = lapply(1:h, function(hi,sg){
@@ -40,6 +48,7 @@ score.nodes <- function(g, G, h=3, mode = 'all'){
   }, g)
   
   # Find summed weight of current node based on h-layer neighbors
+  x <- NULL
   node.scores = foreach::foreach (x = 1:length(neighbor.nodes), .combine = cbind) %dopar% {
     score = sapply(neighbor.nodes[[x]], function(y, G){
       sum(G[names(y)] * (1/node.degree[names(y)]))

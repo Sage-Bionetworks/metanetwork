@@ -1,13 +1,16 @@
-# Function to get modules from network adjacency matrix
+#' Find Modules with iGraph Fast and Greedy algorithm
+#' 
+#' This function wraps permutations of finding modules with 
+#' igraph::cluster_fast_greedy().
+#' 
+#' @inheritParams findModules.CFinder
+#' 
+#' @return  GeneModules = n x 3 dimensional data frame with column names as Gene.ID,
+#' moduleNumber, and moduleLabel.
+#' 
+#' @importFrom magrittr %>%
+#' @export
 findModules.fast_greedy <- function(adj, nperm = 10, min.module.size = 30){
-  # Input
-  #      adj = n x n upper triangular adjacency in the matrix class format
-  #      nperm = number of permutation on the gene ordering 
-  #      min.module.size = integer between 1 and n genes 
-  
-  # Output
-  #      geneModules = n x 3 dimensional data frame with column names as Gene.ID, moduleNumber, and moduleLabel
-  
   # Error functions
   if(class(adj) != "matrix")
     stop('Adjacency matrix should be of class matrix')
@@ -50,32 +53,3 @@ findModules.fast_greedy <- function(adj, nperm = 10, min.module.size = 30){
   
   return(mod)
 }  
-
-findModules.fast_greedy.once <- function(adj, min.module.size){
-  # Convert lsparseNetwork to igraph graph object
-  g = igraph::graph.adjacency(adj, mode = 'undirected', weighted = T, diag = F)
-  
-  # Get modules using fast greedy method (http://arxiv.org/abs/cond-mat/0408187)
-  mod = igraph::cluster_fast_greedy(g)
-  
-  # Get individual clusters from the igraph community object
-  geneModules = igraph::membership(mod) %>%
-    unclass %>%
-    as.data.frame %>%
-    plyr::rename(c('.' = 'moduleNumber'))
-  
-  geneModules = cbind(data.frame(Gene.ID = rownames(geneModules)),
-                      geneModules)              
-  
-  # Rename modules with size less than min module size to 0
-  filteredModules = geneModules %>% 
-    dplyr::group_by(moduleNumber) %>%
-    dplyr::summarise(counts = length(unique(Gene.ID))) %>%
-    dplyr::filter(counts >= min.module.size)
-  geneModules$moduleNumber[!(geneModules$moduleNumber %in% filteredModules$moduleNumber)] = 0
-  
-  # Change cluster number to color labels
-  geneModules$moduleLabel = WGCNA::labels2colors(geneModules$moduleNumber)
-  
-  return(geneModules)
-}

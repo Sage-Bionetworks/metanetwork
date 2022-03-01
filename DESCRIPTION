@@ -2,16 +2,78 @@ Package: metanetwork
 Type: Package
 Title: Network meta analysis
 Version: 0.1.1
-Authors@R: person("Logsdon", "Benjamin", email="ben.logsdon@sagebase.org", role = c("aut", "cre"))
+Authors@R:
+  c(person(given = "Pradeep",
+    family = "Pugalenthi",
+    role = c("aut", "cre"),
+    email = "pradeep.pugalenthi@sagebase.org"),
+  person(given = "Jake",
+    family = "Gockley",
+    role = c("ctb"),
+    email = "jake.gockley@sagebase.org",
+    comment = c( ORCID = "0000-0001-7993-5308")),
+  person(given = "Benjamin",
+    family = "Logsdon",
+    email = "ben.logsdon@sagebase.org", 
+    role = c("aut"),
+    comment = c(ORCID = "0000-0002-0572-2569"))
+  )
 Description: Package to infer multiple types of coexpression network representations of high dimensional gene expression data.  Builds network ensembles, extract network statistics, and run enrichments on network features.
 Depends: R (>= 3.1.0)
-License: GPLv3
+License: MIT + file LICENSE
 LazyData: true
+URL: hhttps://sage-bionetworks.github.io/metanetwork,
+    https://github.com/Sage-Bionetworks/metanetwork
+Encoding: UTF-8
+biocViews:
 Imports:
+  bit64,
+  Biobase,
+  c3net,
+  caroline,
+  cluster,
+  config,
+  data.table,
   dplyr (>= 0.4.1),
-  vbsr (>= 0.0.5),
+  doParallel,
+  dynamicTreeCut,
+  fastcluster,
+  foreach,
+  fpc,
+  glasso,
   glmnet (>= 2.0),
-  randomForest (>= 4.6),
+  graphics,
+  grid,
+  Hmisc (>= 3.15),
+  igraph,
+  knitr,
   lars (>= 1.2),
+  linkcomm,
+  magrittr,
+  markdown,
+  MASS,
+  Matrix,
+  MEGENA,
+  optparse,
+  randomForest (>= 4.6),
+  reader,
+  readr,
+  rlang,
+  Rmpi,
+  parallel,
+  parmigene,
+  plyr,
   WGCNA (>= 1.46),
-  Hmisc (>= 3.15)
+  stats,
+  stringr,
+  synapser,
+  utils,
+  vbsr (>= 0.0.5)
+Additional_repositories:
+  http://ran.synapse.org
+Remotes:
+  blogsdon/vbsr/vbsr,
+  brian-bot/githubr
+VignetteBuilder:
+  knitr
+RoxygenNote: 7.1.2

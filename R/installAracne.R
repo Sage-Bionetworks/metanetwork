@@ -1,21 +1,24 @@
-#install aracne function
+#' This function applies ARACNE on the data
+#' 
+#' This function installs the ARACNE system Function
+#' 
+#' @param path Optional. Path is currently not a functional argument. This function
+#' automatically installs ARACNe from `inst/tools`. Default = NULL.
+#' 
+#' @export
+#' @return NULL
+#' 
 installAracne <- function(path=NULL){
-  require(synapseClient)
-  synapseLogin()
-  cwd <- getwd()
-  aracne <- synGet(id='syn3076450')
-  if(!is.null(path)){
-    setwd(path)
-  }
-  system(paste('tar -xzvf ',aracne@filePath,sep=''))
-    #str1 <- aracne@filePath;
+  arc_path = system.file("inst/tools", "ARACNE.src.tar.gz", package = "metanetwork")
+  system(paste('tar -xzvf ',arc_path,sep=''))
+  #str1 <- aracne@filePath;
   #str2 <- strsplit(str1,'ARACNE.src.tar.gz')[[1]]
-  str3 <- 'ARACNE/'
-  cat(str3,'\n')  
-  setwd(str3)
+  temp_path = paste0(config$input_profile$temp_storage_loc,"/ARACNE")
+  setwd(temp_path)
+  cat(temp_path,'\n')  
+  setwd(temp_path)
   #system(paste(str2,'/ARACNE.src/ARACNE/',sep=''))
   system('make')
   #setwd('../')
-  setwd(cwd)
   #return(paste(getwd(),'/ARACNE/',sep=''))
 }

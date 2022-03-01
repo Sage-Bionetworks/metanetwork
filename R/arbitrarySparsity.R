@@ -1,5 +1,16 @@
+#' This function Builds an arbitary sparse network
+#' 
+#' This introduces sparsity into a data frame or matrix with increasing frequency
+#' as the `nedges` parameter is specified
+#' 
+#' @param nedges Required. Edges parameter to increase sparsity. 
+#' @param network Required. A matrix or data frame of gene expression
+#' 
+#' @export 
+#' @return a logical matrix of TRUE/FALSE where True indicates sparsity
+#' 
 arbitrarySparsity <- function(nedges,network){
-  require(dplyr)
+  #require(dplyr)
   gc()
   cat('nedges: ',nedges,'\n')
   #make the network into a matrix for sure (in case it is stored as a data frame or list)

@@ -1,13 +1,13 @@
-# Function to find modularity density (Qds)
+#' Find Global Modularity (Qds)
+#' 
+#' This function finds calculates modularity density.
+#'
+#' @inheritParams compute.LocalModularity
+#'  
+#' @return Qds = module density.
+#' 
+#' @export compute.ModularityDensity
 compute.ModularityDensity <- function(adj, mod){
-  
-  # Input
-  #      adj = n x n upper triangular adjacency in the matrix class format
-  #      mod = n x 3 dimensional data frame with column names as Gene.ID, moduleNumber, and moduleLabel
-  
-  # Output
-  #      Qds = module density
-  
   # Error functions
   if(class(adj) != "matrix")
     stop('Adjacency matrix should be of class matrix')
@@ -24,7 +24,7 @@ compute.ModularityDensity <- function(adj, mod){
   # Convert lsparseNetwork upper adj matrix to graph
   g = igraph::graph.adjacency(adj, mode = 'upper', weighted = TRUE, diag = F)
   rownames(mod) = mod$Gene.ID
-  igraph::V(g)$moduleNumber = paste0('mod.',mod[V(g)$name, 'moduleNumber'])
+  igraph::V(g)$moduleNumber = paste0('mod.',mod[igraph::V(g)$name, 'moduleNumber'])
   
   rm(list = c('adj', 'mod'))
   gc()

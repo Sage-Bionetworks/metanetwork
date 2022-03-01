@@ -1,13 +1,17 @@
-# Function to find local modularity (NQ)
+#' Find Local Modularity (NQ)
+#' 
+#' This function finds local modularity (NQ) in an upper triangular adjacency matrix.
+#'
+#' @param adj Required. An n x n upper triangular adjacency in the matrix class 
+#' format.
+#' @param mod Required. An n x 3 dimensional data frame with column names as 
+#' Gene.ID, moduleNumber, and moduleLabel.
+#'  
+#' @return NQ = local modularity index.
+#' 
+#' @export compute.LocalModularity
+#' 
 compute.LocalModularity <- function(adj, mod){
-  
-  # Input
-  #      adj = n x n upper triangular adjacency in the matrix class format
-  #      mod = n x 3 dimensional data frame with column names as Gene.ID, moduleNumber, and moduleLabel
-  
-  # Output (list of following elements)
-  #      NQ = local modularity index
-  
   # Error functions
   if(class(adj) != "matrix")
     stop('Adjacency matrix should be of class matrix')
@@ -24,17 +28,17 @@ compute.LocalModularity <- function(adj, mod){
   # Convert lsparseNetwork upper adj matrix to graph
   g = igraph::graph.adjacency(adj, mode = 'upper', weighted = TRUE, diag = F)
   rownames(mod) = mod$Gene.ID
-  igraph::V(g)$moduleNumber = paste0('mod.',mod[V(g)$name, 'moduleNumber'])
+  igraph::V(g)$moduleNumber = paste0('mod.',mod[igraph::V(g)$name, 'moduleNumber'])
   
   rm(list = c('adj', 'mod'))
   gc()
   
   # Get number of edges between communities
-  edge.comm = foreach::foreach(ci = unique(igraph::V(g)$moduleNumber), 
+  edge.comm = foreach::foreach(ci=unique(igraph::V(g)$moduleNumber), 
                                .packages = c('foreach', 'doParallel'), 
                                .combine = cbind, 
                                .export = c('g')) %dopar% {
-                                 foreach::foreach(cj = unique(igraph::V(g)$moduleNumber), 
+                                 foreach::foreach(cj=unique(igraph::V(g)$moduleNumber), 
                                                   .combine = c,
                                                   .packages = c('foreach', 'doParallel', 'dplyr'),
                                                   .export = c('g', 'ci')) %dopar% {
@@ -51,7 +55,7 @@ compute.LocalModularity <- function(adj, mod){
   gc()
   
   # Calculate local modularity
-  NQ = foreach::foreach(ci = rownames(edge.comm), 
+  NQ = foreach::foreach(ci=rownames(edge.comm), 
                         .combine = c,
                         .export = c('edge.comm')) %dopar% {
                           if(edge.comm[ci,ci] != 0){

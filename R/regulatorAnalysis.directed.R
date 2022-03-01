@@ -1,4 +1,20 @@
-# Function to perform un-weighted key regulator analysis for directed networks
+#' Function to Identify Network Regulators from Directed Networks
+#' 
+#' Identifies network un-weighted regulators from directed networks
+#' 
+#' @param adj Required. An n x n weighted upper triangular adjacency in the matrix 
+#' class format.
+#' @param G Required. A named vector of node scores.
+#' @param h Optional. Neighborhood search distance (h nodes away from current node) 
+#' (Default = 3)
+#' @param FDR Optional. Adjusted pvalue cutoff for regulator selection.
+#' (Default = 0.05)
+#' 
+#' @return scores = n x 5 dimensional data frame with columns giving neighborhood
+#'based score, adjusted pvalue, whether a gene is regulator/global regulator.
+#'
+#' @importFrom foreach %dopar%
+#' @export
 regulatorAnalysis.directed <- function(adj, G, h=3, FDR = 0.05){
   
   # Convert adjacency to igraph object
@@ -11,6 +27,7 @@ regulatorAnalysis.directed <- function(adj, G, h=3, FDR = 0.05){
   }, g)
   
   # Perform enrichment analysis for every gene in every layer and pick the minimum p-value
+  i <- NULL
   fdr = sapply(1:length(neighbor.nodes), function(x, neighborNodes, G, backgroundGenes){
     foreach::foreach(i = 1:length(neighborNodes[[x]]), 
                      .combine = c, 
@@ -25,7 +42,7 @@ regulatorAnalysis.directed <- function(adj, G, h=3, FDR = 0.05){
   # Calculate node degree for identifying global regulators
   node.degree = igraph::degree(g)
   mean.node.degree = mean(node.degree, na.rm = T)
-  stddev.node.degree = sd(node.degree, na.rm = T)
+  stddev.node.degree = stats::sd(node.degree, na.rm = T)
   
   # Find leaf nodes to identify global regulators
   node.in.degree = igraph::degree(g, mode = 'in')

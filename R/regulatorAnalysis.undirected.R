@@ -1,3 +1,20 @@
+#' Function to Identify Network Regulators from Undirected Networks
+#' 
+#' Identifies network un-weighted regulators from Undirected networks
+#' 
+#' @param adj Required. An n x n weighted upper triangular adjacency in the matrix 
+#' class format.
+#' @param G Required. A named vector of node scores.
+#' @param h Optional. Neighborhood search distance (h nodes away from current node) 
+#' (Default = 3)
+#' @param FDR Optional. Adjusted pvalue cutoff for regulator selection.
+#' (Default = 0.05)
+#' 
+#' @return scores = n x 3 dimensional list with columns giving neighborhood
+#'based score, adjusted pvalue, whether a gene is regulator/global regulator.
+#'
+#' @importFrom foreach %dopar%
+#' @export
 regulatorAnalysis.undirected <- function(adj, G, h=3, FDR = 0.05){
   
   # Convert adjacency to igraph object
@@ -10,7 +27,8 @@ regulatorAnalysis.undirected <- function(adj, G, h=3, FDR = 0.05){
   },g)
   
   # Perform enrichment analysis for every gene in every layer and pick the minimum p-value
-  p.val = foreach (x = 1:length(neighbor.nodes)) %dopar% {
+  x <- NULL
+  p.val = foreach::foreach (x = 1:length(neighbor.nodes)) %dopar% {
     p.val = sapply(neighbor.nodes[[x]], function(y, G, backgroundGenes){
       metanetwork::fisherEnrichment(names(y), G, backgroundGenes)$pval
     }, G, background.genes)
@@ -23,7 +41,7 @@ regulatorAnalysis.undirected <- function(adj, G, h=3, FDR = 0.05){
   # Calculate node degree for identifying global regulators
   node.degree = igraph::degree(g)
   mean.node.degree = mean(node.degree, na.rm = T)
-  stddev.node.degree = sd(node.degree, na.rm = T)
+  stddev.node.degree = stats::sd(node.degree, na.rm = T)
   
   # Coallate results
   key.regulators = list()
