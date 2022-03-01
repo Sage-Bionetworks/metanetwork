@@ -54,6 +54,7 @@ Imports:
   MASS,
   Matrix,
   MEGENA,
+  optparse,
   randomForest (>= 4.6),
   readr,
   rlang,
