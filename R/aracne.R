@@ -15,7 +15,7 @@
 #' @param na_fill Optional. Value to replace `NA` values with ideally, a large 
 #' negative number or use min(data). (Default = NULL)
 #' @param tool_storage_loc Required. Provides the directory inside docker to 
-#' temporarily store the ARACNE files and package
+#' temporarily store the ARACNE files and package. (Default = config$input_profile$temp_storage_loc)
 #' 
 #' @return A Co-Expression Network saved to the path `outputpath` and titled
 #'  `aracneThresholdNetwork.csv` (if `pval` < 1) or as `aracneNetwork.csv` if 

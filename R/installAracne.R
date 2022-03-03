@@ -5,7 +5,7 @@
 #' @param path Optional. Path is currently not a functional argument. This function
 #' automatically installs ARACNe from `inst/tools`. Default = NULL.
 #' tool_storage_loc Required. Provides the directory inside docker to 
-#' temporarily store the ARACNE files and package 
+#' temporarily store the ARACNE files and package. (Default = config$input_profile$temp_storage_loc)
 #'
 #' @export
 #' @return NULL
