@@ -20,6 +20,8 @@
 #' correlation pairs. (Default = 10)
 #' @param hub.perm Optional. number of permutations for calculating connectivity 
 #' significance p-value. (Default = 100)
+#' @param min_module Optional. minimum number of nodes/genes allowed for filtering
+#'  (Default = 30)
 #'
 #' @return  GeneModules = n x 3 dimensional data frame with column names as Gene.ID,
 #' moduleNumber, and moduleLabel.
