@@ -53,9 +53,7 @@ findModules.GANXiS <- function(adj, path, nperm = 10, min.module.size = 30){
   # Find the best module based on Q and Qds
   tmp = plyr::ldply(all.modules, function(x){
     data.frame(Q = x$Q, Qds = x$Qds)
-  }) %>%
-    stats::na.omit %>%
-    dplyr::mutate(r = base::rank(Q, na.last = FALSE)+base::rank(Qds, na.last = FALSE))
+  }) %>% na.omit %>% dplyr::mutate(r = base::rank(Q, na.last = FALSE)+base::rank(Qds, na.last = FALSE))
   ind = which.max(tmp$r)
   
   mod = all.modules[[ind]]$mod
