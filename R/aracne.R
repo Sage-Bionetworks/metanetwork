@@ -14,12 +14,14 @@
 #' @param outputpath Required. The path the resulting network should be saved to.
 #' @param na_fill Optional. Value to replace `NA` values with ideally, a large 
 #' negative number or use min(data). (Default = NULL)
+#' @param tool_storage_loc Required. Provides the directory inside docker to 
+#' temporarily store the ARACNE files and package
 #' 
 #' @return A Co-Expression Network saved to the path `outputpath` and titled
 #'  `aracneThresholdNetwork.csv` (if `pval` < 1) or as `aracneNetwork.csv` if 
 #'  `pval` is set to 1. 
 #' @export
-aracne <- function(data,path=NULL,pval=NULL,outputpath,na_fill = NULL){
+aracne <- function(data,path=NULL,pval=NULL,outputpath,na_fill = NULL,tool_storage_loc = config$input_profile$temp_storage_loc){
   #path is the a string of the path to th aracne compiled executable
   #data is a matrix of the gene expression data of interest
   installAracne()
@@ -32,7 +34,7 @@ aracne <- function(data,path=NULL,pval=NULL,outputpath,na_fill = NULL){
   }else{
     data[is.na(data)] <- na_fill # Ideally, user could insert a large negative number or use min(data)
   }
-  temp_path = paste0(config$input_profile$temp_storage_loc,"/ARACNE")
+  temp_path = paste0(tool_storage_loc,"/ARACNE")
   setwd(temp_path)
   
   dataMatrix <- cbind(rownames(data),rownames(data),data)
