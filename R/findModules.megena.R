@@ -60,7 +60,7 @@ findModules.megena <- function(data, method = "pearson", FDR.cutoff = 0.05,
   mod.pvalue = module.pval,hub.pvalue = hub.pval,
   min.size = 10,max.size = igraph::vcount(g)/2,
   output.sig = TRUE)
-  megena_Res <- module_convert_to_table(MEGENA.output,mod.pval = 0.05,
+  megena_Res <- MEGENA::module_convert_to_table(MEGENA.output,mod.pval = 0.05,
                           hub.pval = 0.05,min.size = 30,max.size=vcount(g)/2)
   megena_Res = megena_Res %>% dplyr::filter(.data$module.size > .data$min_module - 1)
   gene_modules = data.frame('Gene.ID'= character(),'moduleNumber'=numeric(),'moduleSize'=numeric())
