@@ -19,7 +19,7 @@ installAracne <- function(path=NULL, tool_storage_loc){
     arc_path = system.file("inst/aracne", "ARACNE.src.tar.gz", package = "metanetwork")
   }
     
-  system(paste('tar -xzvf ',arc_path,sep=''))
+  system(paste('tar -xzvf ',arc_path, ' ', tool_storage_loc, sep=''))
   #str1 <- aracne@filePath;
   #str2 <- strsplit(str1,'ARACNE.src.tar.gz')[[1]]
   temp_path = paste0(tool_storage_loc,"/ARACNE")
