@@ -3,15 +3,22 @@
 #' This function installs the ARACNE system Function
 #' 
 #' @param path Optional. Path is currently not a functional argument. This function
-#' automatically installs ARACNe from `inst/tools`. Default = NULL.
+#' automatically installs ARACNe from `inst/aracne`. Default = NULL.
 #' tool_storage_loc Required. Provides the directory inside docker to 
 #' temporarily store the ARACNE files and package. (Default = config$input_profile$temp_storage_loc)
-#'
+#' @param tool_storage_loc Required. The path to access the installed aracne executeable file.
+#' eg. config$input_profile$temp_storage_loc
+#' 
 #' @export
 #' @return NULL
 #' 
-installAracne <- function(path=NULL,tool_storage_loc = config$input_profile$temp_storage_loc){
-  arc_path = system.file("inst/tools", "ARACNE.src.tar.gz", package = "metanetwork")
+installAracne <- function(path=NULL, tool_storage_loc){
+  if(is.null(path)) {
+    arc_path = system.file("inst/aracne", "ARACNE.src.tar.gz", package = "metanetwork")
+  }else {
+    arc_path = system.file("inst/aracne", "ARACNE.src.tar.gz", package = "metanetwork")
+  }
+    
   system(paste('tar -xzvf ',arc_path,sep=''))
   #str1 <- aracne@filePath;
   #str2 <- strsplit(str1,'ARACNE.src.tar.gz')[[1]]
