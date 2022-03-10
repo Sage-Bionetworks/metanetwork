@@ -4,7 +4,7 @@
 \alias{buildConsensus}
 \title{This function builds the Consensus Network from the component network}
 \usage{
-buildConsensus(outputpath, networkFolderId, fileName = NULL, pattern_id)
+buildConsensus(outputpath, networkFolderId, fileName, pattern_id, bar)
 }
 \arguments{
 \item{outputpath}{Required. Local directory to load files from and save files to.}

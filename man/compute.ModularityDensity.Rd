@@ -4,7 +4,7 @@
 \alias{compute.ModularityDensity}
 \title{Find Global Modularity (Qds)}
 \usage{
-\method{compute}{ModularityDensity}(adj, mod)
+compute.ModularityDensity(adj, mod)
 }
 \arguments{
 \item{adj}{Required. An n x n upper triangular adjacency in the matrix class 

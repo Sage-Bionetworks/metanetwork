@@ -4,11 +4,21 @@
 \alias{mrnetWrapper}
 \title{Implements mrnet}
 \usage{
-mrnetWrapper(data, path = NULL, pval = 1, outputpath)
+mrnetWrapper(
+  data,
+  temp_path,
+  path = NULL,
+  pval = 1,
+  outputpath,
+  tool_storage_loc = NULL
+)
 }
 \arguments{
 \item{data}{Required. A gene expression matrix with rows as sample IDs and
 columns as Gene or feature IDs.}
+
+\item{temp_path}{Required. The path location to install aracne to. eg. 
+`config$input_profile$temp_storage_loc`}
 
 \item{path}{Optional. String containing the path to the aracne compiled 
 executable. (Default = NULL)}
@@ -19,6 +29,10 @@ will produce the file `aracneThresholdNetwork.csv`. (Default = 1)}
 
 \item{outputpath}{Required. The output path to save the resulting coexpression
 network}
+
+\item{tool_storage_loc}{Optional. Path where aracne tarball will be installed
+system command. Default is null and pulls from package data file. to specify 
+other path use}
 }
 \value{
 NULL. Saves a sparrow network object to paste0(`outputpath`,
