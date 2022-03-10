@@ -12,7 +12,7 @@
 #' 
 installAracne <- function(path=NULL, tool_storage_loc){
   if(is.null(path)) {
-    arc_path = system.file("inst/aracne", "ARACNE.src.tar.gz", package = "metanetwork")
+    arc_path = system.file("aracne", "ARACNE.src.tar.gz", package = "metanetwork")
   }else {
     arc_path = path
   }
