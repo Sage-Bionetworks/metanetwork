@@ -13,18 +13,22 @@
 #' will produce the file `aracneThresholdNetwork.csv`. (Default = 1)
 #' @param outputpath Required. The output path to save the resulting coexpression
 #' network
-#' @param tool_storage_loc Optional. Path where aracne tarball will be installed
-#'  system command. Default is null and pulls from package data file. to specify 
-#'  other path use 
+#' @param tool_storage_loc Required. Provides the directory inside docker to 
+#' temporarily store the ARACNE files and package. 
+#' (Default = config$input_profile$temp_storage_loc)
 #' 
 #' @return NULL. Saves a sparrow network object to paste0(`outputpath`,
 #' `regressionFunction`,'mrnetNetwork.csv')
 #'
 #' @importFrom magrittr %>%
 #' @export
-mrnetWrapper = function(data,temp_path, path=NULL,pval=1,outputpath, tool_storage_loc=NULL){
+mrnetWrapper = function(data,temp_path, path=NULL,pval=1,outputpath, tool_storage_loc){
   #library(parmigene)
-  metanetwork::aracne(data,path,pval,outputpath, tool_storage_loc=tool_storage_loc)
+  metanetwork::aracne(data=data,
+                      path=path,
+                      pval=pval,
+                      outputpath=outputpath, 
+                      tool_storage_loc=tool_storage_loc)
   #library(data.table)
   #library(dplyr)
   if(pval==1){

@@ -10,7 +10,7 @@ mrnetWrapper(
   path = NULL,
   pval = 1,
   outputpath,
-  tool_storage_loc = NULL
+  tool_storage_loc
 )
 }
 \arguments{
@@ -30,9 +30,9 @@ will produce the file `aracneThresholdNetwork.csv`. (Default = 1)}
 \item{outputpath}{Required. The output path to save the resulting coexpression
 network}
 
-\item{tool_storage_loc}{Optional. Path where aracne tarball will be installed
-system command. Default is null and pulls from package data file. to specify 
-other path use}
+\item{tool_storage_loc}{Required. Provides the directory inside docker to 
+temporarily store the ARACNE files and package. 
+(Default = config$input_profile$temp_storage_loc)}
 }
 \value{
 NULL. Saves a sparrow network object to paste0(`outputpath`,

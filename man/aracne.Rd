@@ -10,7 +10,7 @@ aracne(
   pval = NULL,
   outputpath,
   na_fill = NULL,
-  tool_storage_loc = NULL
+  tool_storage_loc
 )
 }
 \arguments{
@@ -27,7 +27,7 @@ executable. (Default = NULL)}
 \item{na_fill}{Optional. Value to replace `NA` values with ideally, a large 
 negative number or use min(data). (Default = NULL)}
 
-\item{tool_storage_loc}{Oprional. Provides the directory inside docker to 
+\item{tool_storage_loc}{Required. Provides the directory inside docker to 
 temporarily store the ARACNE files and package. (Default = config$input_profile$temp_storage_loc)}
 }
 \value{

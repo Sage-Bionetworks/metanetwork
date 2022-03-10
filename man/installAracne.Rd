@@ -8,12 +8,10 @@ installAracne(path = NULL, tool_storage_loc)
 }
 \arguments{
 \item{path}{Optional. Path is currently not a functional argument. This function
-automatically installs ARACNe from `inst/aracne`. Default = NULL.
-tool_storage_loc Required. Provides the directory inside docker to 
-temporarily store the ARACNE files and package. (Default = config$input_profile$temp_storage_loc)}
+automatically installs ARACNe from `inst/aracne`. Default = NULL.}
 
-\item{tool_storage_loc}{Required. The path to access the installed aracne executeable file.
-eg. config$input_profile$temp_storage_loc}
+\item{tool_storage_loc}{Required. Provides the directory inside docker to 
+temporarily store the ARACNE files and package. (Default = config$input_profile$temp_storage_loc)}
 }
 \description{
 This function installs the ARACNE system Function
