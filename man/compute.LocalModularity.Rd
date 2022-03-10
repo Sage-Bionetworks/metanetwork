@@ -4,7 +4,7 @@
 \alias{compute.LocalModularity}
 \title{Find Local Modularity (NQ)}
 \usage{
-compute.LocalModularity(adj, mod)
+\method{compute}{LocalModularity}(adj, mod)
 }
 \arguments{
 \item{adj}{Required. An n x n upper triangular adjacency in the matrix class 

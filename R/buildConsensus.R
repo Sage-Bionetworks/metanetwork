@@ -6,7 +6,8 @@
 #' @param networkFolderId Required. The Synapse parent ID of the folder containing
 #' the folders with the individual networks.
 #' @param fileName Required. The input file path.
-#'  
+#' @param bar Required. File paths object with network paths 
+#' 
 #' @inheritParams synGetFiles
 #' 
 #' @export 

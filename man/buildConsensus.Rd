@@ -16,6 +16,8 @@ the folders with the individual networks.}
 
 \item{pattern_id}{Required. A character vector too match in the file names of 
 the children entities in `project_id`.}
+
+\item{bar}{Required. File paths object with network paths}
 }
 \value{
 Saves a rankc consensus network to `outputpath` and saves the BICNetwork

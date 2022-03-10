@@ -4,7 +4,7 @@
 \alias{compute.Modularity}
 \title{Find Global Modularity (Q)}
 \usage{
-compute.Modularity(adj, mod, method = "Newman1")
+\method{compute}{Modularity}(adj, mod, method = "Newman1")
 }
 \arguments{
 \item{adj}{Required. An n x n upper triangular adjacency in the matrix class 
