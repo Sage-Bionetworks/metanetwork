@@ -54,8 +54,8 @@ findModules.CFinder.once <- function(adj, path, min.module.size, i){
     dplyr::top_n(1, .data$moduleSize) %>%
     dplyr::top_n(1, .data$moduleNumber) %>%
     dplyr::select(-.data$moduleSize) %>%
-    dplyr::mutate(moduleNumber = factor(moduleNumber),
-                  moduleNumber = as.numeric(moduleNumber))
+    dplyr::mutate(moduleNumber = factor(.data$moduleNumber),
+                  moduleNumber = as.numeric(.data$moduleNumber))
   
   # Add missing genes
   Gene.ID = setdiff(igraph::V(g)$name, geneModules$Gene.ID)
