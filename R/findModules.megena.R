@@ -20,6 +20,8 @@
 #' correlation pairs. (Default = 10)
 #' @param hub.perm Optional. number of permutations for calculating connectivity 
 #' significance p-value. (Default = 100)
+#' @param min_module Optional. minimum number of nodes/genes allowed for filtering
+#'  (Default = 30)
 #'
 #' @return  GeneModules = n x 3 dimensional data frame with column names as Gene.ID,
 #' moduleNumber, and moduleLabel.
@@ -29,7 +31,7 @@
 #' @export
 findModules.megena <- function(data, method = "pearson", FDR.cutoff = 0.05, 
                                module.pval = 0.05, hub.pval = 0.05, doPar = TRUE,
-                               n.cores = NULL, cor.perm = 10, hub.perm = 100 ){
+                               n.cores = NULL, cor.perm = 10, hub.perm = 100, min_module = 30 ){
   if(is.null(n.cores)){
     n.cores <- parallel::detectCores() - 1
   }
@@ -60,9 +62,9 @@ findModules.megena <- function(data, method = "pearson", FDR.cutoff = 0.05,
   mod.pvalue = module.pval,hub.pvalue = hub.pval,
   min.size = 10,max.size = igraph::vcount(g)/2,
   output.sig = TRUE)
-  megena_Res <- module_convert_to_table(MEGENA.output,mod.pval = 0.05,
-                          hub.pval = 0.05,min.size = 30,max.size=vcount(g)/2)
-  megena_Res = megena_Res %>% dplyr::filter(.data$module.size > .data$min_module - 1)
+  
+  megena_Res <- summary.output$module.table
+  megena_Res = megena_Res %>% dplyr::filter(.data$module.size > min_module - 1)
   gene_modules = data.frame('Gene.ID'= character(),'moduleNumber'=numeric(),'moduleSize'=numeric())
 
   for (i in 1:nrow(megena_Res)){

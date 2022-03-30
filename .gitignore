@@ -1,3 +1,5 @@
+contrib/*
+contrib/
 .Rproj.user
 .Rhistory
 .RData
@@ -9,3 +11,4 @@
 *.rdb
 *.html
 packrat/lib*/
+docs
