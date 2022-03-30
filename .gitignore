@@ -9,3 +9,4 @@
 *.rdb
 *.html
 packrat/lib*/
+docs
