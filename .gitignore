@@ -1,3 +1,5 @@
+contrib/*
+contrib/
 .Rproj.user
 .Rhistory
 .RData
