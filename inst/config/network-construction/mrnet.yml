@@ -1,0 +1,44 @@
+default:
+  input_profile:
+    input_synid: syn27608774
+    project_id: syn27410806
+    network_method: ["mrnet"]
+    na_fill: NULL
+    p_val_c3net: 1
+    p_val_mrnet: 1
+    p_val_wgcna: 1
+    temp_storage_loc: /root/temp
+    rsquaredCut: 0.80
+    defaultnaPower: 6
+  provenance:
+    annotations:
+      data_type: ['clinical','geneExpression']
+      resource_type: metadata
+      metadata_type: 'analytical covariates'
+      ismodelsystem: FALSE
+      ismultispecimen: TRUE
+      fileformat: csv
+      grant: U01AG046152
+      species: Human
+      organ: brain
+      tissue: ['A1C','CgG','M1','MTG','S1','V1C']
+      study: ["Allen","SMART-Seq2"]
+      consortium: AMP-AD
+      assay: rnaSeq
+    code_annotations:
+        repository: PradoVarathan/Reprocessing_Metnetwork_Analysis
+        ref: branch
+        ref_name: main
+        repository_path: Network_Wrapper.R
+    activity_name: mrnet Microglia
+    activity_description: 'Using the mrnet to prepare network from syn27409771 microglia data'
+  output_profile:
+    output_path: /root/out/
+    md5_output_path: microglia_mrnetmd5.out
+    output_name: 'microglia_mrnet_Network '
+    error_path: /root/error
+  computing_specs:
+    light_ncores: 32
+    medium_ncores: 0
+    heavy_ncores: 0
+
