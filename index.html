@@ -4,65 +4,60 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="Package to infer multiple types of coexpression network representations of high dimensional gene expression data.  Builds network ensembles, extract network statistics, and run enrichments on network features.">
 <title>Network meta analysis • metanetwork</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="bootstrap-toc.css">
-<script src="bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
-<script src="pkgdown.js"></script><meta property="og:title" content="Network meta analysis">
+<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Network meta analysis">
 <meta property="og:description" content="Package to infer multiple types of coexpression network representations of high dimensional gene expression data.  Builds network ensembles, extract network statistics, and run enrichments on network features.">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
-<body data-spy="scroll" data-target="#toc">
+<body>
+    <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <div class="container template-home">
-      <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <span class="navbar-brand">
-        <a class="navbar-link" href="index.html">metanetwork</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.1</span>
-      </span>
-    </div>
+    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
+    
+    <a class="navbar-brand me-2" href="index.html">metanetwork</a>
 
-    <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-<li>
-  <a href="reference/index.html">Reference</a>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
+
+    
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar" class="collapse navbar-collapse ms-3">
+      <ul class="navbar-nav me-auto">
+<li class="nav-item">
+  <a class="nav-link" href="reference/index.html">Reference</a>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right">
-<li>
-  <a href="https://github.com/Sage-Bionetworks/metanetwork/" class="external-link">
-    <span class="fab fa-github fa-lg"></span>
+<form class="form-inline my-2 my-lg-0" role="search">
+        <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="search.json" id="search-input" placeholder="Search for" autocomplete="off">
+</form>
+
+      <ul class="navbar-nav">
+<li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/Sage-Bionetworks/metanetwork/" aria-label="github">
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
       </ul>
 </div>
-<!--/.nav-collapse -->
+
+    
   </div>
-<!--/.container -->
-</div>
-<!--/.navbar -->
-
-      
-
-      </header><div class="row">
-  <div class="contents col-md-9">
-<div class="section level1">
+</nav><div class="container template-home">
+<div class="row">
+  <main id="main" class="col-md-9"><div class="section level1">
 <div class="page-header"><h1 id="readme">README<a class="anchor" aria-label="anchor" href="#readme"></a>
 </h1></div>
 <p>R package to build many different statistical networks on high dimensional multivariate data and run diagnostic statistics</p>
@@ -70,34 +65,69 @@
 <h3 id="what-is-this-repository-for">What is this repository for?<a class="anchor" aria-label="anchor" href="#what-is-this-repository-for"></a>
 </h3>
 <ul>
-<li>Quick summary</li>
+<li>Metanetworks Package Setup ** Docker Container Setup and Package Install</li>
+<li>Running Metanetworks Package - Network Construction</li>
+<li>Running Metatnetworks Package - Module Construction</li>
+<li>Runing Metanetworks Package - Consensus Network Construction</li>
 <li>Version</li>
 </ul>
 </div>
 <div class="section level3">
 <h3 id="how-do-i-get-set-up">How do I get set up?<a class="anchor" aria-label="anchor" href="#how-do-i-get-set-up"></a>
 </h3>
-<p>Install the R package devtools</p>
-<p><code>install.packages('devtools')</code></p>
-<p>Run the command</p>
-<p><code>install_github("blogsdon/metanetwork")</code></p>
-<ul>
-<li>Summary of set up</li>
-<li>Configuration</li>
-<li>Dependencies</li>
-<li>Database configuration</li>
-<li>How to run tests</li>
-<li>Deployment instructions</li>
-</ul>
+<p>Pull the metanetworks package repo with the dockerfile and sample configuration files</p>
+<pre><code>cd &lt;Project Working Directory&gt;
+git clone https://github.com/Sage-Bionetworks/metanetwork.git</code></pre>
+<p>The dockerfile to setup the proper run environment and install the metanetwork package is located within the pacakge in <code>metanetwork/inst/Docker/</code>. To build the docker image with the proper environment run the following command from the directory you cloned the pacakge contents into.</p>
+<pre><code>docker build -t metanets metanetwork/inst/Docker/</code></pre>
+<p>Start a container in detached continual run mode to pass build comands into. Use the <code>-v</code> command to pass your current working directory into the current into the container. Any file or folder within <code>&lt;Project Working Directory&gt;</code> will be available within the container under <code>/root/</code>. Conversly any file written under <code>/root/</code> inside the container will be written to <code>&lt;Project Working Directory&gt;</code> outside the container. This makes checking log files and diagnosising any potential issues much easier. The container name will be <code>metanets</code> as specified by <code>--name</code>.</p>
+<pre><code>docker run -it -d -v "/&lt;Project Working Directory&gt;/:/root/" --name networks metanets</code></pre>
+<p>Basic commands to manipulate containers</p>
+<pre><code># See running containers
+docker container ls
+
+# See all containers
+docker ps -a
+
+# Stop the container
+docker stop &lt;container name&gt;
+#eg.
+docker stop metanets
+
+# Start the container
+docker start &lt;container name&gt;
+#eg,
+docker start metanets
+
+# What if I want an interactive terminal session inside the container?
+docker exec -it &lt;container name&gt; /bin/bash
+cd ~
+#eg.
+docker exec -it metanets /bin/bash
+cd /root/</code></pre>
 </div>
 <div class="section level3">
-<h3 id="contribution-guidelines">Contribution guidelines<a class="anchor" aria-label="anchor" href="#contribution-guidelines"></a>
+<h3 id="building-individual-networks">Building Individual Networks<a class="anchor" aria-label="anchor" href="#building-individual-networks"></a>
 </h3>
-<ul>
-<li>Writing tests</li>
-<li>Code review</li>
-<li>Other guidelines</li>
-</ul>
+<p>Each network is build by passing 3 parameters into an R script called <code>Network_Wrapper.R</code>. This script is located within the metanets package within <code>metanetwork/inst/runscripts/</code>. Since this file was in the mounted <code>&lt;Project Working Directory&gt;</code> volume it is accessible inside the container with the filepath <code>/root/metanetwork/inst/runscripts/Network_Wrapper.R</code>. The run parameters required for the script are as follows:</p>
+<pre><code>    -u, --synapse_user  Synapse User name
+    -p, --synapse_pass  Synapse User Password
+    -c, --config_file   Path to the complete config file</code></pre>
+<p>While the first two arguments are straight forward the third is more involved. The configuration YAML file specifies the details of your network construction. For detailed documentaition on this file see: <code>metanetwork/inst/confighelp/Network_Wrapper_Config_Documentation.Rmd</code>. For example configuration files see: <code>metanetwork/inst/config/network-construction/</code>.</p>
+<p>Each network type is built with a single run command passed into the docker container that is already running in detached mode. An example run command from a sample configuration file is:</p>
+<pre><code>docker exec -itd networks /bin/sh -c "export LD_LIBRARY_PATH=/usr/lib64/openmpi/lib &amp;&amp; 
+    export PATH=/usr/lib64/openmpi/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/lib64/openmpi/bin &amp;&amp; 
+mpiexec --allow-run-as-root --mca orte_base_help_aggregate 0 --mca btl_base_warn_component_unused 0 -np 1 Rscript /root/metanetwork/inst/runscripts/Network_Wrapper.R 
+-u &lt;Synapse User Name&gt; -p &lt;Synapse User Password&gt; -c /root/metanetwork/inst/config/network-construction/c3net.yml &gt; /root/log.log"</code></pre>
+<p>The first two commands set the proper OpenMPI libraries and executable paths into the container’s <code>LD_LIBRARY_PATH</code> and <code>PATH</code> environment variables. The final command executes the network wrapper on the configuration file through implementation with OpenMPI. OpenMPI subdivides the compute environment into sub-cores to more effciently process the network construction. NOTE: It is highly adviseable to only run one network at a time on your compute environment since OpenMPI is not designed to run on top of itself. You can check the run progress of your network in the <code>log.log</code> file. Again because you imported your working envionment into the container this file is available at <code>&lt;Project Working Directory&gt;/log.log</code> and updates live from within the running container.</p>
+<p>If you want to run multiple networks in parallel we recomend deploying independent machines, either seperate HPC clusters or cloud based instances such as amazon EC-2 instances. This will also allow you to requisition the approriately sized machines for a given network approach. For benchmarking and expectations we have run an RNA-Seq dataset of 750 samples and 9,740 genes on a machine consisting of 16 cores (vCPU) and 128 GiB (Memory) amazon EC-2 instance (r5.4xlarge) and the runtimes were:</p>
+<pre><code>Light Networks: c3net, mrnet, wgcna: (estimated less than 3 Hours)
+Medium Networks: lassoAIC, lassoBIC, lassoCV1se, lassoCVmin, ridgeAIC, ridgeBIC, ridgeCV1se, ridgeCVmin, sparrowZ, sparrow2Z: (estimated around 10-12 Hours)
+Heavy Networks: genie3, tigress: (TBD)</code></pre>
+</div>
+<div class="section level3">
+<h3 id="module-construction">Module Construction<a class="anchor" aria-label="anchor" href="#module-construction"></a>
+</h3>
 </div>
 <div class="section level3">
 <h3 id="who-do-i-talk-to">Who do I talk to?<a class="anchor" aria-label="anchor" href="#who-do-i-talk-to"></a>
@@ -108,10 +138,7 @@
 </ul>
 </div>
 </div>
-  </div>
-
-  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-    <div class="links">
+  </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
 <li><a href="https://github.com/Sage-Bionetworks/metanetwork/" class="external-link">Browse source code</a></li>
@@ -153,25 +180,24 @@
 
 
 
-  </div>
+  </aside>
 </div>
 
 
-      <footer><div class="copyright">
+    <footer><div class="pkgdown-footer-left">
   <p></p>
 <p>Developed by Pradeep Pugalenthi, Benjamin Logsdon.</p>
 </div>
 
-<div class="pkgdown">
+<div class="pkgdown-footer-right">
   <p></p>
 <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
-      </footer>
+    </footer>
 </div>
 
   
-
 
   
 
