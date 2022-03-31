@@ -4,7 +4,14 @@
 \alias{aracne}
 \title{This function applies ARACNE on the data}
 \usage{
-aracne(data, path = NULL, pval = NULL, outputpath, na_fill = NULL)
+aracne(
+  data,
+  path = NULL,
+  pval = NULL,
+  outputpath,
+  na_fill = NULL,
+  tool_storage_loc
+)
 }
 \arguments{
 \item{data}{Required. The gene expression matrix with rows as sample IDs and
@@ -19,6 +26,9 @@ executable. (Default = NULL)}
 
 \item{na_fill}{Optional. Value to replace `NA` values with ideally, a large 
 negative number or use min(data). (Default = NULL)}
+
+\item{tool_storage_loc}{Required. Provides the directory inside docker to 
+temporarily store the ARACNE files and package. (Default = config$input_profile$temp_storage_loc)}
 }
 \value{
 A Co-Expression Network saved to the path `outputpath` and titled

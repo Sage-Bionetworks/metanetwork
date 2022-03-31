@@ -36,7 +36,7 @@ findModules.CFinder.once <- function(adj, path, min.module.size, i){
   
   mod = utils::read.table(paste0(d[2],'/communities'), skip = 7, sep = '\n') 
   mod$moduleNumber = 1:dim(mod)[1]
-  geneModules = plyr::ddply(mod, .variables = moduleNumber, .fun = function(x){
+  geneModules = plyr::ddply(mod, .variables = "moduleNumber", .fun = function(x){
     mod = data.frame(Gene.ID = stringr::str_split(x$V1, ':')[[1]][2] %>%
                        stringr::str_split(' ') %>% 
                        unlist %>%
@@ -54,8 +54,8 @@ findModules.CFinder.once <- function(adj, path, min.module.size, i){
     dplyr::top_n(1, .data$moduleSize) %>%
     dplyr::top_n(1, .data$moduleNumber) %>%
     dplyr::select(-.data$moduleSize) %>%
-    dplyr::mutate(moduleNumber = factor(moduleNumber),
-                  moduleNumber = as.numeric(moduleNumber))
+    dplyr::mutate(moduleNumber = factor(.data$moduleNumber),
+                  moduleNumber = as.numeric(.data$moduleNumber))
   
   # Add missing genes
   Gene.ID = setdiff(igraph::V(g)$name, geneModules$Gene.ID)

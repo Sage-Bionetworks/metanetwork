@@ -82,9 +82,9 @@ findModules.megena <- function(data, method = "pearson", FDR.cutoff = 0.05,
     dplyr::group_by(.data$Gene.ID) %>%
     dplyr::top_n(1, .data$moduleSize) %>%
     dplyr::top_n(1, .data$moduleNumber) %>%
-    dplyr::select(-moduleSize) %>%
-    dplyr::mutate(moduleNumber = factor(moduleNumber),
-                    moduleNumber = as.numeric(moduleNumber))
+    dplyr::select(-.data$moduleSize) %>%
+    dplyr::mutate(moduleNumber = factor(.data$moduleNumber),
+                    moduleNumber = as.numeric(.data$moduleNumber))
 
   filteredModules = gene_modules %>%  
     dplyr::group_by(.data$moduleNumber) %>% 

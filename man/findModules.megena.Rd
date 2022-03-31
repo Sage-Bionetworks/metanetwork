@@ -13,7 +13,8 @@ findModules.megena(
   doPar = TRUE,
   n.cores = NULL,
   cor.perm = 10,
-  hub.perm = 100
+  hub.perm = 100,
+  min_module = 30
 )
 }
 \arguments{
@@ -42,6 +43,9 @@ correlation pairs. (Default = 10)}
 
 \item{hub.perm}{Optional. number of permutations for calculating connectivity 
 significance p-value. (Default = 100)}
+
+\item{min_module}{Optional. minimum number of nodes/genes allowed for filtering
+(Default = 30)}
 }
 \value{
 GeneModules = n x 3 dimensional data frame with column names as Gene.ID,

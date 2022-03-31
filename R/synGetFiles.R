@@ -57,7 +57,7 @@ synGetFiles <- function(project_id, pattern_id, downloadLocation = getwd()){
       cat(paste0('No match for ',temp_name_search,' \n'))
     }else{
       #cat(paste0(id_t,' \n'))
-      temp <- synGet(id_t, downloadLocation = downloadLocation)
+      temp <- synapser::synGet(id_t, downloadLocation = downloadLocation)
       out_list <- append(out_list, temp)
     }
   }

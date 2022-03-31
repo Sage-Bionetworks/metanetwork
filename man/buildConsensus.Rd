@@ -4,7 +4,7 @@
 \alias{buildConsensus}
 \title{This function builds the Consensus Network from the component network}
 \usage{
-buildConsensus(outputpath, networkFolderId, fileName = NULL, pattern_id)
+buildConsensus(outputpath, networkFolderId, fileName, pattern_id, bar)
 }
 \arguments{
 \item{outputpath}{Required. Local directory to load files from and save files to.}
@@ -16,6 +16,8 @@ the folders with the individual networks.}
 
 \item{pattern_id}{Required. A character vector too match in the file names of 
 the children entities in `project_id`.}
+
+\item{bar}{Required. File paths object with network paths}
 }
 \value{
 Saves a rankc consensus network to `outputpath` and saves the BICNetwork

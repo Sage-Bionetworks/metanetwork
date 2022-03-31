@@ -21,10 +21,10 @@
 #'  `aracneThresholdNetwork.csv` (if `pval` < 1) or as `aracneNetwork.csv` if 
 #'  `pval` is set to 1. 
 #' @export
-aracne <- function(data,path=NULL,pval=NULL,outputpath,na_fill = NULL,tool_storage_loc = config$input_profile$temp_storage_loc){
+aracne <- function(data,path=NULL,pval=NULL,outputpath,na_fill = NULL, tool_storage_loc ){
   #path is the a string of the path to th aracne compiled executable
   #data is a matrix of the gene expression data of interest
-  installAracne()
+  installAracne(tool_storage_loc=tool_storage_loc)
   #library(caroline)
   if(is.null(pval)){
     pval <- 0.05/choose(nrow(data),2)

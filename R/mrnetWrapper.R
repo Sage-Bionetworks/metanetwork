@@ -6,20 +6,29 @@
 #' columns as Gene or feature IDs.
 #' @param path Optional. String containing the path to the aracne compiled 
 #' executable. (Default = NULL)
+#' @param temp_path Required. The path location to install aracne to. eg. 
+#' `config$input_profile$temp_storage_loc` 
 #' @param pval Optional. Cutoff p-value to determine a coexpressed edge. If one is
 #' specified aracne will produce the file `aracneNetwork.csv` if less than 1 it 
 #' will produce the file `aracneThresholdNetwork.csv`. (Default = 1)
 #' @param outputpath Required. The output path to save the resulting coexpression
 #' network
-#'  
+#' @param tool_storage_loc Required. Provides the directory inside docker to 
+#' temporarily store the ARACNE files and package. 
+#' (Default = config$input_profile$temp_storage_loc)
+#' 
 #' @return NULL. Saves a sparrow network object to paste0(`outputpath`,
 #' `regressionFunction`,'mrnetNetwork.csv')
 #'
 #' @importFrom magrittr %>%
 #' @export
-mrnetWrapper = function(data,path=NULL,pval=1,outputpath){
+mrnetWrapper = function(data,temp_path, path=NULL,pval=1,outputpath, tool_storage_loc){
   #library(parmigene)
-  metanetwork::aracne(data,path,pval,outputpath)
+  metanetwork::aracne(data=data,
+                      path=path,
+                      pval=pval,
+                      outputpath=outputpath, 
+                      tool_storage_loc=tool_storage_loc)
   #library(data.table)
   #library(dplyr)
   if(pval==1){
