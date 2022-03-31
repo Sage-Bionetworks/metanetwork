@@ -48,7 +48,14 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">mrnetWrapper</span><span class="op">(</span><span class="va">data</span>, path <span class="op">=</span> <span class="cn">NULL</span>, pval <span class="op">=</span> <span class="fl">1</span>, <span class="va">outputpath</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">mrnetWrapper</span><span class="op">(</span>
+  <span class="va">data</span>,
+  <span class="va">temp_path</span>,
+  path <span class="op">=</span> <span class="cn">NULL</span>,
+  pval <span class="op">=</span> <span class="fl">1</span>,
+  <span class="va">outputpath</span>,
+  <span class="va">tool_storage_loc</span>
+<span class="op">)</span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -56,6 +63,9 @@
     <dl><dt>data</dt>
 <dd><p>Required. A gene expression matrix with rows as sample IDs and
 columns as Gene or feature IDs.</p></dd>
+<dt>temp_path</dt>
+<dd><p>Required. The path location to install aracne to. eg. 
+`config$input_profile$temp_storage_loc`</p></dd>
 <dt>path</dt>
 <dd><p>Optional. String containing the path to the aracne compiled 
 executable. (Default = NULL)</p></dd>
@@ -66,6 +76,10 @@ will produce the file `aracneThresholdNetwork.csv`. (Default = 1)</p></dd>
 <dt>outputpath</dt>
 <dd><p>Required. The output path to save the resulting coexpression
 network</p></dd>
+<dt>tool_storage_loc</dt>
+<dd><p>Required. Provides the directory inside docker to 
+temporarily store the ARACNE files and package. 
+(Default = config$input_profile$temp_storage_loc)</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>

@@ -60,7 +60,8 @@ matrix using MEGENA.</p>
   doPar <span class="op">=</span> <span class="cn">TRUE</span>,
   n.cores <span class="op">=</span> <span class="cn">NULL</span>,
   cor.perm <span class="op">=</span> <span class="fl">10</span>,
-  hub.perm <span class="op">=</span> <span class="fl">100</span>
+  hub.perm <span class="op">=</span> <span class="fl">100</span>,
+  min_module <span class="op">=</span> <span class="fl">30</span>
 <span class="op">)</span></code></pre></div>
     </div>
 
@@ -92,6 +93,9 @@ correlation pairs. (Default = 10)</p></dd>
 <dt>hub.perm</dt>
 <dd><p>Optional. number of permutations for calculating connectivity 
 significance p-value. (Default = 100)</p></dd>
+<dt>min_module</dt>
+<dd><p>Optional. minimum number of nodes/genes allowed for filtering
+(Default = 30)</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>

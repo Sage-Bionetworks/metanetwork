@@ -48,7 +48,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">buildConsensus</span><span class="op">(</span><span class="va">outputpath</span>, <span class="va">networkFolderId</span>, fileName <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">pattern_id</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">buildConsensus</span><span class="op">(</span><span class="va">outputpath</span>, <span class="va">networkFolderId</span>, <span class="va">fileName</span>, <span class="va">pattern_id</span>, <span class="va">bar</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -63,6 +63,8 @@ the folders with the individual networks.</p></dd>
 <dt>pattern_id</dt>
 <dd><p>Required. A character vector too match in the file names of 
 the children entities in `project_id`.</p></dd>
+<dt>bar</dt>
+<dd><p>Required. File paths object with network paths</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>

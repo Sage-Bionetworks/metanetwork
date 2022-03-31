@@ -48,14 +48,17 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">installAracne</span><span class="op">(</span>path <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">installAracne</span><span class="op">(</span>path <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">tool_storage_loc</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>path</dt>
 <dd><p>Optional. Path is currently not a functional argument. This function
-automatically installs ARACNe from `inst/tools`. Default = NULL.</p></dd>
+automatically installs ARACNe from `inst/aracne`. Default = NULL.</p></dd>
+<dt>tool_storage_loc</dt>
+<dd><p>Required. Provides the directory inside docker to 
+temporarily store the ARACNE files and package. (Default = config$input_profile$temp_storage_loc)</p></dd>
 </dl></div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

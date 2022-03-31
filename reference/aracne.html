@@ -60,7 +60,14 @@ ARACNE framework see: &lt;https://bmcbioinformatics.biomedcentral.com/articles/1
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">aracne</span><span class="op">(</span><span class="va">data</span>, path <span class="op">=</span> <span class="cn">NULL</span>, pval <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">outputpath</span>, na_fill <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">aracne</span><span class="op">(</span>
+  <span class="va">data</span>,
+  path <span class="op">=</span> <span class="cn">NULL</span>,
+  pval <span class="op">=</span> <span class="cn">NULL</span>,
+  <span class="va">outputpath</span>,
+  na_fill <span class="op">=</span> <span class="cn">NULL</span>,
+  <span class="va">tool_storage_loc</span>
+<span class="op">)</span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -78,6 +85,9 @@ executable. (Default = NULL)</p></dd>
 <dt>na_fill</dt>
 <dd><p>Optional. Value to replace `NA` values with ideally, a large 
 negative number or use min(data). (Default = NULL)</p></dd>
+<dt>tool_storage_loc</dt>
+<dd><p>Required. Provides the directory inside docker to 
+temporarily store the ARACNE files and package. (Default = config$input_profile$temp_storage_loc)</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
