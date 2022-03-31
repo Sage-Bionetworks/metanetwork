@@ -3,3 +3,6 @@
 ^\.httr-oauth$
 ^packrat/
 ^\.Rprofile$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
