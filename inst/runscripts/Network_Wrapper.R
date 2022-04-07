@@ -170,6 +170,8 @@ dataFolder <- synStore(dataFolder)
 #### - push the config file req_args$config_file
 #split path to find file name
 
+#setwd('/root')
+
 Config_OBJ <- synapser::synStore( synapser::File( 
     path = req_args$config_file,
     name = tail(strsplit(req_args$config_file,'/')[[1]], n =1),
