@@ -18,6 +18,11 @@ Pull the metanetworks package repo with the dockerfile and sample configuration 
 ```
 cd <Project Working Directory>
 git clone https://github.com/Sage-Bionetworks/metanetwork.git
+
+# create support directories 
+mkdir temp
+mkdir out
+mkdir error
 ```
 
 The dockerfile to setup the proper run environment and install the metanetwork package is located within the pacakge in `metanetwork/inst/Docker/`.
