@@ -1,8 +1,8 @@
 default:
   input_profile:
-      input_folderid: syn27410806
-      project_id: syn29293402
-      input_proj_id: syn27409771
+    input_folderid: syn27410806
+    project_id: syn29293402
+    input_proj_id: syn27409771
     temp_storage_loc: /root/temp
     temp_input_loc: /root
     pattern_id: Network
