@@ -1,0 +1,35 @@
+default:
+  input_profile:
+      input_folderid: syn27410806
+      project_id: syn29293402
+      input_proj_id: syn27409771
+    temp_storage_loc: /root/temp
+    temp_input_loc: /root
+    pattern_id: Network
+  provenance:
+    annotations:
+      data_type: ['clinical','geneExpression']
+      resource_type: metadata
+      metadata_type: 'analytical covariates'
+      ismodelsystem: FALSE
+      ismultispecimen: TRUE
+      fileformat: csv
+      grant: U01AG046152
+      species: Human
+      organ: brain
+      tissue: ['A1C','CgG','M1','MTG','S1','V1C']
+      study: ["Allen","SMART-Seq2"]
+      consortium: AMP-AD
+      assay: rnaSeq
+    code_annotations:
+        repository: Sage-Bionetworks/metanetwork
+        ref: branch
+        ref_name: main
+        repository_path: inst/runscripts/Consensus_Wrapper.R
+    activity_name: ConsensusBuild
+    activity_description: 'Using the networks to prepare a consensus network from microglial data'
+  output_profile:
+    output_path: Consensus
+    md5_output_path: Consensus_md5.out
+    output_name: 'Consensus Network'
+    error_path: /root/error
