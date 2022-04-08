@@ -44,6 +44,7 @@ project <- synStore(project)
 outputpath = config$input_profile$temp_storage_loc
 networkFolderId = config$input_profile$input_folderid
 pattern_id = config$input_profile$pattern_id
+run_id = config$input_profile$run_id
 network_names = c('c3net','mrnet','wgcna',
                   'lassoAIC','lassoBIC','lassoCV1se','lassoCVmin','ridgeAIC','ridgeBIC','ridgeCV1se','ridgeCVmin',
                   'sparrowZ','sparrow2Z','tigress','genie3')
@@ -105,7 +106,7 @@ for(ent in 1:length(child_names)){
   }
 }
 message('Buildig Consensus Networks')
-buildConsensus(outputpath = outputpath,networkFolderId = networkFolderId,pattern_id = pattern_id, fileName = fileName,bar = out_list)
+buildConsensus(outputpath = outputpath,networkFolderId = networkFolderId,pattern_id = run_id, fileName = fileName,bar = out_list)
 
 
 # Obtaining the data - For provenance --------------------------------------------

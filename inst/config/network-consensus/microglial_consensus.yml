@@ -5,7 +5,8 @@ default:
     input_proj_id: syn27409771
     temp_storage_loc: /root/temp
     temp_input_loc: /root
-    pattern_id: Network
+    pattern_id: _Network
+    run_id: Network
   provenance:
     annotations:
       data_type: ['clinical','geneExpression']
