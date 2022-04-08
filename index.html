@@ -77,7 +77,12 @@
 </h3>
 <p>Pull the metanetworks package repo with the dockerfile and sample configuration files</p>
 <pre><code>cd &lt;Project Working Directory&gt;
-git clone https://github.com/Sage-Bionetworks/metanetwork.git</code></pre>
+git clone https://github.com/Sage-Bionetworks/metanetwork.git
+
+# create support directories 
+mkdir temp
+mkdir out
+mkdir error</code></pre>
 <p>The dockerfile to setup the proper run environment and install the metanetwork package is located within the pacakge in <code>metanetwork/inst/Docker/</code>. To build the docker image with the proper environment run the following command from the directory you cloned the pacakge contents into.</p>
 <pre><code>docker build -t metanets metanetwork/inst/Docker/</code></pre>
 <p>Start a container in detached continual run mode to pass build comands into. Use the <code>-v</code> command to pass your current working directory into the current into the container. Any file or folder within <code>&lt;Project Working Directory&gt;</code> will be available within the container under <code>/root/</code>. Conversly any file written under <code>/root/</code> inside the container will be written to <code>&lt;Project Working Directory&gt;</code> outside the container. This makes checking log files and diagnosising any potential issues much easier. The container name will be <code>metanets</code> as specified by <code>--name</code>.</p>
