@@ -14,7 +14,7 @@ rankConsensus <- function(networks){
   #library(dplyr)
   aggregateRankFunction <- function(network,upperTriIndices,aggregateRank){
     collapsedEdgeSet <- network[upperTriIndices]
-    foo <- rank(-abs(collapsedEdgeSet),ties.method='min') %>% bit64::as.integer64
+    foo <- rank(-abs(collapsedEdgeSet),ties.method='min') %>% bit64::as.integer64()
     #foo <- rank(-abs(collapsedEdgeSet),ties.method='min') %>% as.integer
     aggregateRank <- aggregateRank + foo
     return(aggregateRank)
