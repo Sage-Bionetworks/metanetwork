@@ -1,8 +1,8 @@
 default:
   input_profile:
-    input_folderid: syn27410806
-    project_id: syn29293402
-    input_proj_id: syn27409771
+    input_folderid: syn28570383
+    project_id: syn29403363
+    input_proj_id: syn28572544
     is_csv: FALSE
     temp_storage_loc: /root/temp
     temp_input_loc: /root
@@ -29,7 +29,7 @@ default:
         ref_name: main
         repository_path: inst/runscripts/Consensus_Wrapper.R
     activity_name: ConsensusBuild
-    activity_description: 'Using the networks to prepare a consensus network from microglial data'
+    activity_description: 'Using the networks to prepare a consensus network from Cerebellum data'
   output_profile:
     output_path: Consensus
     md5_output_path: Consensus_md5.out

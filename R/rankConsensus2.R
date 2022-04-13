@@ -19,7 +19,7 @@ rankConsensus2 <- function(networks){
     collapsedEdgeSet <- network[upperTriIndices]
     set.seed(123456)
     foo <- rank(-abs(collapsedEdgeSet), ties.method = "random") %>% 
-      bit64::as.integer64
+      bit64::as.integer64()
     aggregateRank <- aggregateRank + foo
     return(aggregateRank)
   }
