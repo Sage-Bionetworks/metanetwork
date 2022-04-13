@@ -7,14 +7,14 @@
 #' the folders with the individual networks.
 #' @param fileName Required. The input file path.
 #' @param bar Required. File paths object with network paths 
-#' 
+#' @param is_csv Optional. Is the data matrix a csv file. If not assumes it is tab delimited. (Default = TRUE).
 #' @inheritParams synGetFiles
 #' 
 #' @export 
 #' @return Saves a rankc consensus network to `outputpath` and saves the BICNetwork
 #'  object to `outputpath` if `fileName` is specified
 #' 
-buildConsensus = function(outputpath,networkFolderId, fileName, pattern_id,bar){
+buildConsensus = function(outputpath, networkFolderId, fileName, pattern_id, bar, is_csv = TRUE){
   
   #get all networks from Synapse
   #bar <- synGetFiles(networkFolderId, downloadLocation = outputpath, pattern_id = pattern_id)
@@ -56,9 +56,13 @@ buildConsensus = function(outputpath,networkFolderId, fileName, pattern_id,bar){
    networkMethods <- c(networkMethods,'rankConsensus')
    cat('reading in data\n')
    options(stringsAsFactors = F)
-   #-#dataSet <- readr::read_csv(fileName, row.names=1)
-   dataSet <- data.table::fread(fileName) %>% as.matrix(rownames=1)
+   # load Dataset
    cat('turning data into data matrix\n')
+   if( isTRUE(is_csv) ){
+    dataSet <- readr::read_csv(fileName, row.names=1)
+   }else{ 
+    dataSet <- data.table::fread(fileName) %>% as.matrix(rownames=1)
+   }
    #-#dataSet <- data.matrix(dataSet)
    dataSet <- t(dataSet)
    cat('build bicNetworks\n')

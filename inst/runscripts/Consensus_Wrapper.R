@@ -106,7 +106,9 @@ for(ent in 1:length(child_names)){
   }
 }
 message('Buildig Consensus Networks')
-buildConsensus(outputpath = outputpath,networkFolderId = networkFolderId,pattern_id = run_id, fileName = fileName,bar = out_list)
+buildConsensus(outputpath = outputpath, networkFolderId = networkFolderId,
+  pattern_id = run_id, fileName = fileName,
+  bar = out_list, is_csv = config$input_profile$is_csv)
 
 
 # Obtaining the data - For provenance --------------------------------------------
