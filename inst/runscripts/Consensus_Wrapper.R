@@ -106,6 +106,7 @@ for(ent in 1:length(child_names)){
   }
 }
 message('Buildig Consensus Networks')
+outputpath <- gsub( '//', '/', paste0(outputpath,'/'))
 buildConsensus(outputpath = outputpath, networkFolderId = networkFolderId,
   pattern_id = run_id, fileName = fileName,
   bar = out_list, is_csv = config$input_profile$is_csv)
@@ -118,13 +119,22 @@ activity <- synapser::synGet(config$input_profile$project_id)
 dataFolder <- Folder('Consensus',parent = config$input_profile$project_id)
 dataFolder <- synStore(dataFolder)
 
-file <- File(path = paste0(outputpath,'rankConsensusNetwork.csv'), parent = dataFolder)
-file <- synStore(file)
-file2 <- File(path = paste0(outputpath,'bicNetworks.rda'), parent = dataFolder)
-file2 <- synStore(file2)
-all.annotations <- synGetAnnotations(config$input_profile$input_synid)
-
+#file <- File(path = paste0(outputpath,'rankConsensusNetwork.csv'), parent = dataFolder)
+#file <- synStore(file)
+#file2 <- File(path = paste0(outputpath,'bicNetworks.rda'), parent = dataFolder)
+#file2 <- synStore(file2)
+all.annotations <- NULL
+try(
+  all.annotations <- synGetAnnotations(config$input_profile$input_synid), 
+  silent = TRUE
+)
 checkAnnotations <- function(annotations, config){
+  
+  namer <- c("data_type", "resource_type", "metadata_type", "ismodelsystem", "ismultispecimen",
+    "fileformat", "grant", "species", "organ", "tissue", "study", "consortium", "assay" )
+  names(namer) <- c('dataType', 'resourceType', 'metadataType', 'isModelSystem', 'isMultiSpecimen', 
+    'fileFormat', 'grant', 'species', 'organ', 'tissue', 'study', 'consortium' , 'assay')
+
   annot_default <- list(
     dataType = NULL,
     resourceType = NULL,
@@ -141,13 +151,14 @@ checkAnnotations <- function(annotations, config){
     assay = NULL
   )
   for (item in names(annot_default)){
-    if (!is.null(config$provenance$annotations$item)){
-      annot_default$item = config$provenance$annotations$item[[1]]
+    if (!is.null(config$provenance$annotations[[namer[[item]]]])){
+      annot_default[[item]] = config$provenance$annotations[[namer[[item]]]]
     }
-    else if (!is.null(annotations$item)){
-      annot_default$item = annotations$item[[1]]
+    else if ( !is.null(annotations) & !is.null(annotations[[item]])){
+      annot_default[[item]] = annotations[[item]]
     }
   }
+  return(annot_default)
 }
 
 all.annotations <- checkAnnotations(all.annotations,config)
@@ -172,7 +183,7 @@ try(
 ENRICH_OBJ <- synapser::synStore( synapser::File(
   path = req_args$config_file,
   name = 'Consensus Config',
-  parentId = activity$properties$id),
+  parentId = dataFolder$properties$id),
   used = config$input_profile$input_synid,
   activityName = config$provenance$activity_name,
   executed = thisFile,
@@ -181,9 +192,9 @@ ENRICH_OBJ <- synapser::synStore( synapser::File(
 config_syn <- ENRICH_OBJ$properties$id
 
 ENRICH_OBJ <- synapser::synStore( synapser::File(
-  path = paste0(outputpath,'rankConsensusNetwork.csv'),
-  name = 'RankConsensusNetwork',
-  parentId = activity$properties$id),
+  path = paste0(outputpath,'bicNetworks.rda'),
+  name = 'bicNetworks',
+  parentId = dataFolder$properties$id),
   used = c(config$input_profile$input_synid,config_syn),
   activityName = config$provenance$activity_name,
   executed = thisFile,
@@ -193,12 +204,35 @@ ENRICH_OBJ <- synapser::synStore( synapser::File(
 synapser::synSetAnnotations(ENRICH_OBJ, annotations = all.annotations)
 
 
+ENRICH_OBJ <- synapser::synStore( synapser::File(
+  path = paste0(outputpath,'rankConsensusNetwork.csv'),
+  name = 'RankConsensusNetwork',
+  parentId = dataFolder$properties$id),
+  used = c(config$input_profile$input_synid,config_syn),
+  activityName = config$provenance$activity_name,
+  executed = thisFile,
+  activityDescription = config$provenance$activity_description
+)
+
+synapser::synSetAnnotations(ENRICH_OBJ, annotations = all.annotations)
 
 # Formatting the network to md5 format --------------------------------------------
 
 md5Command <- paste0('md5sum ', paste0(outputpath,'rankConsensusNetwork.csv'))
 md5 <- strsplit(system(md5Command, intern = TRUE), '  ')[[1]][1]
-cat(md5, '\n', file = config$output_profile$md5_output_path, sep = '')
+cat(md5, '\n', file = paste0(outputpath,config$output_profile$md5_output_path), sep = '')
+
+ENRICH_OBJ <- synapser::synStore( synapser::File(
+  path = paste0(outputpath,config$output_profile$md5_output_path),
+  name = 'RankConsensusNet_MD5',
+  parentId = dataFolder$properties$id),
+  used = c(config$input_profile$input_synid,config_syn),
+  activityName = config$provenance$activity_name,
+  executed = thisFile,
+  activityDescription = config$provenance$activity_description
+)
+
+synapser::synSetAnnotations(ENRICH_OBJ, annotations = all.annotations)
 
 if((!is.na(config$computing_specs$heavy_ncores)) || (!is.na(config$computing_specs$medium_ncores))){
   mpi.quit(save = "no")
