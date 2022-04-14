@@ -234,6 +234,6 @@ ENRICH_OBJ <- synapser::synStore( synapser::File(
 
 synapser::synSetAnnotations(ENRICH_OBJ, annotations = all.annotations)
 
-if((!is.na(config$computing_specs$heavy_ncores)) || (!is.na(config$computing_specs$medium_ncores))){
-  mpi.quit(save = "no")
-}
+#if((!is.na(config$computing_specs$heavy_ncores)) || (!is.na(config$computing_specs$medium_ncores))){
+#  mpi.quit(save = "no")
+#}
