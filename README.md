@@ -84,6 +84,8 @@ While the first two arguments are straight forward the third is more involved. T
 detailed documentaition on this file see: `metanetwork/inst/confighelp/Network_Wrapper_Config_Documentation.Rmd`. For example configuration files see: 
 `metanetwork/inst/config/network-construction/`.
 
+Note that if you're going to make a consensus network the `output_name:` configuration variable is very important. All networks need to have a common string following the network type. This is required for programatic location of the induvidual networks within a given synapse Project/folder.
+
 Each network type is built with a single run command passed into the docker container that is already running in detached mode. An example run command from
 a sample configuration file is:
 
@@ -102,12 +104,39 @@ container this file is available at `<Project Working Directory>/log.log` and up
 
 If you want to run multiple networks in parallel we recomend deploying independent machines, either seperate HPC clusters or cloud based instances such as amazon EC-2
 instances. This will also allow you to requisition the approriately sized machines for a given network approach. For benchmarking and expectations we have run an RNA-Seq dataset
-of 750 samples and 9,740 genes on a machine consisting of 16 cores (vCPU) and 128 GiB (Memory) amazon EC-2 instance (r5.4xlarge) and the runtimes were:
+of 750 samples and 9,740 genes on a machine consisting of; 16 cores (vCPU) and 128 GiB (Memory) amazon EC-2 instance (r5.4xlarge) [Light and Medium Networks], 126 cores (vCPU) and 256 GiB (Memory) amazon EC-2 instance (c6i.32xlarge) [Heavy Networks] and the runtimes were:
 ```
 Light Networks: c3net, mrnet, wgcna: (estimated less than 3 Hours)
 Medium Networks: lassoAIC, lassoBIC, lassoCV1se, lassoCVmin, ridgeAIC, ridgeBIC, ridgeCV1se, ridgeCVmin, sparrowZ, sparrow2Z: (estimated around 10-12 Hours)
-Heavy Networks: genie3, tigress: (TBD)
+Heavy Networks: genie3, tigress: (Genie3 ~11 hours, tigress TBD)
 ``` 
+### Consensus Network Construction
+
+Constructing a Consensus Network from the ensemble of induvidual networks is preformed with an independent configuration yaml file and a wrapper R script. A sample configuration file can be found in `inst/config/network-consensus/` and the wrapper R script is located in `inst/runscripts/Consensus_Wrapper.R `. Breifly, this wrapper script scrapes networks from a synapse Project/Folder ID. The networks are found programtically as `Network_Wrapper.R ` has named the folders containing the network as the type of network contained ie. `c3net/` contains the c3net coexpression network file. The induvidual file is identified programatically with config specified ID string(s) `pattern_id` for most networks and `run_id` for the WGCNA netwoorks (see the config read me `inst/confighelp/Consensus_Wrapper_Config_Documentation.Rmd`). These identifiers correspond to how you named the network with the `output_name` setting in the network construction yaml file. For example:
+
+```
+# If your Network(s) were saved as:
+#...
+output_profile:
+    output_path: /root/out/
+    md5_output_path: microglia_lassoCV1semd5.out
+    output_name: 'microglia_lassoCV1se_Network'
+    error_path: /root/error
+#...
+
+# Your Consensus configuration specification should be:
+#...
+pattern_id: _Network
+#...
+```
+
+To run the consensus Network you need to pass the command into the runing docker container similar to before. By importing your working directory into the container you've ensured that if the configuration file is inside the container as long as it is within your working directory. Simply adapt the following command to run the consensus network:
+
+```
+
+docker exec -itd networks /bin/sh -c "Rscript /root/metanetwork/inst/runscripts/Consensus_Wrapper.R -u <Synapse User Name> -p <Synapse User Password> -c /root/metanetwork/inst/config/network-consensus/microglial_consensus.yml > /root/log.log"
+
+```
 
 ### Module Construction
 
