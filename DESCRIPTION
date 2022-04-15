@@ -22,8 +22,8 @@ Description: Package to infer multiple types of coexpression network representat
 Depends: R (>= 3.1.0)
 License: MIT + file LICENSE
 LazyData: true
-URL: hhttps://sage-bionetworks.github.io/metanetwork,
-    https://github.com/Sage-Bionetworks/metanetwork
+URL: https://github.com/Sage-Bionetworks/metanetwork,
+    http://sage-bionetworks.github.io/metanetwork/
 Encoding: UTF-8
 biocViews:
 Imports:
