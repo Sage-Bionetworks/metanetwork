@@ -119,16 +119,39 @@ cd /root/</code></pre>
     -p, --synapse_pass  Synapse User Password
     -c, --config_file   Path to the complete config file</code></pre>
 <p>While the first two arguments are straight forward the third is more involved. The configuration YAML file specifies the details of your network construction. For detailed documentaition on this file see: <code>metanetwork/inst/confighelp/Network_Wrapper_Config_Documentation.Rmd</code>. For example configuration files see: <code>metanetwork/inst/config/network-construction/</code>.</p>
+<p>Note that if you’re going to make a consensus network the <code>output_name:</code> configuration variable is very important. All networks need to have a common string following the network type. This is required for programatic location of the induvidual networks within a given synapse Project/folder.</p>
 <p>Each network type is built with a single run command passed into the docker container that is already running in detached mode. An example run command from a sample configuration file is:</p>
 <pre><code>docker exec -itd networks /bin/sh -c "export LD_LIBRARY_PATH=/usr/lib64/openmpi/lib &amp;&amp; 
     export PATH=/usr/lib64/openmpi/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/lib64/openmpi/bin &amp;&amp; 
 mpiexec --allow-run-as-root --mca orte_base_help_aggregate 0 --mca btl_base_warn_component_unused 0 -np 1 Rscript /root/metanetwork/inst/runscripts/Network_Wrapper.R 
 -u &lt;Synapse User Name&gt; -p &lt;Synapse User Password&gt; -c /root/metanetwork/inst/config/network-construction/c3net.yml &gt; /root/log.log"</code></pre>
 <p>The first two commands set the proper OpenMPI libraries and executable paths into the container’s <code>LD_LIBRARY_PATH</code> and <code>PATH</code> environment variables. The final command executes the network wrapper on the configuration file through implementation with OpenMPI. OpenMPI subdivides the compute environment into sub-cores to more effciently process the network construction. NOTE: It is highly adviseable to only run one network at a time on your compute environment since OpenMPI is not designed to run on top of itself. You can check the run progress of your network in the <code>log.log</code> file. Again because you imported your working envionment into the container this file is available at <code>&lt;Project Working Directory&gt;/log.log</code> and updates live from within the running container.</p>
-<p>If you want to run multiple networks in parallel we recomend deploying independent machines, either seperate HPC clusters or cloud based instances such as amazon EC-2 instances. This will also allow you to requisition the approriately sized machines for a given network approach. For benchmarking and expectations we have run an RNA-Seq dataset of 750 samples and 9,740 genes on a machine consisting of 16 cores (vCPU) and 128 GiB (Memory) amazon EC-2 instance (r5.4xlarge) and the runtimes were:</p>
+<p>If you want to run multiple networks in parallel we recomend deploying independent machines, either seperate HPC clusters or cloud based instances such as amazon EC-2 instances. This will also allow you to requisition the approriately sized machines for a given network approach. For benchmarking and expectations we have run an RNA-Seq dataset of 750 samples and 9,740 genes on a machine consisting of; 16 cores (vCPU) and 128 GiB (Memory) amazon EC-2 instance (r5.4xlarge) [Light and Medium Networks], 126 cores (vCPU) and 256 GiB (Memory) amazon EC-2 instance (c6i.32xlarge) [Heavy Networks] and the runtimes were:</p>
 <pre><code>Light Networks: c3net, mrnet, wgcna: (estimated less than 3 Hours)
 Medium Networks: lassoAIC, lassoBIC, lassoCV1se, lassoCVmin, ridgeAIC, ridgeBIC, ridgeCV1se, ridgeCVmin, sparrowZ, sparrow2Z: (estimated around 10-12 Hours)
-Heavy Networks: genie3, tigress: (TBD)</code></pre>
+Heavy Networks: genie3, tigress: (Genie3 ~11 hours, tigress TBD)</code></pre>
+</div>
+<div class="section level3">
+<h3 id="consensus-network-construction">Consensus Network Construction<a class="anchor" aria-label="anchor" href="#consensus-network-construction"></a>
+</h3>
+<p>Constructing a Consensus Network from the ensemble of induvidual networks is preformed with an independent configuration yaml file and a wrapper R script. A sample configuration file can be found in <code>inst/config/network-consensus/</code> and the wrapper R script is located in <code>inst/runscripts/Consensus_Wrapper.R</code>. Breifly, this wrapper script scrapes networks from a synapse Project/Folder ID. The networks are found programtically as <code>Network_Wrapper.R</code> has named the folders containing the network as the type of network contained ie. <code>c3net/</code> contains the c3net coexpression network file. The induvidual file is identified programatically with config specified ID string(s) <code>pattern_id</code> for most networks and <code>run_id</code> for the WGCNA netwoorks (see the config read me <code>inst/confighelp/Consensus_Wrapper_Config_Documentation.Rmd</code>). These identifiers correspond to how you named the network with the <code>output_name</code> setting in the network construction yaml file. For example:</p>
+<pre><code># If your Network(s) were saved as:
+#...
+output_profile:
+    output_path: /root/out/
+    md5_output_path: microglia_lassoCV1semd5.out
+    output_name: 'microglia_lassoCV1se_Network'
+    error_path: /root/error
+#...
+
+# Your Consensus configuration specification should be:
+#...
+pattern_id: _Network
+#...</code></pre>
+<p>To run the consensus Network you need to pass the command into the runing docker container similar to before. By importing your working directory into the container you’ve ensured that if the configuration file is inside the container as long as it is within your working directory. Simply adapt the following command to run the consensus network:</p>
+<pre><code>
+docker exec -itd networks /bin/sh -c "Rscript /root/metanetwork/inst/runscripts/Consensus_Wrapper.R -u &lt;Synapse User Name&gt; -p &lt;Synapse User Password&gt; -c /root/metanetwork/inst/config/network-consensus/microglial_consensus.yml &gt; /root/log.log"
+</code></pre>
 </div>
 <div class="section level3">
 <h3 id="module-construction">Module Construction<a class="anchor" aria-label="anchor" href="#module-construction"></a>

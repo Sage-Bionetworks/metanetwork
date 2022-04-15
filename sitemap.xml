@@ -1,270 +1,270 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>/404.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/404.html</loc>
   </url>
   <url>
-    <loc>/CODE_OF_CONDUCT.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/CODE_OF_CONDUCT.html</loc>
   </url>
   <url>
-    <loc>/CONTRIBUTING.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/CONTRIBUTING.html</loc>
   </url>
   <url>
-    <loc>/LICENSE-text.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/LICENSE-text.html</loc>
   </url>
   <url>
-    <loc>/authors.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/authors.html</loc>
   </url>
   <url>
-    <loc>/index.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/index.html</loc>
   </url>
   <url>
-    <loc>/reference/applySparrowBonferroni.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/applySparrowBonferroni.html</loc>
   </url>
   <url>
-    <loc>/reference/applySparrowFDR.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/applySparrowFDR.html</loc>
   </url>
   <url>
-    <loc>/reference/aracne.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/aracne.html</loc>
   </url>
   <url>
-    <loc>/reference/arbitrarySparsity.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/arbitrarySparsity.html</loc>
   </url>
   <url>
-    <loc>/reference/buildConsensus.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/buildConsensus.html</loc>
   </url>
   <url>
-    <loc>/reference/c3netWrapper.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/c3netWrapper.html</loc>
   </url>
   <url>
-    <loc>/reference/calcHyperPval.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/calcHyperPval.html</loc>
   </url>
   <url>
-    <loc>/reference/compute.LocalModularity.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/compute.LocalModularity.html</loc>
   </url>
   <url>
-    <loc>/reference/compute.Modularity.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/compute.Modularity.html</loc>
   </url>
   <url>
-    <loc>/reference/compute.ModularityDensity.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/compute.ModularityDensity.html</loc>
   </url>
   <url>
-    <loc>/reference/compute.ModuleQualityMetric.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/compute.ModuleQualityMetric.html</loc>
   </url>
   <url>
-    <loc>/reference/computeBICcurve.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/computeBICcurve.html</loc>
   </url>
   <url>
-    <loc>/reference/computeDriverDistance.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/computeDriverDistance.html</loc>
   </url>
   <url>
-    <loc>/reference/computeDriverDistancePvalue.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/computeDriverDistancePvalue.html</loc>
   </url>
   <url>
-    <loc>/reference/correlation.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/correlation.html</loc>
   </url>
   <url>
-    <loc>/reference/covarianceSelection.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/covarianceSelection.html</loc>
   </url>
   <url>
-    <loc>/reference/covarianceSelectionBisection.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/covarianceSelectionBisection.html</loc>
   </url>
   <url>
-    <loc>/reference/covarianceSelectionMBPath.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/covarianceSelectionMBPath.html</loc>
   </url>
   <url>
-    <loc>/reference/covarianceSelectionPath.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/covarianceSelectionPath.html</loc>
   </url>
   <url>
-    <loc>/reference/deployNetworkSparsity.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/deployNetworkSparsity.html</loc>
   </url>
   <url>
-    <loc>/reference/fastlm.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/fastlm.html</loc>
   </url>
   <url>
-    <loc>/reference/fastlmbic.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/fastlmbic.html</loc>
   </url>
   <url>
-    <loc>/reference/fdrThres.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/fdrThres.html</loc>
   </url>
   <url>
-    <loc>/reference/findModules.CFinder.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/findModules.CFinder.html</loc>
   </url>
   <url>
-    <loc>/reference/findModules.CFinder.once.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/findModules.CFinder.once.html</loc>
   </url>
   <url>
-    <loc>/reference/findModules.GANXiS.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/findModules.GANXiS.html</loc>
   </url>
   <url>
-    <loc>/reference/findModules.GANXiS.once.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/findModules.GANXiS.once.html</loc>
   </url>
   <url>
-    <loc>/reference/findModules.consensusCluster.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/findModules.consensusCluster.html</loc>
   </url>
   <url>
-    <loc>/reference/findModules.consensusKmeans.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/findModules.consensusKmeans.html</loc>
   </url>
   <url>
-    <loc>/reference/findModules.edge_betweenness.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/findModules.edge_betweenness.html</loc>
   </url>
   <url>
-    <loc>/reference/findModules.edge_betweenness.once.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/findModules.edge_betweenness.once.html</loc>
   </url>
   <url>
-    <loc>/reference/findModules.fast_greedy.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/findModules.fast_greedy.html</loc>
   </url>
   <url>
-    <loc>/reference/findModules.fast_greedy.once.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/findModules.fast_greedy.once.html</loc>
   </url>
   <url>
-    <loc>/reference/findModules.hclust.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/findModules.hclust.html</loc>
   </url>
   <url>
-    <loc>/reference/findModules.infomap.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/findModules.infomap.html</loc>
   </url>
   <url>
-    <loc>/reference/findModules.infomap.once.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/findModules.infomap.once.html</loc>
   </url>
   <url>
-    <loc>/reference/findModules.label_prop.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/findModules.label_prop.html</loc>
   </url>
   <url>
-    <loc>/reference/findModules.label_prop.once.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/findModules.label_prop.once.html</loc>
   </url>
   <url>
-    <loc>/reference/findModules.leading_eigen.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/findModules.leading_eigen.html</loc>
   </url>
   <url>
-    <loc>/reference/findModules.leading_eigen.once.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/findModules.leading_eigen.once.html</loc>
   </url>
   <url>
-    <loc>/reference/findModules.linkcommunities.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/findModules.linkcommunities.html</loc>
   </url>
   <url>
-    <loc>/reference/findModules.linkcommunities.once.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/findModules.linkcommunities.once.html</loc>
   </url>
   <url>
-    <loc>/reference/findModules.louvain.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/findModules.louvain.html</loc>
   </url>
   <url>
-    <loc>/reference/findModules.louvain.once.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/findModules.louvain.once.html</loc>
   </url>
   <url>
-    <loc>/reference/findModules.megena.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/findModules.megena.html</loc>
   </url>
   <url>
-    <loc>/reference/findModules.spinglass.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/findModules.spinglass.html</loc>
   </url>
   <url>
-    <loc>/reference/findModules.spinglass.once.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/findModules.spinglass.once.html</loc>
   </url>
   <url>
-    <loc>/reference/findModules.walktrap.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/findModules.walktrap.html</loc>
   </url>
   <url>
-    <loc>/reference/findModules.walktrap.once.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/findModules.walktrap.once.html</loc>
   </url>
   <url>
-    <loc>/reference/fisherEnrichment.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/fisherEnrichment.html</loc>
   </url>
   <url>
-    <loc>/reference/genie3.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/genie3.html</loc>
   </url>
   <url>
-    <loc>/reference/index.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/index.html</loc>
   </url>
   <url>
-    <loc>/reference/installAracne.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/installAracne.html</loc>
   </url>
   <url>
-    <loc>/reference/lassoAIC.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/lassoAIC.html</loc>
   </url>
   <url>
-    <loc>/reference/lassoBIC.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/lassoBIC.html</loc>
   </url>
   <url>
-    <loc>/reference/lassoCV1se.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/lassoCV1se.html</loc>
   </url>
   <url>
-    <loc>/reference/lassoCVmin.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/lassoCVmin.html</loc>
   </url>
   <url>
-    <loc>/reference/metaNet-package.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/metaNet-package.html</loc>
   </url>
   <url>
-    <loc>/reference/mpiWrapper.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/mpiWrapper.html</loc>
   </url>
   <url>
-    <loc>/reference/mrnetWrapper.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/mrnetWrapper.html</loc>
   </url>
   <url>
-    <loc>/reference/multiplot.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/multiplot.html</loc>
   </url>
   <url>
-    <loc>/reference/rankConsensus.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/rankConsensus.html</loc>
   </url>
   <url>
-    <loc>/reference/rankConsensus2.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/rankConsensus2.html</loc>
   </url>
   <url>
-    <loc>/reference/rankedEdgeList.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/rankedEdgeList.html</loc>
   </url>
   <url>
-    <loc>/reference/regulatorAnalysis.directed.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/regulatorAnalysis.directed.html</loc>
   </url>
   <url>
-    <loc>/reference/regulatorAnalysis.directed_weighted.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/regulatorAnalysis.directed_weighted.html</loc>
   </url>
   <url>
-    <loc>/reference/regulatorAnalysis.undirected.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/regulatorAnalysis.undirected.html</loc>
   </url>
   <url>
-    <loc>/reference/regulatorAnalysis.undirected_weighted.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/regulatorAnalysis.undirected_weighted.html</loc>
   </url>
   <url>
-    <loc>/reference/ridgeAIC.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/ridgeAIC.html</loc>
   </url>
   <url>
-    <loc>/reference/ridgeBIC.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/ridgeBIC.html</loc>
   </url>
   <url>
-    <loc>/reference/ridgeCV1se.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/ridgeCV1se.html</loc>
   </url>
   <url>
-    <loc>/reference/ridgeCVmin.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/ridgeCVmin.html</loc>
   </url>
   <url>
-    <loc>/reference/run.consensus.cluster.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/run.consensus.cluster.html</loc>
   </url>
   <url>
-    <loc>/reference/score.nodes.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/score.nodes.html</loc>
   </url>
   <url>
-    <loc>/reference/simulateNetworkData.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/simulateNetworkData.html</loc>
   </url>
   <url>
-    <loc>/reference/sparrow2Z.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/sparrow2Z.html</loc>
   </url>
   <url>
-    <loc>/reference/sparrowNetwork.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/sparrowNetwork.html</loc>
   </url>
   <url>
-    <loc>/reference/sparrowZ.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/sparrowZ.html</loc>
   </url>
   <url>
-    <loc>/reference/synGetFiles.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/synGetFiles.html</loc>
   </url>
   <url>
-    <loc>/reference/tigress.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/tigress.html</loc>
   </url>
   <url>
-    <loc>/reference/wgcnaSoftThreshold.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/wgcnaSoftThreshold.html</loc>
   </url>
   <url>
-    <loc>/reference/wgcnaTOM.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/wgcnaTOM.html</loc>
   </url>
   <url>
-    <loc>/reference/winsorizeData.html</loc>
+    <loc>http://sage-bionetworks.github.io/metanetwork/reference/winsorizeData.html</loc>
   </url>
 </urlset>
