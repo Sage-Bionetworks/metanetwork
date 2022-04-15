@@ -10,7 +10,7 @@ buildConsensus(
   fileName,
   pattern_id,
   bar,
-  is_csv = TRUE
+  iscsv = TRUE
 )
 }
 \arguments{
@@ -26,7 +26,7 @@ the children entities in `project_id`.}
 
 \item{bar}{Required. File paths object with network paths}
 
-\item{is_csv}{Optional. Is the data matrix a csv file. If not assumes it is tab delimited. (Default = TRUE).}
+\item{iscsv}{Optional. Is the data matrix a csv file. If not assumes it is tab delimited. (Default = TRUE).}
 }
 \value{
 Saves a rankc consensus network to `outputpath` and saves the BICNetwork

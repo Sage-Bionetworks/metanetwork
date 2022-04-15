@@ -109,7 +109,7 @@ message('Buildig Consensus Networks')
 outputpath <- gsub( '//', '/', paste0(outputpath,'/'))
 buildConsensus(outputpath = outputpath, networkFolderId = networkFolderId,
   pattern_id = run_id, fileName = fileName,
-  bar = out_list, is_csv = config$input_profile$is_csv)
+  bar = out_list, iscsv = config$input_profile$is_csv)
 
 
 # Obtaining the data - For provenance --------------------------------------------
