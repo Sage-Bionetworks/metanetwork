@@ -7,14 +7,14 @@
 #' the folders with the individual networks.
 #' @param fileName Required. The input file path.
 #' @param bar Required. File paths object with network paths 
-#' @param iscsv Required. Is the data matrix a csv file. If not assumes it is tab delimited.
+#' @param iscsv Optional. Is the data matrix a csv file. If not assumes it is tab delimited. (Default = TRUE).
 #' @inheritParams synGetFiles
 #' 
 #' @export 
 #' @return Saves a rankc consensus network to `outputpath` and saves the BICNetwork
 #'  object to `outputpath` if `fileName` is specified
 #' 
-buildConsensus = function(outputpath, networkFolderId, fileName, pattern_id, bar, iscsv){
+buildConsensus = function(outputpath, networkFolderId, fileName, pattern_id, bar, iscsv = TRUE){
   
   #get all networks from Synapse
   #bar <- synGetFiles(networkFolderId, downloadLocation = outputpath, pattern_id = pattern_id)
