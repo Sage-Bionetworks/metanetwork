@@ -54,4 +54,4 @@ RUN R -e "install.packages('PythonEmbedInR', repos=c('http://cran.fhcrc.org', 'h
 RUN R -e "install.packages('devtools')" \
 	&& R -e "devtools::install_github('brian-bot/githubr')"
 # Metanets
-RUN R -e "devtools::install_github('PradoVarathan/metanetwork')"
+RUN R -e "devtools::install_github('Sage-Bionetworks/metanetwork')"
