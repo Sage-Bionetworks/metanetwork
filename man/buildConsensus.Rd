@@ -4,14 +4,7 @@
 \alias{buildConsensus}
 \title{This function builds the Consensus Network from the component network}
 \usage{
-buildConsensus(
-  outputpath,
-  networkFolderId,
-  fileName,
-  pattern_id,
-  bar,
-  iscsv = TRUE
-)
+buildConsensus(outputpath, networkFolderId, fileName, pattern_id, bar, iscsv)
 }
 \arguments{
 \item{outputpath}{Required. Local directory to load files from and save files to.}
@@ -26,7 +19,7 @@ the children entities in `project_id`.}
 
 \item{bar}{Required. File paths object with network paths}
 
-\item{iscsv}{Optional. Is the data matrix a csv file. If not assumes it is tab delimited. (Default = TRUE).}
+\item{iscsv}{Required. Is the data matrix a csv file. If not assumes it is tab delimited.}
 }
 \value{
 Saves a rankc consensus network to `outputpath` and saves the BICNetwork
