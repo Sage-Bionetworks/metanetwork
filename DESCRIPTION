@@ -6,7 +6,8 @@ Authors@R:
   c(person(given = "Pradeep",
     family = "Pugalenthi",
     role = c("aut", "cre"),
-    email = "pradeep.pugalenthi@sagebase.org"),
+    email = "pradeep.pugalenthi@sagebase.org",
+      comment = c( ORCID = "0000-0001-5863-0468")),
   person(given = "Jake",
     family = "Gockley",
     role = c("ctb"),
@@ -22,6 +23,8 @@ Description: Package to infer multiple types of coexpression network representat
 Depends: R (>= 3.1.0)
 License: MIT + file LICENSE
 LazyData: true
+Suggests: 
+    rmarkdown
 URL: https://github.com/Sage-Bionetworks/metanetwork,
     http://sage-bionetworks.github.io/metanetwork/
 Encoding: UTF-8
