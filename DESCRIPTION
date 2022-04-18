@@ -64,7 +64,6 @@ Imports:
   rlang,
   rmarkdown,
   Rmpi,
-  pandoc,
   parallel,
   parmigene,
   plyr,
