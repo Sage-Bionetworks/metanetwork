@@ -1,0 +1,150 @@
+---
+title: "Write your own Config File for Network Creation"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Write your own Config File for Network Creation}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+A [configuration file](https://github.com/Sage-Bionetworks/metanetwork/blob/master/inst/config/network-construction/c3net.yml) defines the inputs for the Network Construction of the c3net.  Update the default parameters to include the Synapse ID where your data is stored and the appropriate annotation data you want to use for storage of the produced consensus network. The full list of configurable options are:
+
+   
+## DOCUMENTATION OF CONFIG FILE FOR NETWORK WRAPPER 
+```
+For the current development, we use a single (default) config profile per file
+ It is divided into four sections :
+ 
+  1. Input Profile
+  2. Provenanace
+  3. Output Profile
+  4. Computing Specs
+  
+ Each of these sections are further divided into subsections and tags that has to be added and required for most cases, else filled as NULL
+```
+
+#### `Input Profile`   
+```
+default:
+  input_profile:
+    input_synid:        Required. The Synapse ID of the input file is to provided; 
+                        User has to make sure that their synapse profile has access 
+                        to this particular profile (eg. syn27409771)
+    project_id:         Required. The Synapse ID of the Project folder currently 
+                        the user owns to build provenance and upload files 
+                        (eg. syn27410806)
+    network_method:     Required. The type of network methods to be used in a list 
+                        format with quotes. See below for all options. (eg. ["c3net"]).
+    na_fill:
+    p_val_c3net:        Optional. P-value threshold for the C3Net method, if 
+                        specified in network_method, else leave blank or NULL (eg.  1)
+    p_val_mrnet:        Optional. P-value threshold for the mrnet method, if 
+                        specified in network_method, else leave blank or NULL (eg.  1)
+    p_val_wgcna:        Optional. P-value threshold for the wgcna method, if 
+                        specified in network_method, else leave blank or NULL (eg.  1)
+    temp_storage_loc:   Required.Temporary file storage location for the input file 
+                        which will be deleted after completion of the process.
+                        (eg. /root/temp)
+    rsquaredCut:        Optional. R squared cutt-off for the WGCNA network method 
+                        and if not used, leave blank or NULL. (eg. 0.80)
+    defaultnaPower:     Optional. Default NA power value for WGCNA network method 
+                        and if not used, leave blank or NULL. (eg. 6)
+```
+
+#### Network methods
+  The type of network methods to be used in a list format with quotes. 
+
+  - The options in light network include c3net, mrnet, wgcna
+  - The options in light network include lassoAIC, lassoBIC, lassoCV1se, lassoCVmin, ridgeAIC, ridgeBIC, ridgeCV1se, ridgeCVmin, sparrowZ, sparrow2Z
+  - The options in light network include genie3 and tigress
+ 
+#### `Provenance`      
+```
+provenance:               **Annotations** rovenance annoation subsections - 
+                            can be obtained from the parent syn ID. More details 
+                            about obtaining annotations from synapse can be found 
+                            [here](https://help.synapse.org/docs/Annotations-and-Queries.2011070649.html).
+                            More details on the functioning of Provenance can be 
+                            found [here](https://help.synapse.org/docs/Provenance.1972470373.html) 
+                            A sample annotation profile includes the following required 
+                            information and can be replaced with NULL if unknown.
+
+    annotations:
+      data_type:            Optional. Type of data. (eg. ['clinical','geneExpression'])
+      resource_type:        Optional. Type of resource to surface in data portals (eg. metadata)
+      metadata_type:        Optional. Sub-Type of metadata class (eg. 'analytical covariates')
+      ismodelsystem:        Optional. Is this data from a model system (eg. FALSE)
+      ismultispecimen:      Optional. Is there multiple observations for any 
+                            induvidual. (eg. TRUE)
+      fileformat:           Optional. File format of the data. (eg. csv)
+      grant:                Optional. Is this data generated towards the aim of 
+                            a specific grant. (eg. U01AG046152)
+      species:              Optional. What species is this data profiled from.
+                            (eg. Human)
+      organ:                Optional. What organ is this data profiled from.
+                            (eg. brain)
+      tissue:               Optional. What tissues does this data originate from.
+                            (eg. ['A1C','CgG','M1','MTG','S1','V1C'])
+      study:                Optional. Is this data associated with a specific study.
+                            (eg. ["Allen","SMART-Seq2"])
+      consortium:           Optional. Was this data generated for a specific
+                            consortia. (eg. AMP-AD)
+      assay:                Optional. What is the base data-type. (eg. rnaSeq)
+    code_annotations:       For development purpose only. **DO NOT CHANGE** the code 
+                            annotations unless user determines to use another analysis pipeline
+        repository:         Required The current repository from where the analysis 
+                            code is obtained from. (eg. Sage-Bionetworks/metanetwork)
+        ref:                Required The type of pointer to use for the repo commit 
+                            history. (eg. branch)
+        ref_name:           Required The name of pointer type to use for the repo 
+                            commit history ie the name of the branch. (eg. main or master)
+        repository_path:    Required The current repository from where the analysis 
+                            code is obtained from. eg(. inst/runscripts/Consensus_Wrapper.R)
+    activity_name:          Required. The activity name for Synapse Provenance path creation 
+    activity_description:   Required. Detailed explanation of the activity in quotes 
+                            to be updated on Synapse  
+```
+
+#### `Output Profile`  
+```
+output_profile:
+    output_path:            Required. The full path for the final output file. (eg. Consensus)
+    md5_output_path:        Required. The output MD5 name as to be updated in Synapse 
+                            Project (eg. Consensus_md5.out)
+    output_name:            Required. The output name as to be updated in Synapse 
+                            Project. (eg. 'Consensus Network')
+    error_path:             Required. The full path for the error file from the 
+                            process (eg. /root/error)
+```
+
+   
+#### `Computing Specs`
+
+This software uses OpenMPI to subdivide cores and run processes in parrallel. These 
+core specification are pertinate to this sub division not the actual size of your 
+machine. For example all light and medium networks were run on a 16 core AWS 
+r5.4xlarge machine divided into 32 cores (light), 128 cores (medium), or (256 cores heavy).
+Note the heavy networks require a more powerful machine unless input is small.
+
+```
+computing_specs:
+    light_ncores:         Required. Total number of cores available for the light 
+                          network processing (c3net, mrnet and wgcna) and if not 
+                          being used, specify as 0.
+    medium_ncores:        Required. Total number of cores available for the medium 
+                          network processing (lassoAIC, lassoBIC, lassoCV1se, 
+                          lassoCVmin, ridgeAIC, ridgeBIC, ridgeCV1se, ridgeCVmin, 
+                          sparrowZand sparrow2Z) and if not being used, specify as 0.
+    heavy_ncores:         Required. Total number of cores available for the heavy 
+                          network processing (genie3 and tigress) and if not being 
+                          used, specify as 0.   
+
+```
+
