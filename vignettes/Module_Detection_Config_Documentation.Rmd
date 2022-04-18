@@ -1,8 +1,8 @@
 ---
-title: "Write your own consensus wrapper config file"
+title: "Write your own Module Wrapper config file"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Write your own consensus wrapper config file}
+  %\VignetteIndexEntry{Write your own Module Wrapper config file}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
