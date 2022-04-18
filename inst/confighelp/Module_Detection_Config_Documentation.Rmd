@@ -29,20 +29,10 @@ default:
     input_proj_id:          Required. The original input data matrix used to prepare
                             the individual networks themselves, such as 
                             RNAseq data or microarray data.
-    is_csv:                 Optional. A logical TRUE/FALSE value specifying if the 
-                            original input data matrix used to prepare the individual 
-                            networks is a csv (TRUE), or tab delimited file with 
-                            the rownames as the first column (FALSE).
-                            (Default is TRUE)
+    bic_file:               Required. Synapse ID of the consensus network BIC rda file 
+                            output from the consensus network wrapper
     temp_storage_loc:       Required. The location to store temporary output files.
     temp_input_loc:         Required. The location to store input files.
-    pattern_id:             Required. A character vector too match the file names 
-                            associated to the children entities in project_id.
-                            eg( _Network)
-    run_id:                 Required. A character vector too match in the children 
-                            entities in project_id. This may or may not be the same 
-                            as `pattern_id` depending on your network construction 
-                            parameters. (eg. Network') 
   provenance:               **Annotations** rovenance annoation subsections - 
                             can be obtained from the parent syn ID. More details 
                             about obtaining annotations from synapse can be found 
