@@ -1,14 +1,7 @@
-# Workflow derived from https://github.com/r-lib/actions/tree/master/examples
-# Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
 on:
   push:
     branches: master
-  release:
-    types: [published]
-  workflow_dispatch:
-
 name: pkgdown
-
 jobs:
   pkgdown:
     runs-on: macOS-latest
@@ -16,12 +9,12 @@ jobs:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v2
-
-      - uses: r-lib/actions/setup-pandoc@v1
+      - uses: r-lib/actions/setup-r@master
 
       - name: Install MPI in macOS
         run: brew install openmpi
         if: runner.os == 'macOS'
+
       - name: Query dependencies
         run: |
           install.packages('remotes')
@@ -41,6 +34,7 @@ jobs:
         shell: Rscript {0}
       - name: Install package
         run: R CMD INSTALL .
+
       - name: Deploy package
         run: pkgdown::deploy_to_branch(new_process = FALSE)
         shell: Rscript {0}
