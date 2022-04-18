@@ -4,7 +4,7 @@
 \alias{compute.ModuleQualityMetric}
 \title{Find  Modularity Quality}
 \usage{
-\method{compute}{ModuleQualityMetric}(adj, mod)
+compute.ModuleQualityMetric(adj, mod)
 }
 \arguments{
 \item{adj}{Required. An n x n upper triangular adjacency in the matrix class 
