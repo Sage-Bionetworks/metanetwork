@@ -140,6 +140,13 @@ docker exec -itd networks /bin/sh -c "Rscript /root/metanetwork/inst/runscripts/
 
 ### Module Construction
 
+Processes the consensus network though multiple sets of module identification software to identify co-expression modules within the consensus network. Testing is still in Beta. 
+
+```
+
+docker exec -itd networks /bin/sh -c "Rscript /root/metanetwork/inst/runscripts/Module_Wrapper.R -u <Synapse User Name> -p <Synapse User Password> -c /root/metanetwork/inst/config/network-module/module.yml > /root/log.log"
+
+```
 
 ### Who do I talk to? 
 
