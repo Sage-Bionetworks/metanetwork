@@ -62,6 +62,7 @@ Imports:
   reader,
   readr,
   rlang,
+  rmarkdown,
   Rmpi,
   parallel,
   parmigene,
