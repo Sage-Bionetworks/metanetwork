@@ -108,7 +108,7 @@ of 750 samples and 9,740 genes on a machine consisting of; 16 cores (vCPU) and 1
 ```
 Light Networks: c3net, mrnet, wgcna: (estimated less than 3 Hours)
 Medium Networks: lassoAIC, lassoBIC, lassoCV1se, lassoCVmin, ridgeAIC, ridgeBIC, ridgeCV1se, ridgeCVmin, sparrowZ, sparrow2Z: (estimated around 10-12 Hours)
-Heavy Networks: genie3, tigress: (Genie3 ~11 hours, tigress TBD)
+Heavy Networks: genie3, tigress: (Genie3 ~11 hours, tigress ~96 hours)
 ``` 
 ### Consensus Network Construction
 
@@ -137,6 +137,8 @@ To run the consensus Network you need to pass the command into the runing docker
 docker exec -itd networks /bin/sh -c "Rscript /root/metanetwork/inst/runscripts/Consensus_Wrapper.R -u <Synapse User Name> -p <Synapse User Password> -c /root/metanetwork/inst/config/network-consensus/microglial_consensus.yml > /root/log.log"
 
 ```
+
+Consensus network construction on the Cerebellum light and medium networks ( all networks except genie and tigress) took ~96-120 hours on a 126 cores (vCPU) and 256 GiB (Memory) amazon EC-2 instance (c6i.32xlarge).
 
 ### Module Construction
 
